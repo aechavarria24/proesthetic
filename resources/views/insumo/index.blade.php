@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('titulo')
-Insumo
+insumo
 @endsection
 @section('contenedor')
 <div class="padding">

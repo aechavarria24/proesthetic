@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Model\proveedor;
+use App\Model\insumo;
+use Notify;
 
 class insumoController extends Controller
 {
@@ -37,8 +39,13 @@ class insumoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+       $input = $request->all();
+        insumo::create($input);
+        Notify::success("El insumo ". $input['nombre']. ", se registro con éxito.","Registro exitoso");
+        return redirect('insumo/create');
     }
+
+    
 
     /**
      * Display the specified resource.

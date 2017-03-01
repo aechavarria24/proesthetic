@@ -6,7 +6,7 @@
   <div class="box-body">
     <div class="row">
       <div class="col-sm-4 offset-sm-4">
-        <form data-ui-jp="parsley" novalidate="" method="post" action="/contrato">
+        <form data-ui-jp="parsley" novalidate="" method="post" action="{{ route('insumo.store') }}">
           {{csrf_field()}}
           <div class="form-group">
             <label>Nombre</label>
@@ -16,14 +16,14 @@
             <label>Unidad de Medida</label>
             <input class="form-control" required="" data-parsley-id="136" type="text" name="unidadMedida">
           </div>
-          <div class="form-group">
-            <label>Proveedor</label>
-            <select class="form-control c-select" name="proveedor">
-              @foreach($proveedores as $values)
-              <option value="{{$values->id}}"> {{$values->nombre}}</option>
-              @endforeach
-            </select>
-          </div>
+           <div class="form-group">
+              <label>Proveedor</label>
+              <select class="form-control c-select" name="insumo">
+              @foreach($proveedores as $value)
+                <option value="{{$value->id}}"> {{$value->nombre}}</option>
+                @endforeach
+              </select>
+            </div>
           <div class=" p-a text-center">
             <button type="submit" class="btn info">Registrar</button>
           </div>
@@ -32,4 +32,6 @@
     </div>
   </div>
 </div>
+
+
 @endsection
