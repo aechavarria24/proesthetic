@@ -2,13 +2,12 @@
 namespace App\Http\Controllers;
 
 
-namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use App\Model\clinica;
-use App\Model\tipoContrato;
+use App\Model\contrato;
 use Notify;
 
 class clinicaController extends Controller
@@ -32,7 +31,7 @@ class clinicaController extends Controller
   public function create()
   {
     //
-    $tipoContrato = tipoContrato::all();
+    $tipoContrato = contrato::all();
     return view('clinica.crear', compact('tipoContrato'));
   }
 
@@ -48,7 +47,7 @@ class clinicaController extends Controller
 
     $input = $request->all();
     clinica::create($input);
-    $tipoContrato = tipoContrato::all();
+    $tipoContrato = contrato::all();
     Notify::success("La clínica ". $input['nombre'] .", se registro con éxito.","Registro exitoso");
     return view('clinica.crear', compact('tipoContrato'));
   }
@@ -61,7 +60,8 @@ class clinicaController extends Controller
   */
   public function show($id)
   {
-    //
+
+    return view('clinica.listar');
   }
 
   /**

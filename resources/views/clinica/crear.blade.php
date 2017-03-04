@@ -32,19 +32,18 @@ Clínica
 
 
 
-
-
           <div class="form-group">
             <label>Dirección</label>
             <input class="form-control" required="" data-parsley-id="138" type="text" name="direccion">
-          </div>
+          
 
           <div class="row m-b">
-            <div class="col-sm-6">
+            <div class="col-sm-12">
               <div class="form-group">
                 <label>Teléfono</label>
                 <input class="form-control" required="" data-parsley-id="138" type="phone" name="telefono">
               </div>
+            </div>
             </div>
             <div class="col-sm-6">
               <div class="form-group">
@@ -59,13 +58,9 @@ Clínica
           </div>
           <div class="row m-b">
             <div class="col-sm-6">
-              <label>Día corte</label>
-              <input class="form-control" required="" id="pwd" data-parsley-id="140" type="number" name="diaCorte">
-            </div>
-            <div class="col-sm-6">
-              <label>Mes corte</label>
-              <input class="form-control" required="" id="pwd" data-parsley-id="140" type="number" name="mesCorte">
-            </div>
+              <label>Fecha de Corte</label>
+              <input class="form-control" required="" id="pwd" data-parsley-id="140" type="number"><br>
+           
           </div>
           <div class=" p-a text-center">
             <button type="submit" class="btn info">Registrar</button>
@@ -76,8 +71,5 @@ Clínica
   </div>
 
 </div>
-
-
-
 
 @endsection
