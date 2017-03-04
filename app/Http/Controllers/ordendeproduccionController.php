@@ -24,7 +24,7 @@ class ordendeproduccionController extends Controller
    */
   public function create()
   {
-      //
+
       return view('ordendeproduccion.crear');
   }
 

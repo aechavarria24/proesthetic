@@ -6,11 +6,11 @@
   <div class="box-body">
     <div class="row">
       <div class="col-sm-4 offset-sm-4">
-        <form data-ui-jp="parsley" novalidate="" method="post" action="/contrato">
+        <form data-ui-jp="parsley" novalidate="" method="post" action="/contrato" id="frmContrato">
           {{csrf_field()}}
           <div class="form-group">
             <label>Nombre</label>
-            <input class="form-control" required="" data-parsley-id="136" type="text" name="nombre">
+            <input class="form-control" required="" data-parsley-id="136" type="text" name="nombre" id="nombre">
           </div>
           <div class="form-group">
             <label>Descripción</label>
@@ -26,4 +26,17 @@
 </div>
 
 
+@endsection
+@section('script')
+<script>
+$("#frmContrato").validate({
+  rules: {
+    nombre: {
+      required: true,
+      minlength: 3
+    }
+  }
+});
+
+</script>
 @endsection

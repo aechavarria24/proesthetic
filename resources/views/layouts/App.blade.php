@@ -26,6 +26,7 @@
   <link rel="stylesheet" href="/css/simple-line-icons/css/simple-line-icons.css" type="text/css" />
   <link rel="stylesheet" href="/css/bootstrap/dist/css/bootstrap.min.css" type="text/css" />
   <link rel="stylesheet" href="/plugins/pnotify/pnotify.custom.min.css" type="text/css" />
+  <link rel="stylesheet" href="/plugins/select2/select2.min.css">
   <link rel="stylesheet" href="/plugins/dataTables/datatables.min.css"/>
 
   <!-- build:css css/styles/app.min.css -->
@@ -649,6 +650,11 @@
   <script src="/scripts/ajax.js"></script>
   <script src="/plugins/pnotify/pnotify.custom.min.js"></script>
   <script src="/plugins/dataTables/datatables.min.js"></script>
+  <script src="/plugins/select2/select2.min.js"></script>
+  <script src="/plugins/jqueryvalidation/jquery.validate.min.js"></script>
+  <script src="/plugins/jqueryvalidation/localization/messages_es.min.js"></script>
+
+
   @if (Session::has('notifier.notice'))
   <script>
   new PNotify({!! Session::get('notifier.notice') !!});

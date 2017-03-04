@@ -4,7 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Model\insumoproveedor;
 use App\Model\proveedor;
+use App\Model\insumo;
+
+use Notify;
 
 class insumoController extends Controller
 {
@@ -23,12 +27,11 @@ class insumoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        $proveedores = proveedor::all();
-        return view ('insumo.crear', compact('proveedores'));
-    }
-
+     public function create()
+     {
+         $proveedores = proveedor::all();
+         return view ('insumo.crear', compact('proveedores'));
+     }
     /**
      * Store a newly created resource in storage.
      *
@@ -37,7 +40,17 @@ class insumoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      $input = $request->all();
+      $input1 = $request['nombre'];
+      $insumos=insumo::create($input);
+
+      foreach ($input['proveedor'] as $key => $value) {
+        $input=insumoproveedor::create(["insumo_id"=>$insumos->id,"proveedor_id"=>$value]);
+        // var_dump($input);
+        // exit;
+      }
+      Notify::success("El insumo ". $input1. ", se registro con éxito.","Registro exitoso");
+      return redirect('insumo/create');
     }
 
     /**

@@ -30,9 +30,11 @@ Route::resource('servicio','servicioController');
 Route::resource('contrato','tipoContratoController');
 Route::resource('clinica','clinicaController');
 Route::resource('usuario','usuarioClinicaController');
-Route::resource('proveedor', 'proveedorController');
-Route::resource('insumo','insumoController');
+Route::resource('produccion', 'ordendeproduccionController');
 Route::resource('servicioTipoContrato','servicioTipoContratoController');
 Route::resource('pedido','pedidoController');
 
-Route::resource('produccion', 'ordendeproduccionController');
+
+Route::resource('proveedor', 'proveedorController');
+Route::resource('insumo','insumoController');
+Route::resource('insumoordenproduccion','insumoOrdenProduccionController');
