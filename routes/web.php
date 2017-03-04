@@ -24,6 +24,10 @@ Route::get('/home', 'HomeController@index');
 Route::get('servicio/get', 'servicioController@getData');
 Route::get('contrato/get', 'tipoContratoController@getData');
 Route::get('proveedor/get', 'proveedorController@getData');
+Route::get('produccion/get', 'ordenProduccionController@getData');
+Route::get('pedido/get', 'pedidoController@getData');
+Route::get('pedido/detalle', 'pedidoController@detalle');
+Route::get('produccion/detalle', 'ordenProduccionController@detalle');
 
 
 Route::resource('servicio','servicioController');
@@ -35,4 +39,4 @@ Route::resource('insumo','insumoController');
 Route::resource('servicioTipoContrato','servicioTipoContratoController');
 Route::resource('pedido','pedidoController');
 
-Route::resource('produccion', 'ordendeproduccionController');
+Route::resource('produccion', 'ordenProduccionController');
