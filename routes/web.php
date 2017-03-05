@@ -22,12 +22,15 @@ Route::get('/home', 'HomeController@index');
 
 
 Route::get('servicio/get', 'servicioController@getData');
-Route::get('contrato/get', 'tipoContratoController@getData');
+Route::get('contrato/get', 'contratoController@getData');
 Route::get('proveedor/get', 'proveedorController@getData');
+Route::get('usuario/get', 'usuarioController@getData');
+Route::get('usuarioClinica/get', 'usuarioClinicaController@getData');
+Route::get('clinica/get', 'clinica@getData');
 
 
 Route::resource('servicio','servicioController');
-Route::resource('contrato','tipoContratoController');
+Route::resource('contrato','contratoController');
 Route::resource('clinica','clinicaController');
 Route::resource('usuario','usuarioClinicaController');
 Route::resource('proveedor', 'proveedorController');
