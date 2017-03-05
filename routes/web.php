@@ -31,7 +31,7 @@ Route::get('produccion/get', 'ordenProduccionController@getData');
 Route::get('pedido/get', 'pedidoController@getData');
 Route::get('pedido/detalle', 'pedidoController@detalle');
 Route::get('produccion/detalle', 'ordenProduccionController@detalle');
-
+Route::get('venta/get', 'ventaController@getData');
 
 Route::resource('servicio','servicioController');
 Route::resource('contrato','contratoController');
@@ -42,3 +42,4 @@ Route::resource('insumo','insumoController');
 Route::resource('pedido','pedidoController');
 
 Route::resource('produccion', 'ordenProduccionController');
+Route::resource('venta', 'ventaController');
