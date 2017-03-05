@@ -31,7 +31,6 @@ Route::resource('contrato','tipoContratoController');
 Route::resource('clinica','clinicaController');
 Route::resource('usuario','usuarioClinicaController');
 Route::resource('produccion', 'ordendeproduccionController');
-Route::resource('servicioTipoContrato','servicioTipoContratoController');
 Route::resource('pedido','pedidoController');
 
 

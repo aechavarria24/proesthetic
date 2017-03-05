@@ -20,7 +20,7 @@ class insumoController extends Controller
     public function index()
     {
         return  view('insumo.index');
-        
+
     }
 
     /**
@@ -29,7 +29,7 @@ class insumoController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    
+
     /**
      * Store a newly created resource in storage.
      *
@@ -44,8 +44,6 @@ class insumoController extends Controller
 
       foreach ($input['proveedor'] as $key => $value) {
         $input=insumoproveedor::create(["insumo_id"=>$insumos->id,"proveedor_id"=>$value]);
-        // var_dump($input);
-        // exit;
       }
       Notify::success("El insumo ". $input1. ", se registro con éxito.","Registro exitoso");
       return redirect('insumo/create');
