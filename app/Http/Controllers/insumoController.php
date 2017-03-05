@@ -28,11 +28,8 @@ class insumoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-     public function create()
-     {
-         $proveedores = proveedor::all();
-         return view ('insumo.crear', compact('proveedores'));
-     }
+
+    
     /**
      * Store a newly created resource in storage.
      *
