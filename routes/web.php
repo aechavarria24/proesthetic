@@ -40,6 +40,6 @@ Route::resource('usuario','usuarioClinicaController');
 Route::resource('proveedor', 'proveedorController');
 Route::resource('insumo','insumoController');
 Route::resource('pedido','pedidoController');
-
 Route::resource('produccion', 'ordenProduccionController');
 Route::resource('venta', 'ventaController');
+Route::resource('empleado', 'empleadoController');
