@@ -20,6 +20,7 @@ class insumoController extends Controller
     public function index()
     {
         return  view('insumo.index');
+        
     }
 
     /**
