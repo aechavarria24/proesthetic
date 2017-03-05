@@ -17,6 +17,17 @@ class usuarioClinicaController extends Controller
   *
   * @return \Illuminate\Http\Response
   */
+
+  public function getData (Request $Request)
+  {
+    $usuarioClinica = usuarioClinica::all();
+    return Datatables::of($usuarioClinica)
+    ->addColumn('action', function ($usuario) {
+      return '<a href="/usuarioClinica/'.$usuarioClinica->id.'/edit" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i>&nbsp;Editar</a>
+      <a href="/servicio/'.$usuarioClinica->id.'/edit" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i>&nbsp;Inabilitar</a>';
+    })
+    ->make(true);
+  }
   public function index()
   {
     //
@@ -88,7 +99,9 @@ class usuarioClinicaController extends Controller
   */
   public function show($id)
   {
-    //
+    $usuarioClinica= usuarioClinica::all();
+    return view('usuarioClinica.editar');
+
   }
 
   /**
@@ -99,7 +112,13 @@ class usuarioClinicaController extends Controller
   */
   public function edit($id)
   {
-    //
+     $usuarioClinica = usuarioClinica::find($id);
+    if ($usuarioClinica==null) {
+      Notify::warning('No se encontraron datos','Espera...');
+      return redirect('/usuarioClinica/show');
+    } else {
+      return view('usuarioClinica.editar',compact('usuarioClinica'));
+    }
   }
 
   /**
@@ -111,7 +130,15 @@ class usuarioClinicaController extends Controller
   */
   public function update(Request $request, $id)
   {
-    //
+    $input = $request->all();
+    $usuarioClinica = usuarioClinica::find($id);
+    if ($usuarioClinica==null) {
+      Notify::warning('No se encontraron datos','Nota: ');
+      return redirect('usuarioClinica/show');
+    }
+      $usuarioClinica->update($input);
+      Notify::success("El usuario \"". $input['nombre'] ."\", se modifico con éxito.","Modificacion exitosa");
+      return redirect('usuarioClinica/show');
   }
 
   /**

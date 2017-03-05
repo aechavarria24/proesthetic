@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Model\tipoContrato;
+use App\Model\contrato;
 use Notify;
 use Datatables;
 
-class tipoContratoController extends Controller
+class contratoController extends Controller
 {
   /**
   * Display a listing of the resource.
@@ -18,8 +18,8 @@ class tipoContratoController extends Controller
 
   public function getData (Request $Request)
   {
-    $contratos = tipoContrato::all();
-    return Datatables::of($contratos)
+    $contrato = contrato::all();
+    return Datatables::of($contrato)
     ->addColumn('action', function ($contrato) {
       return '<a href="/contrato/'.$contrato->id.'/edit" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i>&nbsp;Editar</a>
       <a href="/contrato/'.$contrato->id.'/edit" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i>&nbsp;Inabilitar</a>';
@@ -32,7 +32,7 @@ class tipoContratoController extends Controller
 
   public function index()
   {
-    return view('tipoContrato.index');
+    return view('contrato.index');
   }
 
   /**
@@ -43,7 +43,7 @@ class tipoContratoController extends Controller
   public function create()
   {
     //
-    return view('tipoContrato.crear');
+    return view('contrato.crear');
   }
 
   /**
@@ -56,7 +56,7 @@ class tipoContratoController extends Controller
   {
     //
     $input = $request->all();
-    tipoContrato::create($input);
+    contrato::create($input);
     Notify::success("El contrato \"". $input['nombre'] ."\", se registro con éxito.","Registro exitoso");
     return view('tipoContrato.crear');
 
@@ -70,8 +70,8 @@ class tipoContratoController extends Controller
   */
   public function show($id)
   {
-    $contratos = tipoContrato::all();
-    return view('tipoContrato.listar');
+    $contrato = contrato::all();
+    return view('contrato.listar');
   }
 
   /**
@@ -82,12 +82,12 @@ class tipoContratoController extends Controller
   */
   public function edit($id)
   {
-    $contratos = tipoContrato::find($id);
-    if ($contratos==null) {
+    $contrato = contrato::find($id);
+    if (false/**$contrato==null*/) {
       Notify::warning('No se encontraron datos','Espera...');
-      return redirect('/contrato/show');
+      return redirect('/edit/show');
     } else {
-      return view('tipoContrato.editar',compact('contratos'));
+      return view('contrato.editar',compact('contrato'));
     }
   }
 
@@ -101,12 +101,12 @@ class tipoContratoController extends Controller
   public function update(Request $request, $id)
   {
     $input = $request->all();
-    $contratos = tipoContrato::find($id);
-    if ($contratos==null) {
+    $contrato = contrato::find($id);
+    if ($contrato==null) {
       Notify::warning('No se encontraron datos','Nota: ');
       return redirect('contrato/show');
     }
-    $contratos->update($input);
+    $contrato->update($input);
     Notify::success("El Contrato \"". $input['nombre'] ."\", se modifico con éxito.","Modificacion exitosa");
     return redirect('contrato/show');
   }
