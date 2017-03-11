@@ -23,6 +23,7 @@ Route::get('/home', 'HomeController@index');
 
 Route::get('servicio/get', 'servicioController@getData');
 Route::get('contrato/get', 'contratoController@getData');
+Route::get('insumo/get', 'insumoController@getData');
 Route::get('proveedor/get', 'proveedorController@getData');
 Route::get('usuarioClinica/get', 'usuarioClinicaController@getData');
 Route::get('usuario/get', 'usuarioController@getData');
@@ -39,6 +40,7 @@ Route::resource('clinica','clinicaController');
 Route::resource('usuario','usuarioClinicaController');
 Route::resource('proveedor', 'proveedorController');
 Route::resource('insumo','insumoController');
+Route::resource('insumoordenproduccion','insumoOrdenProduccionController');
 Route::resource('pedido','pedidoController');
 Route::resource('produccion', 'ordenProduccionController');
 Route::resource('venta', 'ventaController');
