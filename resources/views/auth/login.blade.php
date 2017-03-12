@@ -48,39 +48,113 @@
       </div>
     </div>
     <div class="b-t">
-      <div class="center-block w-xxl w-auto-xs p-y-md text-center">
-        <div class="p-a-md">
-          <div>
-
-            <form name="form" action="/login" method="post">
-              {{ csrf_field() }}
-              <div class="form-group">
-                <input type="text" class="form-control" placeholder="Usuario" required name="username">
-                @if ($errors->has('usuario'))
-                <span class="help-block">
-                  <strong>{{ $errors->first('usuario') }}</strong>
-                </span>
-                @endif
+      <div class="padding">
+        <div class="row">
+          <div class="col-sm-4 offset-sm-4">
+            <div class="b-b b-primary nav-active-primary">
+              <ul class="nav nav-tabs">
+                <li class="nav-item">
+                  <a class="nav-link active" href="#" data-toggle="tab" data-target="#tab4" aria-expanded="true">Usuario</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#" data-toggle="tab" data-target="#tab5" aria-expanded="false">Doctor</a>
+                </li>
+              </ul>
+            </div>
+            <div class="tab-content p-a m-b-md">
+              <div class="tab-pane animated fadeIn text-muted active" id="tab4" aria-expanded="true">
+                <div class="row">
+                  <div class="col-sm-10 offset-sm-1">
+                    <div>
+                      <form name="form" action="/login" method="post">
+                        {{ csrf_field() }}
+                        <div class="form-group">
+                          <input type="text" class="form-control" placeholder="Usuario" required name="username">
+                          @if ($errors->has('usuario'))
+                          <span class="help-block">
+                            <strong>{{ $errors->first('usuario') }}</strong>
+                          </span>
+                          @endif
+                        </div>
+                        <div class="form-group">
+                          <input type="password" class="form-control" placeholder="Contraseña" required name="password">
+                          @if ($errors->has('password'))
+                          <span class="help-block">
+                            <strong>{{ $errors->first('password') }}</strong>
+                          </span>
+                          @endif
+                        </div>
+                        <div class="row">
+                          <div class="offset-sm-3">
+                            <div class="m-b-md">
+                              <label class="md-check">
+                                <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> <i class="primary"></i>  Recordarme
+                              </label>
+                            </div>
+                            <input type="hidden" name="lblTipo" value="empleado">
+                            <button type="submit" class="btn btn-lg black p-x-lg">Entrar</button>
+                          </div>
+                        </div>
+                      </form>
+                      <div class="row">
+                        <div class="offset-sm-6">
+                          <div class="m-y">
+                            <a href="/forgot-password.html" class="_600">¿Olvidaste tu contraseña?</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div class="form-group">
-                <input type="password" class="form-control" placeholder="Contraseña" required name="password">
-                @if ($errors->has('password'))
-                <span class="help-block">
-                  <strong>{{ $errors->first('password') }}</strong>
-                </span>
-                @endif
+              <div class="tab-pane animated fadeIn text-muted" id="tab5" aria-expanded="false">
+                <div class="row">
+                  <div class="col-sm-10 offset-sm-1">
+                    <div>
+                      <form name="form" action="/login" method="post">
+                        {{ csrf_field() }}
+                        <div class="form-group">
+                          <input type="text" class="form-control" placeholder="Doctor" required name="username">
+                          @if ($errors->has('usuario'))
+                          <span class="help-block">
+                            <strong>{{ $errors->first('usuario') }}</strong>
+                          </span>
+                          @endif
+                        </div>
+                        <div class="form-group">
+                          <input type="password" class="form-control" placeholder="Contraseña" required name="password">
+                          @if ($errors->has('password'))
+                          <span class="help-block">
+                            <strong>{{ $errors->first('password') }}</strong>
+                          </span>
+                          @endif
+                        </div>
+                        <div class="row">
+                          <div class="offset-sm-3">
+                            <div class="m-b-md">
+                              <label class="md-check">
+                                <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> <i class="primary"></i>  Recordarme
+                              </label>
+                            </div>
+                            <input type="hidden" name="lblTipo" value="doctor">
+                            <button type="submit" class="btn btn-lg black p-x-lg">Entrar</button>
+                          </div>
+                        </div>
+                      </form>
+                      <div class="row">
+                        <div class="offset-sm-6">
+                          <div class="m-y">
+                            <a href="/forgot-password.html" class="_600">¿Olvidaste tu contraseña?</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div class="m-b-md">
-                <label class="md-check">
-                  <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> <i class="primary"></i>  Recordarme
-                </label>
-              </div>
-              <button type="submit" class="btn btn-lg black p-x-lg">Entrar</button>
-            </form>
-            <div class="m-y">
-              <a href="/forgot-password.html" class="_600">¿Olvidaste tu contraseña?</a>
             </div>
           </div>
+
         </div>
       </div>
 
