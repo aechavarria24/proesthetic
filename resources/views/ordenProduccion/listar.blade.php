@@ -13,7 +13,7 @@ Orden de producción
         <tr>
           <th  style="width:20%">Número orden</th>
           <th  style="width:25%">Fecha creación</th>
-          <th  style="width:25%">Fecha finalizacion</th>
+          <th  style="width:25%">Fecha finalización</th>
           <th  style="width:25%">Estado</th>
           <th  style="width:25%">Opciones</th>
         </tr>
