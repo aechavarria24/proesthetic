@@ -15,13 +15,13 @@ Clínica
   <div class="box-body">
     <div class="row">
       <div class="col-sm-4 offset-sm-4">
-        <form data-ui-jp="parsley" novalidate="" method="post" action="/clinica">
+        <form data-ui-jp="parsley" novalidate="" method="post" action="/clinica" id="frmclinica">
           {{csrf_field()}}
 
 
           <div class="form-group">
             <label>NIT</label>
-            <input class="form-control" required="" data-parsley-id="136" type="text" name="NIT" maxlength="10">
+            <input class="form-control" required="" data-parsley-id="136" type="text" name="NIT" maxlength="10" id="NIT">
           </div>
 
 
@@ -59,7 +59,7 @@ Clínica
           <div class="row m-b">
             <div class="col-sm-6">
               <label>Fecha de Corte</label>
-              <input class="form-control" required="" id="pwd" data-parsley-id="140" type="number"><br>
+              <input class="form-control" required="" id="pwd" name= "diaCorte" data-parsley-id="140" type="number"><br>
            
           </div>
           <div class=" p-a text-center">
@@ -71,5 +71,23 @@ Clínica
   </div>
 
 </div>
+
+@endsection
+
+@section('script')
+<script>
+
+  $("#frmclinica").validate({
+    rules: {
+
+      NIT: {
+        required: true,
+        digits: true
+      }
+    }
+  });
+
+
+</script>
 
 @endsection

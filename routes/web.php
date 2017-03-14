@@ -26,12 +26,13 @@ Route::get('contrato/get', 'contratoController@getData');
 Route::get('proveedor/get', 'proveedorController@getData');
 Route::get('usuarioClinica/get', 'usuarioClinicaController@getData');
 Route::get('usuario/get', 'usuarioController@getData');
-Route::get('clinica/get', 'clinica@getData');
+Route::post('clinica/estado/editar', 'clinicaController@cambiar_estado');
 Route::get('produccion/get', 'ordenProduccionController@getData');
 Route::get('pedido/get', 'pedidoController@getData');
 Route::get('pedido/detalle', 'pedidoController@detalle');
-Route::get('produccion/detalle', 'ordenProduccionController@detalle');
+Route::get('produccion/detalle/{id}', 'ordenProduccionController@detalle');
 Route::get('venta/get', 'ventaController@getData');
+Route::get('clinica/get','clinicaController@getData');
 
 Route::resource('servicio','servicioController');
 Route::resource('contrato','contratoController');
@@ -43,3 +44,4 @@ Route::resource('pedido','pedidoController');
 Route::resource('produccion', 'ordenProduccionController');
 Route::resource('venta', 'ventaController');
 Route::resource('empleado', 'empleadoController');
+

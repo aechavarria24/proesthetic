@@ -649,6 +649,8 @@
   <script src="/scripts/ajax.js"></script>
   <script src="/plugins/pnotify/pnotify.custom.min.js"></script>
   <script src="/plugins/dataTables/datatables.min.js"></script>
+  <script src="/plugins/jqueryvalidation/dist/jquery.validate.min.js"></script>
+  <script src="/plugins/jqueryvalidation/dist/localization/messages_es.min.js"></script>
   @if (Session::has('notifier.notice'))
   <script>
   new PNotify({!! Session::get('notifier.notice') !!});
