@@ -25,6 +25,7 @@ Route::get('servicio/get', 'servicioController@getData');
 Route::get('contrato/get', 'contratoController@getData');
 Route::get('insumo/get', 'insumoController@getData');
 Route::get('proveedor/get', 'proveedorController@getData');
+Route::get('proveedor/pdf', 'proveedorController@generar_pdf');
 Route::get('usuarioClinica/get', 'usuarioClinicaController@getData');
 Route::get('usuario/get', 'usuarioController@getData');
 Route::get('clinica/get', 'clinica@getData');
@@ -33,7 +34,7 @@ Route::get('pedido/get', 'pedidoController@getData');
 Route::get('pedido/detalle', 'pedidoController@detalle');
 Route::get('produccion/detalle', 'ordenProduccionController@detalle');
 Route::get('venta/get', 'ventaController@getData');
-Route::get('proveedor/pdf', 'proveedorController@generar_pdf);
+
 
 
 Route::resource('servicio','servicioController');

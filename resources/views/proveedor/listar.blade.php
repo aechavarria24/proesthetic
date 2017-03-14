@@ -6,6 +6,7 @@ Proveedor
 <div class="box">
   <div class="box-header">
     <h2>Lista de porveedores</h2>
+    <a target="_blank" href="/proveedor/pdf" class="btn btn-primary">Generar PDF</a>
   </div>
   <div class="box-body">
     <table class="table table-striped b-t b-b" id="tblProveedor">

@@ -122,9 +122,12 @@ class proveedorController extends Controller
 
 public function generar_pdf(){
   $proveedor = proveedor::all();
+  $view =  \View::make('proveedor.pdf', compact('proveedor'))->render();
+        $pdf = \App::make('dompdf.wrapper');
+        $pdf->loadHTML($view);
+        return $pdf->stream('invoice');
 
-  $pdf = PDF::loadView('proveedor.pdf', compact('proveedor'));
-  return $pdf->download('invoice.pdf');
+  
 
 }
 
