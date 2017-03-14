@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Model\ordenProduccion;
+use App\Model\empleado;
 use Notify;
 use Datatables;
 
@@ -15,8 +16,15 @@ class ordenProduccionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-     public function detalle(){
-       return view('ordenProduccion.detalle');
+     public function detalle($id){
+       $ordenProduccion = ordenProduccion::all();
+      //  $ordenProduccion=  ordenProduccion::select('orden_Produccion.*')
+      //  ->join('empleado','empleado.id','=','orden_Produccion.usuario_id')
+      //  ->get();
+      //  var_dump($ordenProduccion);
+      //  exit;
+
+     return view('ordenProduccion.detalle',compact('ordenProduccion'  ));
 
      }
 

@@ -57,7 +57,7 @@ Pedido
                   </div>
                   <h6>Fecha entrega</h6>
                   <div class="input-group date">
-                    <input type="text" class="form-control" id="datepicker" >
+                    <input type="text" class="form-control" id="datepicker" name="fechaEntrega">
                     <div class="input-group-addon">
                       <span class="fa fa-calendar"></span>
                     </div>
@@ -77,7 +77,7 @@ Pedido
                     <div class="col-sm-6">
                       <div class="form-group">
                         <label>Servicio</label>
-                        <select class="form-control c-select" name="servicio" id="cbxServicio"  onchange="cambiar_valor_servicio(this)">
+                        <select class="form-control c-select" name="servicio_tipocontrato_id" id="cbxServicio"  onchange="cambiar_valor_servicio(this)">
                           <option value=""></option>
                           @foreach($servicio as $values)
                           <option value="{{$values->id}}" id=""> {{$values->nombre}}</option>

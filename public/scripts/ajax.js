@@ -1,9 +1,10 @@
 var id_pieza=0;
 function AgregarServicio(e){
 	var servicio = $("#cbxServicio option:selected").html();
+	var servicio_tipo_id =$("#cbxServicio").val();
+	// alert(servicio_tipo_id);
 
 		$("#containerMedidaPieza").append(
-
 		'<div class="box">'
 		+'<div class="box-header" >'
 		+'Medidas de la pieza de: '+' '+servicio+''
@@ -11,16 +12,17 @@ function AgregarServicio(e){
 		+'<div class="box-body">'
 		+'<div class="row">'
 		+'<div class="col-xs-3">'
-		+'<input class="form-control" id="txtCant-'+id_pieza+'" placeholder="Cantidad" type="number" value="">'
+		+'<input class="form-control" hidden="true" name="servicio_tipo_id" type="number" value="'+servicio_tipo_id+'">'
+		+'<input class="form-control" name="cantidad" id="txtCant-'+id_pieza+'" placeholder="Cantidad" type="number" value="">'
 		+	'</div>'
 		+'<div class=" col-xs-4">'
-		+'<select class="form-control c-select" name="servicio" id="selectUnidadMedida-'+id_pieza+'" value="">'
+		+'<select class="form-control c-select" name="unidadMedida" id="selectUnidadMedida-'+id_pieza+'" value="">'
 		+'<option value="MM">MM</option>'
 		+'<option value="CM">CM</option>'
 		+'</select>'
 		+'</div>'
 		+'<div class="col-xs-3">'
-		+'<select class="form-control c-select" name="servicio" id="selectDimension-'+id_pieza+'" value="">'
+		+'<select class="form-control c-select" name="dimension" id="selectDimension-'+id_pieza+'" value="">'
 		+'<option value="ALTO">ALTO</option>'
 		+'<option value="LARGO">LARGO</option>'
 		+'<option value="ANCHO">ANCHO</option>'

@@ -9,6 +9,9 @@ use App\Model\servicio;
 use App\Model\usuarioClinica;
 use App\Model\clinica;
 use App\Model\servicioTipoContrato;
+use App\Model\medidapieza;
+use App\Model\paciente;
+use App\Model\servicioTipocontratoPedido;
 use Notify;
 use Datatables;
 

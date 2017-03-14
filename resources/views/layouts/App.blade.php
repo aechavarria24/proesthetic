@@ -649,9 +649,9 @@
   <script src="/scripts/app.js"></script>
   <script src="/scripts/ajax.js"></script>
   <script src="/plugins/pnotify/pnotify.custom.min.js"></script>
-  <script src="/plugins/dataTables/datatables.min.js"></script>
   <script src="/plugins/select2/js/select2.full.min.js"></script>
   <script src="/plugins/bootstrapdatepicker/js/bootstrap-datepicker.min.js"></script>
+  <script src="/plugins/dataTables/datatables.min.js"></script>
 
 
   @if (Session::has('notifier.notice'))
