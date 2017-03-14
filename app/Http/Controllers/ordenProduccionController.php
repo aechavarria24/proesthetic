@@ -25,8 +25,8 @@ class ordenProduccionController extends Controller
        $ordenProduccion = ordenProduccion::all();
        return Datatables::of($ordenProduccion)
        ->addColumn('action', function ($ordenProduccion) {
-         return '<a href="/produccion/'.$ordenProduccion->id.'/edit" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i>&nbsp;Insumo</a>
-         <a href="/produccion/'.$ordenProduccion->id.'/detalle" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i>&nbsp;Detalle</a>';
+         return '<a href="/produccion/'.$ordenProduccion->id.'/edit" class="btn btn-xs btn-primary"><i class=""></i>&nbsp;Editar</a>
+         <a href="/produccion/'.$ordenProduccion->id.'/detalle" class="btn btn-xs btn-danger"><i class=""></i>&nbsp;Detalle</a>';
        })
        ->make(true);
      }

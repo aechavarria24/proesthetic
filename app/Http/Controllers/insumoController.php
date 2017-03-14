@@ -22,8 +22,8 @@ class insumoController extends Controller
        $insumos = insumo::all();
        return Datatables::of($insumos)
        ->addColumn('action', function ($insumo) {
-         return '<a href="/insumo/'.$insumo->id.'/edit" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i>&nbsp;Editar</a>
-         <a href="/insumo/'.$insumo->id.'/edit" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i>&nbsp;Inabilitar</a>';
+         return '<a href="/insumo/'.$insumo->id.'/edit" class=""><i class="glyphicon glyphicon-edit"></i>&nbsp;</a>
+         <a href="/insumo/'.$insumo->id.'/edit" class=""><i class="glyphicon glyphicon-trash"></i>&nbsp;</a>';
        })
        ->addColumn('proveedor', function($insumo){
          $proveedor = proveedor::select("proveedor.*")
@@ -96,7 +96,6 @@ class insumoController extends Controller
     public function edit($id)
     {
       $proveedores = proveedor::all();
-  
       $insumos = insumo::find($id);
       if ($insumos==null) {
         Notify::warning('No se encontraron datos','Espera...');

@@ -33,6 +33,8 @@ Route::get('pedido/get', 'pedidoController@getData');
 Route::get('pedido/detalle', 'pedidoController@detalle');
 Route::get('produccion/detalle', 'ordenProduccionController@detalle');
 Route::get('venta/get', 'ventaController@getData');
+Route::get('proveedor/pdf', 'proveedorController@generar_pdf);
+
 
 Route::resource('servicio','servicioController');
 Route::resource('contrato','contratoController');

@@ -28,10 +28,6 @@
           </select>
         </div>
 
-
-
-
-
         <div class=" p-a text-center">
           <button type="submit" class="btn btn-warning">Modificar</button>
         </div>

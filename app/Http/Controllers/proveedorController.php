@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Model\proveedor;
 use Notify;
 use Datatables;
+use PDF;
 
 class proveedorController extends Controller
 {
@@ -21,8 +22,8 @@ class proveedorController extends Controller
     $proveedores = proveedor::all();
     return Datatables::of($proveedores)
     ->addColumn('action', function ($proveedor) {
-      return '<a href="/proveedor/'.$proveedor->id.'/edit" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i>&nbsp;Editar</a>
-      <a href="/proveedor/'.$proveedor->id.'/edit" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i>&nbsp;Inabilitar</a>';
+      return '<a href="/proveedor/'.$proveedor->id.'/edit" class=""><i class="glyphicon glyphicon-edit"></i>&nbsp;</a>
+      <a href="/proveedor/'.$proveedor->id.'/edit" class=""><i class="glyphicon glyphicon-ok" ></i>&nbsp;</a>';
     })
     ->make(true);
   }
@@ -118,6 +119,15 @@ class proveedorController extends Controller
   * @param  int  $id
   * @return \Illuminate\Http\Response
   */
+
+public function generar_pdf(){
+  $proveedor = proveedor::all();
+
+  $pdf = PDF::loadView('proveedor.pdf', compact('proveedor'));
+  return $pdf->download('invoice.pdf');
+
+}
+
 
   public function destroy($id)
   {
