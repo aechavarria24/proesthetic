@@ -10,8 +10,9 @@ Pedido
   <div class="box-body">
     <div class="padding">
       <div class="row">
-        <form data-ui-jp="parsley" novalidate="" method="post" action="/pedido">
-          {{csrf_field()}}
+
+        <form data-ui-jp="parsley" novalidate="" method="POST" action="/pedido">
+          {{ csrf_field() }}
           <div class="col-sm-6">
             <div class="col-lg-12">
               <div class="box">
@@ -119,18 +120,145 @@ Pedido
     </form>
   </div>
 </div>
-
+<pre id = "resultado"></pre>
 </div>
 </div>
 @endsection
 
 @section ('script')
 <script type="text/javascript">
-
 $('#cbxServicio').select2();
 $('#datepicker').datepicker({
   format: 'yyyy-mm-dd',
 });
+
+var id_pieza=0;
+function AgregarServicio(e){
+	var servicio = $("#cbxServicio option:selected").html();
+	var servicio_tipo_id =$("#cbxServicio").val();
+	// alert(servicio_tipo_id);
+
+		$("#containerMedidaPieza").append(
+		'<div class="box">'
+		+'<div class="box-header" >'
+		+'Medidas de la pieza de: '+' '+servicio+''
+		+'</div>'
+		+'<div class="box-body">'
+		+'<div class="row">'
+		+'<div class="col-xs-3">'
+		+'<input class="form-control" hidden="true" name="servicio_tipo_id" type="number" value="'+servicio_tipo_id+'">'
+		+'<input class="form-control" name="cantidad" id="txtCant-'+id_pieza+'" placeholder="Cantidad" type="number" value="">'
+		+	'</div>'
+		+'<div class=" col-xs-4">'
+		+'<select class="form-control c-select" name="unidadMedida" id="selectUnidadMedida-'+id_pieza+'" value="">'
+		+'<option value="MM">MM</option>'
+		+'<option value="CM">CM</option>'
+		+'</select>'
+		+'</div>'
+		+'<div class="col-xs-3">'
+		+'<select class="form-control c-select" name="dimension" id="selectDimension-'+id_pieza+'" value="">'
+		+'<option value="ALTO">ALTO</option>'
+		+'<option value="LARGO">LARGO</option>'
+		+'<option value="ANCHO">ANCHO</option>'
+		+'<option value="RADIO">RADIO</option>'
+		+'</select>'
+		+'</div>'
+		+'<div>'
+		+'<div class="col-xs-1">'
+		+'<button id="'+id_pieza+'-btn" title="Adicionar" value="'+id_pieza+'" onclick="AgregarMedidaPieza(this);" class="btn btn-icon white" type="button">'
+    + '<input id="_token" name="_token" type="hidden" value="{{csrf_token()}}">'
+		+'<i class="fa fa-plus" href="#"></i>'
+		+'</button>'
+		+'</div>'
+		+'</div>'
+		+'<div class="box-divider m-a-0"></div>'
+
+		+'</div>'
+		+'<div style = "padding-top: 2%;">'
+		+'<table class="table table-striped b-t">'
+		+'<thead>'
+		+'<tr>'
+		+'<th>Cantidad</th>'
+		+'<th>Dimensión</th>'
+		+'<th>Unidad de medida</th>'
+		+'<th>Opción</th>'
+		+'</tr>'
+		+'</thead>'
+		+'<tbody id="'+id_pieza+'">'
+		+'</tbody>'
+		+'</table>'
+		+'</div>'
+		+'</div>'
+
+		+'</div>'
+	);
+	id_pieza++;
+}
+var contador=0;
+function AgregarMedidaPieza(e){
+
+	var id=$(e).val();
+	// alert(id);
+	var idTabla=id.split('-');
+	var cantidad=($("#txtCant-"+idTabla[0]).val());
+	var unidad=($("#selectUnidadMedida-"+idTabla[0]).val());
+	var dimension=($("#selectDimension-"+idTabla[0]).val());
+	// 	var oID = $(this).attr("tbody");
+  $.ajax({
+    type: "post",
+    datatype : "json",
+    url: "/pedido/agregarPieza",
+    data:{
+      "_token" : $("#_token").val(),
+      "cantidad" : cantidad,
+      "unidad" : unidad,
+      "dimension" : dimension,
+      "id" : id
+    }
+  }).done(function(result){
+    //Por programar :)
+    $("#resultado").append(result.respuesta);
+  });
+
+
+
+	$('#'+idTabla[0]).append(
+		'<tr id="'+contador+'-'+idTabla[0]+'">'
+		+'<td>'+cantidad+'</td>'
+		+'<td>'+unidad+'</td>'
+		+'<td>'+dimension+'</td>'
+		+'<td>'
+		+'<button class="btn btn-icon white" title="Eliminar" value="'+contador+'-'+idTabla[0]+'" onclick="eliminar(this);" id="'+contador+'-'+idTabla[0]+'" type="button">'
+		+'<i class="fa fa-trash" href="#"></i>'
+		+'</button>'
+		+'</td>'
+		+'</tr>')
+		// alert(id);
+		contador++;
+	}
+	function eliminar(e){
+		var id=$(e).val();
+		var idTabla=id.split('-');
+		// alert(id);
+		$('#'+id).remove(
+
+		);
+	}
+
+	// $('#tabla > tbody:last').append('<tr id="ultima"><td>Ultima fila</td></tr>');
+	//  $('#tabla > tbody:last').append('<tr id="ultima"><td>Ultima fila</td></tr>');
+	function cambiar_valor_servicio(e){
+		var id = $(e).val();
+		$.ajax({
+			url:'/pedido/traer/valor/'+id,
+			dataType:'json',
+			type:'get'
+		}).done(function(r){
+			$("#valor").val(r.valor);
+		})
+	}
+
+
 
 
 
