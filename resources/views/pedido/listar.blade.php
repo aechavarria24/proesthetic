@@ -60,17 +60,22 @@ function cancelarPedido(e){
     if (r.respuesta == 1) {
         var table = $('#tblPedido').DataTable();
 
-            new PNotify({
-                title: 'Notificación',
-                type : 'success',
-                text: 'Estado actualizado con éxito.',
-                icon : false
-            })
+        new PNotify({
+            title: 'Notificación',
+            type : 'success',
+            text: 'Estado actualizado con éxito.',
+            icon : false
+        })
 
         table.ajax.reload();
 
-    }else{
-        alert(":)");
+    }else if (r.respuesta == 0){
+        new PNotify({
+            title: 'Notificación',
+            type : 'error',
+            text: 'No se puede cancelar el pedido.',
+            icon : false
+        })
     }
 });
 }

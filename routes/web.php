@@ -34,6 +34,7 @@ Route::get('pedido/detalle', 'pedidoController@detalle');
 Route::get('produccion/{id}/detalle', 'ordenProduccionController@detalle');
 Route::get('venta/get', 'ventaController@getData');
 Route::post('pedido/agregarPieza', 'pedidoController@add_medida_pieza_tabla');
+Route::post('pedido/eliminarPieza', 'pedidoController@delete_medida_pieza_tabla');
 Route::post('pedido/cancelarPedido', 'pedidoController@cancelarPedido');
 
 Route::resource('servicio','servicioController');

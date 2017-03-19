@@ -46,10 +46,12 @@ class pedidoController extends Controller
 
         $pedido=pedido::find($input["id"]);
 
-        if ($pedido != null) {
+        if ($pedido != null && $pedido["peido_estado_id"] != 1) {
             $input["estado_pedido_id"]=7;
             $pedido->update($input);
             return json_encode(["respuesta"=>1]);
+        }else{
+            return json_encode(["respuesta"=>0]);
         }
 
     }
@@ -111,9 +113,12 @@ class pedidoController extends Controller
     public function create()
     {
         //SELECT * FROM usuario_clinica as A inner join clinica as b on b.id=a.clinica_id
-        $usuarioClinica=  usuarioClinica::select('usuario_clinica.*')
+        $usuarioClinica=  usuarioClinica::select('usuario_clinica.nombre as NombreDoctor','usuario_clinica.apellido as ApellidoDocto','clinica.nombre as usuarioClinica')
         ->join('clinica','usuario_clinica.clinica_id','=','clinica.id')
         ->get();
+        // var_dump($usuarioClinica);
+        // exit;
+
         //
         // SELECT * FROM servicio_tipocontrato as A
         //     INNER join servicio as b on a.servicio_id=b.id
@@ -191,77 +196,26 @@ class pedidoController extends Controller
     }
 
     public function add_medida_pieza_tabla(Request $request){
-        // return $request;
-        // exit;
+
         $input = $request->all();
-        $id_tabla = -1;
-
+        $contador=count(session(["pedido"=>$input["id"]]))+1;
+        $id="id_contador";
+        var_dump($contador);
+        exit;
         if (session("pedido") == null) {
-            session(["pedido"=>[]]);
-            if (session("tabla") == null) {
-                session(["tabla"=>["id"=>$input["id"], ["fila"=>[]]]]);
-            }
-
-
-            foreach (session("tabla") as $value) {
-                if ($value[0] == $input["id"] ) {
-                    $id_tabla = $value[0];
-                    break;
-                }
-            }
-
-            if ($id_tabla >= 0) {
-                session(["tabla"=>["id"=>[$id_tabla], "fila"=> [
-                    "cantidad"=>$input["cantidad"],
-                    "dimension" => $input["dimension"],
-                    "unidad" => $input["unidad"]
-                ]
-            ]
-        ]);
-        session(["pedido"=>[session("tabla")]]);
-    }else{
-        session(["tabla"=>["id"=>[$input["id"]], "fila"=> [
-            "cantidad"=>$input["cantidad"],
-            "dimension" => $input["dimension"],
-            "unidad" => $input["unidad"]
-        ]
-    ]
-]);
-session(["pedido"=>[session("tabla")]]);
-}
-} else {
-    if (session("tabla") == null) {
-        session(["tabla"=>["id"=>$input["id"], ["fila"=>[]]]]);
-    }
-
-
-    foreach (session("tabla") as $value) {
-        if ($value[0] == $input["id"] ) {
-            $id_tabla = $value[0];
-            break;
+            session(["pedido"=> [[ "id_tabla" => $input["id"], "unidad" => $input["unidad"], "cantidad" => $input["cantidad"], "dimension" => $input["dimension"],  $id=>[$contador]]]]);
+        } else {
+            $pedido = session("pedido");
+            array_push($pedido, [ "id_tabla" => $input["id"], "unidad" => $input["unidad"], "cantidad" => $input["cantidad"], "dimension" => $input["dimension"], $id=>[$contador]]);
+            session(["pedido" => $pedido]);
         }
-    }
+        //var_dump(session("pedido"));
+        //exit;
 
-    if ($id_tabla >= 0) {
-        session(["tabla"=>["id"=>[$id_tabla], "fila"=> [
-            "cantidad"=>$input["cantidad"],
-            "dimension" => $input["dimension"],
-            "unidad" => $input["unidad"]
-        ]
-    ]
-]);
-session(["pedido"=>[session("tabla")]]);
-}else{
-    session(["tabla"=>["id"=>[$input["id"]], "fila"=> [
-        "cantidad"=>$input["cantidad"],
-        "dimension" => $input["dimension"],
-        "unidad" => $input["unidad"]
-    ]
-]
-]);
-session(["pedido"=>[session("tabla")]]);
-}
-}
-return response()->json(["respuesta"=>session("pedido")]);
-}
+        return response()->json(session("pedido"));
+
+    }
+    public function delete_medida_pieza_tabla(Request $Request){
+
+    }
 }
