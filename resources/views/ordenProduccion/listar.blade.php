@@ -47,7 +47,7 @@ Orden de producción
 @endsection
 @section ('script')
 <script type="text/javascript">
- function detalle(id){
+ function detalle(id){   
 
     $.ajax({
         'dataType':'json',
@@ -62,15 +62,18 @@ Orden de producción
         });
 
       }else{
+        
+        
         $("#estadoActual").text(e.estado);
         $.each(e.data[0], function(i, e){
           $("#ddlEstados").append("<option value='"+e.id+"'>"+e.nombre+"</option>");
         })
-         $("#mdlEstado").modal();
+        $("#ddlEstados").removeAttr('hidden');
+         // $("#mdlEstado").modal();
       }
 
-  });
-  }
+  })};
+  
 
 $('#tblordenProduccion').DataTable({
   processing: true,
@@ -87,5 +90,6 @@ $('#tblordenProduccion').DataTable({
     {data: 'action', name: 'action', orderable: false,searchable: false}
   ]
 });
+
 </script>
 @endsection

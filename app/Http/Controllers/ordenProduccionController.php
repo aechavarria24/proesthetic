@@ -24,23 +24,34 @@ class ordenProduccionController extends Controller
              return json_encode(["data"=>1]);
         }
 
-        return json_encode(["data"=>[$estado_orden], "estado"=>$estado->nombre]);
+        //return json_encode(["data"=>[$estado_orden], "estado"=>$estado->nombre]);
+        return ["data"=>$estado_orden, "estado"=>$estado->nombre];
+
      }
 
-     public function getData (Request $Request)
+     public function getData(Request $Request)
      {
        $ordenProduccion = ordenProduccion::select("orden_produccion.*", "estado_orden_produccion.nombre as estado")
        ->join("estado_orden_produccion", "orden_produccion.estado_orden_produccion_id", "=", "estado_orden_produccion.id")
        ->get();
 
-       return Datatables::of($ordenProduccion)
-       ->addColumn('action', function ($ordenProduccion) {
+        $option_estado = "<option>Nada</option>";
+       $estados = $this->detalle($ordenProduccion[0]["id"]);
+       
+       foreach ($estados["data"] as $value) {
+           $option_estado .= '<option value = "'.$value["id"].'">'.$value["nombre"].'</option>';
+       }
 
+       return Datatables::of($ordenProduccion)
+       ->addColumn('action', function ($ordenProduccion) use ($option_estado) {
 
          return '<a href="/produccion/'.$ordenProduccion->id.'/edit" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i>&nbsp;Insumo</a>
 
-            <a href="#" onclick= "detalle('.$ordenProduccion->id.')" class="btn btn-xs btn-info"><i class="fa fa-eye"></i>&nbsp;Cambio Estado</a>';
+            <a href="#"  class="btn btn-xs btn-info"><i class="fa fa-eye" ></i>&nbsp;</a> <select hidden="" class="form-control" ="'.$option_estado.'" id="ddlEstados">
+         
+        </select>';
        })
+
         ->addColumn('estado_orden_produccion', function ($ordenProduccion){
             return $ordenProduccion ->estado;
 
