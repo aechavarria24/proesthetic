@@ -237,7 +237,6 @@ function AgregarMedidaPieza(e){
 
 
 
-
         //console.log(result.respuesta);
     });
 

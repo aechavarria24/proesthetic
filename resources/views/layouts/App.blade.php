@@ -777,6 +777,7 @@
     <!-- escript propia de casa pagina -->
     @yield('script')
 
+
   </script>
   <!-- endbuild -->
 </body>
