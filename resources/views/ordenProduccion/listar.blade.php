@@ -13,7 +13,7 @@ Orden de producción
         <tr>
           <th  style="width:20%">Número orden</th>
           <th  style="width:25%">Fecha creación</th>
-          <th  style="width:25%">Fecha finalizacion</th>
+          <th  style="width:25%">Fecha finalización</th>
           <th  style="width:25%">Estado</th>
           <th  style="width:25%">Opciones</th>
         </tr>
@@ -36,9 +36,9 @@ $('#tblordenProduccion').DataTable({
   ajax: '/produccion/get',
   columns: [
     {data: 'id', name: 'Numero orden'},
-    {data: 'create_at', name: 'Fecha creación'},
+    {data: 'created_at', name: 'Fecha creación'},
     {data: 'fechaFin', name: 'Fecha finalizacion'},
-    {data: 'estado_orden_produccion', name: 'Estado'},
+    {data: 'estado_orden_produccion_id', name: 'Estado'},
     {data: 'action', name: 'action', orderable: false,searchable: false}
   ]
 });
