@@ -29,9 +29,13 @@ Route::get('usuario/get', 'usuarioController@getData');
 Route::get('clinica/get', 'clinica@getData');
 Route::get('produccion/get', 'ordenProduccionController@getData');
 Route::get('pedido/get', 'pedidoController@getData');
+Route::get('pedido/traer/valor/{id}', 'pedidoController@get_valor');
 Route::get('pedido/detalle', 'pedidoController@detalle');
-Route::get('produccion/detalle', 'ordenProduccionController@detalle');
+Route::get('produccion/{id}/detalle', 'ordenProduccionController@detalle');
 Route::get('venta/get', 'ventaController@getData');
+Route::post('pedido/agregarPieza', 'pedidoController@add_medida_pieza_tabla');
+Route::post('pedido/eliminarPieza', 'pedidoController@delete_medida_pieza_tabla');
+Route::post('pedido/cancelarPedido', 'pedidoController@cancelarPedido');
 
 Route::resource('servicio','servicioController');
 Route::resource('contrato','contratoController');

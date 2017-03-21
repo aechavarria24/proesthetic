@@ -20,8 +20,7 @@ class servicioController extends Controller
     $servicios = servicio::all();
     return Datatables::of($servicios)
     ->addColumn('action', function ($servicio) {
-      return '<a href="/servicio/'.$servicio->id.'/edit" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i>&nbsp;Editar</a>
-      <a href="/servicio/'.$servicio->id.'/edit" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i>&nbsp;Inabilitar</a>';
+      return '<a href="/servicio/'.$servicio->id.'/edit" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i>&nbsp;Editar</a>';
     })
     ->make(true);
   }

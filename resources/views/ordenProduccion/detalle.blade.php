@@ -12,19 +12,25 @@
         {{csrf_field()}}
         <div class="form-group">
           <label>Número orden </label>
-          <input class="form-control" required="" data-parsley-id="136" type="text" name="id" readonly="">
+            @foreach($ordenProduccion as $values)
+          <input class="form-control" required="" value="{{$values->id}}" data-parsley-id="136" type="text" name="" readonly="">
+          @endforeach
         </div>
         <div class="form-group">
           <label>usuario creación</label>
-          <input class="form-control" required="" data-parsley-id="136" type="text" name="idusuario" readonly="">
+
+          <input class="form-control" value="{{$values->usuario_id}}" required="" data-parsley-id="136" type="text" name="idusuario" readonly="">
+
         </div>
         <div class="form-group">
           <label>Observación</label>
-          <textarea class="form-control"  data-parsley-id="136" type="text" name="observacion" readonly=""> </textarea>
+          <input class="form-control" value="{{$values->observacion}}" rows="8" cols="80" data-parsley-id="136" type="text" name="observacion" readonly="">
+
+          <!-- <textarea name="name" value="{{$values->observacion}}" rows="8" cols="80"></textarea> -->
         </div>
         <div class="form-group">
           <label>Número Pedido</label>
-          <input class="form-control" required="" data-parsley-id="136" type="text" name="pedidoid" readonly="">
+          <input class="form-control" required="" value="{{$values->pedido_id}}" data-parsley-id="136" type="text" name="pedidoid" readonly="">
         </div>
 
         <div class=" p-a text-center">

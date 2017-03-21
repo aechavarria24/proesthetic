@@ -27,10 +27,11 @@
   <link rel="stylesheet" href="/css/bootstrap/dist/css/bootstrap.min.css" type="text/css" />
   <link rel="stylesheet" href="/plugins/pnotify/pnotify.custom.min.css" type="text/css" />
   <link rel="stylesheet" href="/plugins/dataTables/datatables.min.css"/>
-
-  <!-- build:css css/styles/app.min.css -->
+  <link rel="stylesheet" href="/plugins/select2/css/select2.min.css"/>
   <link rel="stylesheet" href="/css/styles/app.css" type="text/css" />
   <link rel="stylesheet" href="/css/styles/style.css" type="text/css" />
+  <link rel="stylesheet" href="/plugins/bootstrapdatepicker/css/bootstrap-datepicker.min.css"/>
+
   <!-- endbuild -->
   <link rel="stylesheet" href="/css/styles/font.css" type="text/css" />
 </head>
@@ -648,7 +649,11 @@
   <script src="/scripts/app.js"></script>
   <script src="/scripts/ajax.js"></script>
   <script src="/plugins/pnotify/pnotify.custom.min.js"></script>
+  <script src="/plugins/select2/js/select2.full.min.js"></script>
+  <script src="/plugins/bootstrapdatepicker/js/bootstrap-datepicker.min.js"></script>
   <script src="/plugins/dataTables/datatables.min.js"></script>
+
+
   @if (Session::has('notifier.notice'))
   <script>
   new PNotify({!! Session::get('notifier.notice') !!});
