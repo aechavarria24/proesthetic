@@ -20,7 +20,6 @@ Auth::routes();
 Route::get('/home', 'HomeController@index');
 
 
-
 Route::get('servicio/get', 'servicioController@getData');
 Route::get('contrato/get', 'contratoController@getData');
 Route::get('proveedor/get', 'proveedorController@getData');

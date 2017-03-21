@@ -12,6 +12,7 @@ Empleado
       <thead>
         <tr>
           <th  style="width:1%">Usuario</th>
+          <th  style="width:1%">Rol</th>
           <th  style="width:1%">Nombre</th>
           <th  style="width:1%">Apellido</th>
           <th  style="width:1%">Estado</th>
@@ -35,6 +36,7 @@ $('#tblEmpleado').DataTable({
   ajax: '/empleado/get',
   columns: [
     {data: 'username', name: 'username'},
+    {data: 'rol', name: 'rol'},
     {data: 'nombre', name: 'nombre'},
     {data: 'apellido', name: 'apellido'},
     {data: 'estado', name: 'estado'},

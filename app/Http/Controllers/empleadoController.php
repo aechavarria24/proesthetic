@@ -89,6 +89,26 @@ class empleadoController extends Controller
   public function edit($id)
   {
     //
+    $empleado = empleado::find($id);
+
+    //$empleado = empleado::select("empleado.*", "rol.nombre AS rol")
+    //->join("rol", "rol.id", "=", "empleado.rol_id")
+    //->where("empleado.id", $id)
+    //->first();
+    $pregunta = preguntaEmpleado::select("pregunta_empleado.*")
+    ->join("empleado", "pregunta_empleado.id", "=", "empleado.pregunta_empleado_id")
+    ->where("empleado.id", $id)
+    ->first();
+    if ($empleado == null) {
+      Notify::success("No se encontro el empleado \"". $input['nombre'] ."\".","Ooops");
+      redirect('empleado/show');
+    } else {
+      $roles = rol::pluck("nombre","id");
+      $preguntas = preguntaEmpleado::pluck("pregunta", "id");
+      return view("empleado.editar", compact("empleado", "roles", 'pregunta'));
+    }
+
+
   }
 
   /**
@@ -101,6 +121,18 @@ class empleadoController extends Controller
   public function update(Request $request, $id)
   {
     //
+    $input = $request->all();
+    $empleado = empleado::find($id);
+    if ($empleado == null) {
+      Notify::warning('No se encontro el empleado que intenta actualizar', 'Nota: ');
+      return redirect('empleado/show');;
+    } else {
+      $empleado->update($input);
+      Notify::success('Empelado '.$input['nombre'].' actualizado con éxito', 'Nota: ');
+      return redirect('empleado/show');
+    }
+
+
   }
 
   /**
