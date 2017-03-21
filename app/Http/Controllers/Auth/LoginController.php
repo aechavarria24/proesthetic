@@ -6,178 +6,198 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\Model\User;
+use App\Model\paginas;
 
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
+  /*
+  |--------------------------------------------------------------------------
+  | Login Controller
+  |--------------------------------------------------------------------------
+  |
+  | This controller handles authenticating users for the application and
+  | redirecting them to your home screen. The controller uses a trait
+  | to conveniently provide its functionality to your applications.
+  |
+  */
 
-    use AuthenticatesUsers;
+  use AuthenticatesUsers;
 
-    /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    protected $redirectTo = '/home';
+  /**
+  * Where to redirect users after login.
+  *
+  * @var string
+  */
+  protected $redirectTo = '/home';
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('guest', ['except' => 'logout']);
+  /**
+  * Create a new controller instance.
+  *
+  * @return void
+  */
+  public function __construct()
+  {
+    $this->middleware('guest', ['except' => 'logout']);
+  }
+
+  public function login(Request $request)
+  {
+    $this->validateLogin($request);
+
+    if ($request['lblTipo'] == "doctor") {
+      session(['tabla_usuario'=>'usuario_clinica']);
+    }else if ($request['lblTipo'] == "empleado") {
+      session(['tabla_usuario'=>'empleado']);
     }
 
-    public function login(Request $request)
-    {
-        $this->validateLogin($request);
 
-        // If the class is using the ThrottlesLogins trait, we can automatically throttle
-        // the login attempts for this application. We'll key this by the username and
-        // the IP address of the client making these requests into this application.
-        if ($this->hasTooManyLoginAttempts($request)) {
-            $this->fireLockoutEvent($request);
 
-            return $this->sendLockoutResponse($request);
-        }
+    // If the class is using the ThrottlesLogins trait, we can automatically throttle
+    // the login attempts for this application. We'll key this by the username and
+    // the IP address of the client making these requests into this application.
+    if ($this->hasTooManyLoginAttempts($request)) {
+      $this->fireLockoutEvent($request);
 
-        if ($this->attemptLogin($request)) {
-            return $this->sendLoginResponse($request);
-        }
-        // If the login attempt was unsuccessful we will increment the number of attempts
-        // to login and redirect the user back to the login form. Of course, when this
-        // user surpasses their maximum number of attempts they will get locked out.
-        $this->incrementLoginAttempts($request);
-
-        return $this->sendFailedLoginResponse($request);
+      return $this->sendLockoutResponse($request);
     }
 
-    /**
-     * Validate the user login request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return void
-     */
-    protected function validateLogin(Request $request)
-    {
-        $this->validate($request, [
-            $this->username() => 'required', 'password' => 'required',
-        ]);
+    if ($this->attemptLogin($request)) {
+      $rol = \Auth::user()->rol_id;
+      $permisos = paginas::select('pagina.*')
+                  ->join("pagina_rol", "pagina_id", "=", "pagina.id")
+                  ->where("pagina_rol.rol_id", $rol)
+                  ->get()
+                  ->toArray();
+
+      session(["permisos"=>$permisos]);
+
+
+
+      return $this->sendLoginResponse($request);
+    }
+    // If the login attempt was unsuccessful we will increment the number of attempts
+    // to login and redirect the user back to the login form. Of course, when this
+    // user surpasses their maximum number of attempts they will get locked out.
+    $this->incrementLoginAttempts($request);
+
+    return $this->sendFailedLoginResponse($request);
+  }
+
+  /**
+  * Validate the user login request.
+  *
+  * @param  \Illuminate\Http\Request  $request
+  * @return void
+  */
+  protected function validateLogin(Request $request)
+  {
+    $this->validate($request, [
+      $this->username() => 'required', 'password' => 'required',
+    ]);
+  }
+
+  /**
+  * Attempt to log the user into the application.
+  *
+  * @param  \Illuminate\Http\Request  $request
+  * @return bool
+  */
+  protected function attemptLogin(Request $request)
+  {
+    return $this->guard()->attempt(
+      $this->credentials($request), $request->has('remember')
+    );
+  }
+
+  /**
+  * Get the needed authorization credentials from the request.
+  *
+  * @param  \Illuminate\Http\Request  $request
+  * @return array
+  */
+  protected function credentials(Request $request)
+  {
+    return $request->only($this->username(), 'password');
+  }
+
+  /**
+  * Send the response after the user was authenticated.
+  *
+  * @param  \Illuminate\Http\Request  $request
+  * @return \Illuminate\Http\Response
+  */
+  protected function sendLoginResponse(Request $request)
+  {
+    $request->session()->regenerate();
+
+    $this->clearLoginAttempts($request);
+
+    return $this->authenticated($request, $this->guard()->user())
+    ?: redirect()->intended($this->redirectPath());
+  }
+
+  /**
+  * The user has been authenticated.
+  *
+  * @param  \Illuminate\Http\Request  $request
+  * @param  mixed  $user
+  * @return mixed
+  */
+  protected function authenticated(Request $request, $user)
+  {
+    //
+  }
+
+  /**
+  * Get the failed login response instance.
+  *
+  * @param  \Illuminate\Http\Request  $request
+  * @return \Illuminate\Http\RedirectResponse
+  */
+  protected function sendFailedLoginResponse(Request $request)
+  {
+    $errors = [$this->username() => trans('auth.failed')];
+
+    if ($request->expectsJson()) {
+      return response()->json($errors, 422);
     }
 
-    /**
-     * Attempt to log the user into the application.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return bool
-     */
-    protected function attemptLogin(Request $request)
-    {
-        return $this->guard()->attempt(
-            $this->credentials($request), $request->has('remember')
-        );
-    }
+    return redirect()->back()
+    ->withInput($request->only($this->username(), 'remember'))
+    ->withErrors($errors);
+  }
 
-    /**
-     * Get the needed authorization credentials from the request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
-     */
-    protected function credentials(Request $request)
-    {
-        return $request->only($this->username(), 'password');
-    }
+  /**
+  * Get the login username to be used by the controller.
+  *
+  * @return string
+  */
+  public function username()
+  {
+    return 'username';
+  }
 
-    /**
-     * Send the response after the user was authenticated.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    protected function sendLoginResponse(Request $request)
-    {
-        $request->session()->regenerate();
+  /**
+  * Log the user out of the application.
+  *
+  * @param  \Illuminate\Http\Request  $request
+  * @return \Illuminate\Http\Response
+  */
+  public function logout(Request $request)
+  {
+    $this->guard()->logout();
 
-        $this->clearLoginAttempts($request);
+    $request->session()->flush();
 
-        return $this->authenticated($request, $this->guard()->user())
-                ?: redirect()->intended($this->redirectPath());
-    }
+    $request->session()->regenerate();
 
-    /**
-     * The user has been authenticated.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  mixed  $user
-     * @return mixed
-     */
-    protected function authenticated(Request $request, $user)
-    {
-        //
-    }
+    return redirect('/');
+  }
 
-    /**
-     * Get the failed login response instance.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    protected function sendFailedLoginResponse(Request $request)
-    {
-        $errors = [$this->username() => trans('auth.failed')];
-
-        if ($request->expectsJson()) {
-            return response()->json($errors, 422);
-        }
-
-        return redirect()->back()
-            ->withInput($request->only($this->username(), 'remember'))
-            ->withErrors($errors);
-    }
-
-    /**
-     * Get the login username to be used by the controller.
-     *
-     * @return string
-     */
-    public function username()
-    {
-        return 'username';
-    }
-
-    /**
-     * Log the user out of the application.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function logout(Request $request)
-    {
-        $this->guard()->logout();
-
-        $request->session()->flush();
-
-        $request->session()->regenerate();
-
-        return redirect('/');
-    }
-
-    /**
-     * Get the guard to be used during authentication.
-     *
-     * @return \Illuminate\Contracts\Auth\StatefulGuard
-     */
+  /**
+  * Get the guard to be used during authentication.
+  *
+  * @return \Illuminate\Contracts\Auth\StatefulGuard
+  */
 
 }
