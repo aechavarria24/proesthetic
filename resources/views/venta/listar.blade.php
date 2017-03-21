@@ -13,11 +13,10 @@ Venta
         <table class="table table-striped b-t b-b" id="tblVentas" style="width: 100%;">
           <thead>
             <tr>
-              <th  style="width:20%">Número pedido</th>
-              <th  style="width:25%">Doctor</th>
-              <th  style="width:25%">Clínica</th>
-              <th  style="width:25%">Fecha de venta</th>
-              <th  style="width:25%">Estado</th>
+              <th  style="width:20%">Número Venta</th>
+              <th  style="width:20%">Número Pedido</th>
+              <th  style="width:25%">Usuario creación</th>
+              <th  style="width:25%">Fecha creación</th>
               <th  style="width:25%">Opciones</th>
             </tr>
           </thead>
@@ -41,11 +40,10 @@ $('#tblVentas').DataTable({
   },
   ajax: '/venta/get',
   columns: [
-    {data: 'nombre', name: 'nombre'},
-    {data: 'descripcion', name: 'descripcion'},
-    {data: 'descripcion', name: 'descripcion'},
-    {data: 'descripcion', name: 'descripcion'},
-    {data: 'descripcion', name: 'descripcion'},
+    {data: 'id', name: 'id'},
+    {data: 'pedido_id', name: 'pedido_id'},
+    {data: 'empleado_id', name: 'empleado_id'},
+    {data: 'created_at', name: 'created_at'},
     {data: 'action', name: 'action', orderable: false,searchable: false}
   ]
 });

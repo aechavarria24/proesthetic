@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Model\servicio;
+use App\Model\venta;
 use Datatables;
 
 class ventaController extends Controller
@@ -18,11 +18,11 @@ class ventaController extends Controller
 
      public function getData (Request $Request)
      {
-       $servicios = servicio::all();
-       return Datatables::of($servicios)
-       ->addColumn('action', function ($servicio) {
-         return '<a href="/venta/'.$servicio->id.'/edit" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i></a>
-         <a href="/servicio/'.$servicio->id.'/edit" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i></a>';
+       $venta = venta::all();
+       return Datatables::of($venta)
+       ->addColumn('action', function ($venta) {
+         return '<a href="/venta/'.$venta->id.'/edit" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i></a>
+         <a href="/venta/'.$venta->id.'/edit" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i></a>';
        })
        ->make(true);
      }
@@ -64,7 +64,7 @@ class ventaController extends Controller
      */
     public function show($id)
     {
-      $servicios = servicio::all();
+      $venta = venta::all();
       return view('venta.listar');
     }
 

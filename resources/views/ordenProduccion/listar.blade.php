@@ -87,6 +87,7 @@ $('#tblordenProduccion').DataTable({
     {data: 'created_at', name: 'Fecha creación'},
     {data: 'fechaFin', name: 'Fecha finalizacion'},
     {data: 'estado_orden_produccion', name: 'estado_orden_produccion'},
+
     {data: 'action', name: 'action', orderable: false,searchable: false}
   ]
 });
