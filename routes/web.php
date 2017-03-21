@@ -20,7 +20,6 @@ Auth::routes();
 Route::get('/home', 'HomeController@index');
 
 
-
 Route::get('servicio/get', 'servicioController@getData');
 Route::get('contrato/get', 'contratoController@getData');
 Route::get('insumo/get', 'insumoController@getData');
@@ -28,12 +27,22 @@ Route::get('proveedor/get', 'proveedorController@getData');
 Route::get('proveedor/pdf', 'proveedorController@generar_pdf');
 Route::get('usuarioClinica/get', 'usuarioClinicaController@getData');
 Route::get('usuario/get', 'usuarioController@getData');
-Route::get('clinica/get', 'clinica@getData');
+Route::post('clinica/estado/editar', 'clinicaController@cambiar_estado');
 Route::get('produccion/get', 'ordenProduccionController@getData');
 Route::get('pedido/get', 'pedidoController@getData');
+Route::get('pedido/traer/valor/{id}', 'pedidoController@get_valor');
 Route::get('pedido/detalle', 'pedidoController@detalle');
-Route::get('produccion/detalle', 'ordenProduccionController@detalle');
+Route::get('produccion/detalle/{id}', 'ordenProduccionController@detalle');
 Route::get('venta/get', 'ventaController@getData');
+Route::get('clinica/get','clinicaController@getData');
+
+Route::get('empleado/get', 'empleadoController@getData');
+Route::post('empleado/validar_empleado', 'empleadoController@validar_empleado');
+
+Route::post('pedido/agregarPieza', 'pedidoController@add_medida_pieza_tabla');
+Route::post('pedido/eliminarPieza', 'pedidoController@delete_medida_pieza_tabla');
+Route::post('pedido/cancelarPedido', 'pedidoController@cancelarPedido');
+
 
 
 
@@ -48,3 +57,4 @@ Route::resource('pedido','pedidoController');
 Route::resource('produccion', 'ordenProduccionController');
 Route::resource('venta', 'ventaController');
 Route::resource('empleado', 'empleadoController');
+

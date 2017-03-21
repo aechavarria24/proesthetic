@@ -28,10 +28,11 @@
   <link rel="stylesheet" href="/plugins/pnotify/pnotify.custom.min.css" type="text/css" />
    <link rel="stylesheet" href="/plugins/select2/select2.min.css">
   <link rel="stylesheet" href="/plugins/dataTables/datatables.min.css"/>
-
-  <!-- build:css css/styles/app.min.css -->
+  <link rel="stylesheet" href="/plugins/select2/css/select2.min.css"/>
   <link rel="stylesheet" href="/css/styles/app.css" type="text/css" />
   <link rel="stylesheet" href="/css/styles/style.css" type="text/css" />
+  <link rel="stylesheet" href="/plugins/bootstrapdatepicker/css/bootstrap-datepicker.min.css"/>
+
   <!-- endbuild -->
   <link rel="stylesheet" href="/css/styles/font.css" type="text/css" />
 </head>
@@ -56,27 +57,144 @@
         </div>
         <div data-flex class="hide-scroll">
           <nav class="scroll nav-stacked nav-stacked-rounded nav-color">
-
             <ul class="nav" data-ui-nav>
               <li class="nav-header hidden-folded">
                 <span class="text-xs">Main</span>
               </li>
+
+
+              <!-- / Panel -->
+              @if(session("permisos") != null)
+                @foreach(session("permisos") as $value)
+                  @if($value["padre"] == 0)
+                    <!-- / Panel -->
+                    <li>
+                      <a href="#" class="b-success" title="Empleado">
+                        <span class="nav-icon text-white no-fade">
+                          <i class="{{$value['icono']}}"></i>
+                        </span>
+                        <span class="nav-text">{{ $value["nombre"] }}</span>
+                      </a>
+                      <!-- / opciones -->
+                      <ul class="nav-sub nav-mega nav-mega-3">
+                      @foreach(session("permisos") as $padre)
+                        @if($value["id"] == $padre["padre"])
+                          <li>
+                            <a href="{{$padre['url']}}">
+                              <span class="nav-text">{{ $padre['nombre'] }}</span>
+                            </a>
+                          </li>
+                        @endif
+                      @endforeach
+                      </ul>
+                    </li>
+                    <!-- / Panel -->
+                  @endif
+                @endforeach
+              @endif
+              <!-- / Panel -->
               <li>
-                <a href="/dashboard.html" class="b-danger">
+                <a href="#" class="b-success" title="Empleado">
                   <span class="nav-icon text-white no-fade">
-                    <i class="ion-filing"></i>
+                    <i class="fa fa-users"></i>
                   </span>
-                  <span class="nav-text">Dashboard</span>
+                  <span class="nav-text">Empleado</span>
                 </a>
+                <!-- / opciones -->
+                <ul class="nav-sub nav-mega nav-mega-3">
+                  <li>
+                    <a href="/ui.arrow.html">
+                      <span class="nav-text">Arrow</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/ui.box.html">
+                      <span class="nav-text">Box</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/ui.button.html">
+                      <span class="nav-text">Button</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/ui.color.html">
+                      <span class="nav-text">Color</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/ui.dropdown.html">
+                      <span class="nav-text">Dropdown</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/ui.grid.html">
+                      <span class="nav-text">Grid</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/ui.icon.html">
+                      <span class="nav-text">Icon</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/ui.label.html">
+                      <span class="nav-text">Label</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/ui.list.html">
+                      <span class="nav-text">List Group</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/ui.modal.html">
+                      <span class="nav-text">Modal</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/ui.nav.html">
+                      <span class="nav-text">Nav</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/ui.progress.html">
+                      <span class="nav-text">Progress</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/ui.social.html">
+                      <span class="nav-text">Social</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/ui.sortable.html">
+                      <span class="nav-text">Sortable</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/ui.streamline.html">
+                      <span class="nav-text">Streamline</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/ui.timeline.html">
+                      <span class="nav-text">Timeline</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/map.vector.html">
+                      <span class="nav-text">Vector Map</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/ui.widget.html">
+                      <span class="nav-text">Widget</span>
+                    </a>
+                  </li>
+                </ul>
               </li>
-              <li>
-                <a href="/app.project.html" class="b-success">
-                  <span class="nav-icon text-white no-fade">
-                    <i class="ion-android-apps"></i>
-                  </span>
-                  <span class="nav-text">Projects</span>
-                </a>
-              </li>
+              <!-- / Panel -->
               <li>
                 <a href="/app.inbox.html" class="b-info">
                   <span class="nav-icon text-white no-fade">
@@ -505,161 +623,160 @@
           </a>
           <div class="navbar-item pull-left h5" id="pageTitle">
             @yield('titulo')</div>
-          <!-- nabar right -->
-          <ul class="nav navbar-nav pull-right">
-            <li class="nav-item dropdown pos-stc-xs">
-              <a class="nav-link" data-toggle="dropdown">
-                <i class="ion-android-search w-24"></i>
-              </a>
-              <div class="dropdown-menu text-color w-md animated fadeInUp pull-right">
-                <!-- search form -->
-                <form class="navbar-form form-inline navbar-item m-a-0 p-x v-m" role="search">
-                  <div class="form-group l-h m-a-0">
-                    <div class="input-group">
-                      <input type="text" class="form-control" placeholder="Search projects...">
-                      <span class="input-group-btn">
-                        <button type="submit" class="btn white b-a no-shadow"><i class="fa fa-search"></i></button>
-                      </span>
+            <!-- nabar right -->
+            <ul class="nav navbar-nav pull-right">
+              <li class="nav-item dropdown pos-stc-xs">
+                <a class="nav-link" data-toggle="dropdown">
+                  <i class="ion-android-search w-24"></i>
+                </a>
+                <div class="dropdown-menu text-color w-md animated fadeInUp pull-right">
+                  <!-- search form -->
+                  <form class="navbar-form form-inline navbar-item m-a-0 p-x v-m" role="search">
+                    <div class="form-group l-h m-a-0">
+                      <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search projects...">
+                        <span class="input-group-btn">
+                          <button type="submit" class="btn white b-a no-shadow"><i class="fa fa-search"></i></button>
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                </form>
-                <!-- / search form -->
-              </div>
-            </li>
-            <li class="nav-item dropdown pos-stc-xs">
-              <a class="nav-link clear" data-toggle="dropdown">
-                <i class="ion-android-notifications-none w-24"></i>
-                <span class="label up p-a-0 danger"></span>
-              </a>
-              <!-- dropdown -->
-              <div class="dropdown-menu pull-right w-xl animated fadeIn no-bg no-border no-shadow">
-                <div class="scrollable" style="max-height: 220px">
-                  <ul class="list-group list-group-gap m-a-0">
-                    <li class="list-group-item dark-white box-shadow-z0 b">
-                      <span class="pull-left m-r">
-                        <img src="/images/a0.jpg" alt="..." class="w-40 img-circle">
-                      </span>
-                      <span class="clear block">
-                        Use awesome <a href="/#" class="text-primary">animate.css</a><br>
-                        <small class="text-muted">10 minutes ago</small>
-                      </span>
-                    </li>
-                    <li class="list-group-item dark-white box-shadow-z0 b">
-                      <span class="pull-left m-r">
-                        <img src="/images/a1.jpg" alt="..." class="w-40 img-circle">
-                      </span>
-                      <span class="clear block">
-                        <a href="/#" class="text-primary">Joe</a> Added you as friend<br>
-                        <small class="text-muted">2 hours ago</small>
-                      </span>
-                    </li>
-                    <li class="list-group-item dark-white text-color box-shadow-z0 b">
-                      <span class="pull-left m-r">
-                        <img src="/images/a2.jpg" alt="..." class="w-40 img-circle">
-                      </span>
-                      <span class="clear block">
-                        <a href="/#" class="text-primary">Danie</a> sent you a message<br>
-                        <small class="text-muted">1 day ago</small>
-                      </span>
-                    </li>
-                  </ul>
+                  </form>
+                  <!-- / search form -->
                 </div>
-              </div>
-              <!-- / dropdown -->
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link clear" data-toggle="dropdown">
-                <span class="avatar w-32">
-                  <img src="/images/a3.jpg" class="w-full rounded" alt="...">
-                </span>
-              </a>
-              <div class="dropdown-menu w dropdown-menu-scale pull-right">
-                <a class="dropdown-item" href="/profile.html">
-                  <span>Profile</span>
+              </li>
+              <li class="nav-item dropdown pos-stc-xs">
+                <a class="nav-link clear" data-toggle="dropdown">
+                  <i class="ion-android-notifications-none w-24"></i>
+                  <span class="label up p-a-0 danger"></span>
                 </a>
-                <a class="dropdown-item" href="/setting.html">
-                  <span>Settings</span>
+                <!-- dropdown -->
+                <div class="dropdown-menu pull-right w-xl animated fadeIn no-bg no-border no-shadow">
+                  <div class="scrollable" style="max-height: 220px">
+                    <ul class="list-group list-group-gap m-a-0">
+                      <li class="list-group-item dark-white box-shadow-z0 b">
+                        <span class="pull-left m-r">
+                          <img src="/images/a0.jpg" alt="..." class="w-40 img-circle">
+                        </span>
+                        <span class="clear block">
+                          Use awesome <a href="/#" class="text-primary">animate.css</a><br>
+                          <small class="text-muted">10 minutes ago</small>
+                        </span>
+                      </li>
+                      <li class="list-group-item dark-white box-shadow-z0 b">
+                        <span class="pull-left m-r">
+                          <img src="/images/a1.jpg" alt="..." class="w-40 img-circle">
+                        </span>
+                        <span class="clear block">
+                          <a href="/#" class="text-primary">Joe</a> Added you as friend<br>
+                          <small class="text-muted">2 hours ago</small>
+                        </span>
+                      </li>
+                      <li class="list-group-item dark-white text-color box-shadow-z0 b">
+                        <span class="pull-left m-r">
+                          <img src="/images/a2.jpg" alt="..." class="w-40 img-circle">
+                        </span>
+                        <span class="clear block">
+                          <a href="/#" class="text-primary">Danie</a> sent you a message<br>
+                          <small class="text-muted">1 day ago</small>
+                        </span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <!-- / dropdown -->
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link clear" data-toggle="dropdown">
+                  <span class="avatar w-32">
+                    <img src="/images/a3.jpg" class="w-full rounded" alt="...">
+                  </span>
                 </a>
-                <a class="dropdown-item" href="/app.inbox.html">
-                  <span>Inbox</span>
-                </a>
-                <a class="dropdown-item" href="/app.message.html">
-                  <span>Message</span>
-                </a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="/docs.html">
-                  Need help?
-                </a>
-                <a class="dropdown-item" href="/signin.html">Sign out</a>
-              </div>
-            </li>
-          </ul>
-          <!-- / navbar right -->
+                <div class="dropdown-menu w dropdown-menu-scale pull-right">
+                  <a class="dropdown-item" href="/profile.html">
+                    <span>Profile</span>
+                  </a>
+                  <a class="dropdown-item" href="/setting.html">
+                    <span>Settings</span>
+                  </a>
+                  <a class="dropdown-item" href="/app.inbox.html">
+                    <span>Inbox</span>
+                  </a>
+                  <a class="dropdown-item" href="/app.message.html">
+                    <span>Message</span>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="/docs.html">
+                    Need help?
+                  </a>
+                  <a class="dropdown-item" href="/signin.html">Sign out</a>
+                </div>
+              </li>
+            </ul>
+            <!-- / navbar right -->
+          </div>
+        </div>
+        <div class="app-footer white bg p-a b-t">
+          <div class="pull-right text-sm text-muted">Version 1.0.1</div>
+          <span class="text-sm text-muted">&copy; Copyright.</span>
+        </div>
+        <div class="app-body">
+
+          <!-- ############ PAGE START-->
+          <!-- only need a height for layout 4 -->
+          @yield('contenedor')
+          <!-- ############ PAGE END-->
+
         </div>
       </div>
-      <div class="app-footer white bg p-a b-t">
-        <div class="pull-right text-sm text-muted">Version 1.0.1</div>
-        <span class="text-sm text-muted">&copy; Copyright.</span>
-      </div>
-      <div class="app-body">
+      <!-- / -->
 
-        <!-- ############ PAGE START-->
-        <!-- only need a height for layout 4 -->
-        @yield('contenedor')
-        <!-- ############ PAGE END-->
 
-      </div>
+      <!-- ############ SWITHCHER START-->
+
+      <!-- ############ SWITHCHER END-->
+
+      <!-- ############ LAYOUT END-->
     </div>
-    <!-- / -->
 
+    <!-- build:js scripts/app.min.js -->
+    <!-- jQuery -->
+    <script src="/libs/jquery/dist/jquery.js"></script>
+    <!-- Bootstrap -->
+    <script src="/libs/tether/dist/js/tether.min.js"></script>
+    <script src="/libs/bootstrap/dist/js/bootstrap.js"></script>
+    <!-- core -->
+    <script src="/libs/jQuery-Storage-API/jquery.storageapi.min.js"></script>
+    <script src="/libs/PACE/pace.min.js"></script>
+    <script src="/libs/jquery-pjax/jquery.pjax.js"></script>
+    <script src="/libs/blockUI/jquery.blockUI.js"></script>
+    <script src="/libs/jscroll/jquery.jscroll.min.js"></script>
 
-    <!-- ############ SWITHCHER START-->
-
-    <!-- ############ SWITHCHER END-->
-
-    <!-- ############ LAYOUT END-->
-  </div>
-
-  <!-- build:js scripts/app.min.js -->
-  <!-- jQuery -->
-  <script src="/libs/jquery/dist/jquery.js"></script>
-  <!-- Bootstrap -->
-  <script src="/libs/tether/dist/js/tether.min.js"></script>
-  <script src="/libs/bootstrap/dist/js/bootstrap.js"></script>
-  <!-- core -->
-  <script src="/libs/jQuery-Storage-API/jquery.storageapi.min.js"></script>
-  <script src="/libs/PACE/pace.min.js"></script>
-  <script src="/libs/jquery-pjax/jquery.pjax.js"></script>
-  <script src="/libs/blockUI/jquery.blockUI.js"></script>
-  <script src="/libs/jscroll/jquery.jscroll.min.js"></script>
-
-  <script src="/scripts/config.lazyload.js"></script>
-  <script src="/scripts/ui-load.js"></script>
-  <script src="/scripts/ui-jp.js"></script>
-  <script src="/scripts/ui-include.js"></script>
-  <script src="/scripts/ui-device.js"></script>
-  <script src="/scripts/ui-form.js"></script>
-  <script src="/scripts/ui-modal.js"></script>
-  <script src="/scripts/ui-nav.js"></script>
-  <script src="/scripts/ui-list.js"></script>
-  <script src="/scripts/ui-screenfull.js"></script>
-  <script src="/scripts/ui-scroll-to.js"></script>
-  <script src="/scripts/ui-toggle-class.js"></script>
-  <script src="/scripts/ui-taburl.js"></script>
-  <script src="/scripts/app.js"></script>
-  <script src="/scripts/ajax.js"></script>
-  <script src="/plugins/pnotify/pnotify.custom.min.js"></script>
-  <script src="/plugins/dataTables/datatables.min.js"></script>
-  <script src="/plugins/select2/select2.min.js"></script>
-  <script src="/plugins/jqueryvalidation/jquery.validate.min.js"></script>
-  <script src="/plugins/jqueryvalidation/localization/messages_es.min.js"></script>
-  @if (Session::has('notifier.notice'))
-  <script>
-  new PNotify({!! Session::get('notifier.notice') !!});
-  </script>
-  @endif
-  <!-- escript propia de casa pagina -->
-@yield('script')
+    <script src="/scripts/config.lazyload.js"></script>
+    <script src="/scripts/ui-load.js"></script>
+    <script src="/scripts/ui-jp.js"></script>
+    <script src="/scripts/ui-include.js"></script>
+    <script src="/scripts/ui-device.js"></script>
+    <script src="/scripts/ui-form.js"></script>
+    <script src="/scripts/ui-modal.js"></script>
+    <script src="/scripts/ui-nav.js"></script>
+    <script src="/scripts/ui-list.js"></script>
+    <script src="/scripts/ui-screenfull.js"></script>
+    <script src="/scripts/ui-scroll-to.js"></script>
+    <script src="/scripts/ui-toggle-class.js"></script>
+    <script src="/scripts/ui-taburl.js"></script>
+    <script src="/scripts/app.js"></script>
+    <script src="/scripts/ajax.js"></script>
+    <script src="/plugins/pnotify/pnotify.custom.min.js"></script>
+    <script src="/plugins/dataTables/datatables.min.js"></script>
+    <script src="/plugins/jqueryValidation/jquery.validate.js"></script>
+    <script src="/plugins/jqueryValidation/localization/messages_es.js"></script>
+    @if (Session::has('notifier.notice'))
+    <script>
+    new PNotify({!! Session::get('notifier.notice') !!});
+    </script>
+    @endif
+    <!-- escript propia de casa pagina -->
+    @yield('script')
 
   </script>
   <!-- endbuild -->
