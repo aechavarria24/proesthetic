@@ -22,7 +22,9 @@ Route::get('/home', 'HomeController@index');
 
 Route::get('servicio/get', 'servicioController@getData');
 Route::get('contrato/get', 'contratoController@getData');
+Route::get('insumo/get', 'insumoController@getData');
 Route::get('proveedor/get', 'proveedorController@getData');
+Route::get('proveedor/pdf', 'proveedorController@generar_pdf');
 Route::get('usuarioClinica/get', 'usuarioClinicaController@getData');
 Route::get('usuario/get', 'usuarioController@getData');
 Route::post('clinica/estado/editar', 'clinicaController@cambiar_estado');
@@ -42,12 +44,15 @@ Route::post('pedido/eliminarPieza', 'pedidoController@delete_medida_pieza_tabla'
 Route::post('pedido/cancelarPedido', 'pedidoController@cancelarPedido');
 
 
+
+
 Route::resource('servicio','servicioController');
 Route::resource('contrato','contratoController');
 Route::resource('clinica','clinicaController');
 Route::resource('usuario','usuarioClinicaController');
 Route::resource('proveedor', 'proveedorController');
 Route::resource('insumo','insumoController');
+Route::resource('insumoordenproduccion','insumoOrdenProduccionController');
 Route::resource('pedido','pedidoController');
 Route::resource('produccion', 'ordenProduccionController');
 Route::resource('venta', 'ventaController');

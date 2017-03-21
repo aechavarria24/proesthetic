@@ -3566,6 +3566,7 @@
         },
         "installation-source": "dist",
         "autoload": {
+
             "files": [
                 "src/Psy/functions.php"
             ],
@@ -3591,6 +3592,7 @@
             "console",
             "interactive",
             "shell"
+
         ]
     }
 ]

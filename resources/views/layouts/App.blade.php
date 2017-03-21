@@ -26,6 +26,7 @@
   <link rel="stylesheet" href="/css/simple-line-icons/css/simple-line-icons.css" type="text/css" />
   <link rel="stylesheet" href="/css/bootstrap/dist/css/bootstrap.min.css" type="text/css" />
   <link rel="stylesheet" href="/plugins/pnotify/pnotify.custom.min.css" type="text/css" />
+   <link rel="stylesheet" href="/plugins/select2/select2.min.css">
   <link rel="stylesheet" href="/plugins/dataTables/datatables.min.css"/>
   <link rel="stylesheet" href="/plugins/select2/css/select2.min.css"/>
   <link rel="stylesheet" href="/css/styles/app.css" type="text/css" />
@@ -776,7 +777,6 @@
     @endif
     <!-- escript propia de casa pagina -->
     @yield('script')
-
 
   </script>
   <!-- endbuild -->

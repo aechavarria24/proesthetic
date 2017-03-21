@@ -56,6 +56,7 @@ class ordenProduccionController extends Controller
        }
 
        return Datatables::of($ordenProduccion)
+
        ->addColumn('action', function ($ordenProduccion) use ($option_estado) {
 
          return '<a href="/produccion/'.$ordenProduccion->id.'/edit" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i>&nbsp;Insumo</a>
