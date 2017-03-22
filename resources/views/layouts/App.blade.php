@@ -27,7 +27,7 @@
   <link rel="stylesheet" href="/css/bootstrap/dist/css/bootstrap.min.css" type="text/css" />
   <link rel="stylesheet" href="/plugins/pnotify/pnotify.custom.min.css" type="text/css" />
    <link rel="stylesheet" href="/plugins/select2/select2.min.css">
-  <link rel="stylesheet" href="/plugins/dataTables/datatables.min.css"/>
+   <link rel="stylesheet" href="/plugins/dataTables/datatables.min.css"/>
   <link rel="stylesheet" href="/plugins/select2/css/select2.min.css"/>
   <link rel="stylesheet" href="/css/styles/app.css" type="text/css" />
   <link rel="stylesheet" href="/css/styles/style.css" type="text/css" />
@@ -750,7 +750,6 @@
     <script src="/libs/jquery-pjax/jquery.pjax.js"></script>
     <script src="/libs/blockUI/jquery.blockUI.js"></script>
     <script src="/libs/jscroll/jquery.jscroll.min.js"></script>
-
     <script src="/scripts/config.lazyload.js"></script>
     <script src="/scripts/ui-load.js"></script>
     <script src="/scripts/ui-jp.js"></script>
@@ -760,6 +759,7 @@
     <script src="/scripts/ui-modal.js"></script>
     <script src="/scripts/ui-nav.js"></script>
     <script src="/scripts/ui-list.js"></script>
+     <script src="/plugins/select2/js/select2.full.min.js"></script>
     <script src="/scripts/ui-screenfull.js"></script>
     <script src="/scripts/ui-scroll-to.js"></script>
     <script src="/scripts/ui-toggle-class.js"></script>
@@ -767,9 +767,10 @@
     <script src="/scripts/app.js"></script>
     <script src="/scripts/ajax.js"></script>
     <script src="/plugins/pnotify/pnotify.custom.min.js"></script>
-    <script src="/plugins/dataTables/datatables.min.js"></script>
     <script src="/plugins/jqueryValidation/jquery.validate.js"></script>
     <script src="/plugins/jqueryValidation/localization/messages_es.js"></script>
+    <script src="/plugins/bootstrapdatepicker/js/bootstrap-datepicker.min.js"></script>
+    <script src="/plugins/dataTables/datatables.min.js"></script>
     @if (Session::has('notifier.notice'))
     <script>
     new PNotify({!! Session::get('notifier.notice') !!});
