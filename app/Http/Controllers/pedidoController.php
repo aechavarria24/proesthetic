@@ -46,7 +46,7 @@ class pedidoController extends Controller
 
         $pedido=pedido::find($input["id"]);
 
-        if ($pedido != null && $pedido["peido_estado_id"] != 1) {
+        if ($pedido != null && $pedido["estado_pedido_id"] == 1) {
             $input["estado_pedido_id"]=7;
             $pedido->update($input);
             return json_encode(["respuesta"=>1]);
@@ -88,6 +88,7 @@ class pedidoController extends Controller
                 break;
                 case '7':
                 $estado = "Cancelado";
+
                 break;
 
                 default:
@@ -198,15 +199,15 @@ class pedidoController extends Controller
     public function add_medida_pieza_tabla(Request $request){
 
         $input = $request->all();
-        $contador=count(session(["pedido"=>$input["id"]]))+1;
-        $id="id_contador";
-        var_dump($contador);
-        exit;
-        if (session("pedido") == null) {
-            session(["pedido"=> [[ "id_tabla" => $input["id"], "unidad" => $input["unidad"], "cantidad" => $input["cantidad"], "dimension" => $input["dimension"],  $id=>[$contador]]]]);
+        $contador2=count(session(["pedido"=>$input["id"]]))+1;
+        $contador1 = array('contador2' =>$contador2);
+        dd(session("pedido"));
+                if (session(["pedido"]) == null || session("pedido") == null) {
+
+            session(["pedido"=> [[ "id_tabla" => $input["id"], "unidad" => $input["unidad"], "cantidad" => $input["cantidad"], "dimension" => $input["dimension"], "contadorSession" => $contador2]]]);
         } else {
             $pedido = session("pedido");
-            array_push($pedido, [ "id_tabla" => $input["id"], "unidad" => $input["unidad"], "cantidad" => $input["cantidad"], "dimension" => $input["dimension"], $id=>[$contador]]);
+            array_push($pedido, [ "id_tabla" => $input["id"], "unidad" => $input["unidad"], "cantidad" => $input["cantidad"], "dimension" => $input["dimension"], "contadorSession" => $contador1["contador2"]]);
             session(["pedido" => $pedido]);
         }
         //var_dump(session("pedido"));
