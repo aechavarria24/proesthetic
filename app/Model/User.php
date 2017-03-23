@@ -9,15 +9,19 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    function __construct(){
+      $this->table=session('tabla_usuario');
+    }
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-     public $table = "usuario_clinica";
+     public $table ;
 
     protected $fillable = [
-        'username', 'password', 'rol_id', 'pregunta_id', 'respuesta', 'estado_cliente'
+        'username', 'password', 'rol_id', 'pregunta_id', 'respuesta', 'estado'
     ];
 
     /**
