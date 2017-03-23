@@ -27,7 +27,7 @@
   <link rel="stylesheet" href="/css/bootstrap/dist/css/bootstrap.min.css" type="text/css" />
   <link rel="stylesheet" href="/plugins/pnotify/pnotify.custom.min.css" type="text/css" />
    <link rel="stylesheet" href="/plugins/select2/select2.min.css">
-   <link rel="stylesheet" href="/plugins/dataTables/datatables.min.css"/>
+
   <link rel="stylesheet" href="/plugins/select2/css/select2.min.css"/>
   <link rel="stylesheet" href="/css/styles/app.css" type="text/css" />
   <link rel="stylesheet" href="/css/styles/style.css" type="text/css" />
@@ -770,7 +770,7 @@
     <script src="/plugins/jqueryValidation/jquery.validate.js"></script>
     <script src="/plugins/jqueryValidation/localization/messages_es.js"></script>
     <script src="/plugins/bootstrapdatepicker/js/bootstrap-datepicker.min.js"></script>
-    <script src="/plugins/dataTables/datatables.min.js"></script>
+    
     @if (Session::has('notifier.notice'))
     <script>
     new PNotify({!! Session::get('notifier.notice') !!});
