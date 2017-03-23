@@ -202,7 +202,7 @@ function AgregarMedidaPieza(e){
     var cantidad=($("#txtCant-"+idTabla[0]).val());
     var unidad=($("#selectUnidadMedida-"+idTabla[0]).val());
     var dimension=($("#selectDimension-"+idTabla[0]).val());
-    // 	var oID = $(this).attr("tbody");
+    	var oID = $(this).attr("tbody");
     $.ajax({
         type: "post",
         datatype : "json",
@@ -236,24 +236,9 @@ function AgregarMedidaPieza(e){
 
 
 
-
         //console.log(result.respuesta);
     });
 
-
-
-    //$('#'+idTabla[0]).append(
-        //'<tr id="'+contador+'-'+idTabla[0]+'">'
-        //+'<td>'+cantidad+'</td>'
-        //+'<td>'+unidad+'</td>'
-        //+'<td>'+dimension+'</td>'
-        //+'<td>'
-        //+'<button class="btn btn-icon white" title="Eliminar" value="'+contador+'-'+idTabla[0]+'" onclick="eliminar(this);" id="'+contador+'-'+idTabla[0]+'" type="button">'
-        //+'<i class="fa fa-trash" href="#"></i>'
-        //+'</button>'
-        //+'</td>'
-        //+'</tr>')
-        // alert(id);
         contador++;
     }
 

@@ -29,10 +29,12 @@ pedido
 @section ('script')
 <script type="text/javascript">
 $('#tblPedido').DataTable({
+
     processing: true,
     serverSide: true,
     "language": {
         "url": "/plugins/dataTables/Spanish.json"
+
     },
     ajax: '/pedido/get',
     columns: [
@@ -79,6 +81,5 @@ function cancelarPedido(e){
     }
 });
 }
-
 </script>
 @endsection
