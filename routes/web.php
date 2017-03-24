@@ -20,13 +20,14 @@ Auth::routes();
 Route::get('/home', 'HomeController@index');
 
 //----------------------------------Rutas de clinica----------------------------------//
-Route::resource('clinica','clinicaController');
 
 //--POST--//
 Route::post('clinica/estado/editar', 'clinicaController@cambiar_estado');
 
 //--GET--//
 Route::get('clinica/get','clinicaController@getData');
+
+Route::resource('clinica','clinicaController');
 //------------------------------------------------------------------------------------//
 //------------------------------Fin rutas de clinica----------------------------------//
 //------------------------------------------------------------------------------------//
@@ -34,7 +35,6 @@ Route::get('clinica/get','clinicaController@getData');
 
 
 //--------------------------Rutas de usuarios de la clinica---------------------------//
-Route::resource('usuario','usuarioClinicaController');
 
 //--POST--//
 
@@ -42,6 +42,8 @@ Route::resource('usuario','usuarioClinicaController');
 //--GET--//
 Route::get('usuarioClinica/get', 'usuarioClinicaController@getData');
 Route::get('usuario/get', 'usuarioController@getData');
+
+Route::resource('usuario','usuarioClinicaController');
 //------------------------------------------------------------------------------------//
 //----------------------Fin rutas de usuarios de la clinica---------------------------//
 //------------------------------------------------------------------------------------//
@@ -49,13 +51,14 @@ Route::get('usuario/get', 'usuarioController@getData');
 
 
 //------------------------------Rutas de empleado-------------------------------------//
-Route::resource('empleado', 'empleadoController');
 
 //--POST--//
 Route::post('empleado/validar_empleado', 'empleadoController@validar_empleado');
 
 //--GET--//
 Route::get('empleado/get', 'empleadoController@getData');
+
+Route::resource('empleado', 'empleadoController');
 //------------------------------------------------------------------------------------//
 //------------------------------Fin rutas de empleado---------------------------------//
 //------------------------------------------------------------------------------------//
@@ -64,7 +67,6 @@ Route::get('empleado/get', 'empleadoController@getData');
 
 
 //-------------------------------Rutas de pedido--------------------------------------//
-Route::resource('pedido','pedidoController');
 
 //--POST--//
 Route::post('pedido/agregarPieza', 'pedidoController@add_medida_pieza_tabla');
@@ -75,6 +77,8 @@ Route::post('pedido/cancelarPedido', 'pedidoController@cancelarPedido');
 Route::get('pedido/get', 'pedidoController@getData');
 Route::get('pedido/traer/valor/{id}', 'pedidoController@get_valor');
 Route::get('pedido/detalle', 'pedidoController@detalle');
+
+Route::resource('pedido','pedidoController');
 //------------------------------------------------------------------------------------//
 //---------------------------Fin rutas de pedido--------------------------------------//
 //------------------------------------------------------------------------------------//
@@ -83,13 +87,14 @@ Route::get('pedido/detalle', 'pedidoController@detalle');
 
 
 //----------------------------Rutas de orden de produccion----------------------------//
-Route::resource('produccion', 'ordenProduccionController');
 
 //--POST--//
 
 //--GET--//
 Route::get('produccion/get', 'ordenProduccionController@getData');
 Route::get('produccion/detalle/{id}', 'ordenProduccionController@detalle');
+
+Route::resource('produccion', 'ordenProduccionController');
 //------------------------------------------------------------------------------------//
 //--------------------------Fin Rutas de orden de produccion--------------------------//
 //------------------------------------------------------------------------------------//
@@ -111,12 +116,13 @@ Route::resource('insumoordenproduccion','insumoOrdenProduccionController');
 
 
 //-------------------------------Rutas de insumo--------------------------------------//
-Route::resource('insumo','insumoController');
 
 //--POST--//
 
 //--GET--//
 Route::get('insumo/get', 'insumoController@getData');
+
+Route::resource('insumo','insumoController');
 //------------------------------------------------------------------------------------//
 //------------------------------Fin rutas de insumo-----------------------------------//
 //------------------------------------------------------------------------------------//
@@ -124,26 +130,27 @@ Route::get('insumo/get', 'insumoController@getData');
 
 
 
-
 //--------------------------------Rutas de servicio-----------------------------------//
-Route::resource('servicio','servicioController');
+//--GET--//
+Route::get('servicio/get', 'servicioController@getData');
 
 //--POST--//
 
-//--GET--//
-Route::get('servicio/get', 'servicioController@getData');
+Route::resource('servicio','servicioController');
 //------------------------------------------------------------------------------------//
 //----------------------------Fin rutas de servicio-----------------------------------//
 //------------------------------------------------------------------------------------//
 
 
 //--------------------------------Rutas de contrato-----------------------------------//
-Route::resource('contrato','contratoController');
 
 //--POST--//
 
 //--GET--//
 Route::get('contrato/get', 'contratoController@getData');
+
+
+Route::resource('contrato','contratoController');
 //------------------------------------------------------------------------------------//
 //-----------------------------Fin rutas de contrato----------------------------------//
 //------------------------------------------------------------------------------------//
@@ -152,13 +159,13 @@ Route::get('contrato/get', 'contratoController@getData');
 
 
 //------------------------------Rutas de proveedor------------------------------------//
-Route::resource('proveedor', 'proveedorController');
-
 //--POST--//
 
 //--GET--//
 Route::get('proveedor/pdf', 'proveedorController@generar_pdf');
 Route::get('proveedor/get', 'proveedorController@getData');
+
+Route::resource('proveedor', 'proveedorController');
 //------------------------------------------------------------------------------------//
 //----------------------------Fin rutas de proveedor----------------------------------//
 //------------------------------------------------------------------------------------//
@@ -167,12 +174,13 @@ Route::get('proveedor/get', 'proveedorController@getData');
 
 
 //-------------------------------Rutas de Venta------------------------------------//
-Route::resource('venta', 'ventaController');
 
 //--POST--//
 
 //--GET--//
 Route::get('venta/get', 'ventaController@getData');
+
+Route::resource('venta', 'ventaController');
 //------------------------------------------------------------------------------------//
 //--------------------------------Fin rutas de Venta----------------------------------//
 //------------------------------------------------------------------------------------//

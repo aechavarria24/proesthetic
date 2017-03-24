@@ -31,7 +31,7 @@
                   @endforeach
                 </select>
               </div>
-        
+
         <div class=" p-a text-center">
           <button type="submit" class="btn btn-warning">Modificar</button>
            <a href="/clinica/show" class="btn btn-info" type="button">Salir</a>
@@ -43,3 +43,7 @@
   </div>
 </div>
 @endsection
+
+
+var $example = $(".js-example-programmatic").select2();
+$example.val(<%= %>).trigger("change");
