@@ -31,6 +31,8 @@
   <link rel="stylesheet" href="/css/styles/app.css" type="text/css" />
   <link rel="stylesheet" href="/css/styles/style.css" type="text/css" />
   <link rel="stylesheet" href="/plugins/bootstrapdatepicker/css/bootstrap-datepicker.min.css"/>
+  <link rel="stylesheet" href="/plugins/alert2/sweetalert2.min.css"/>
+
 
   <!-- endbuild -->
   <link rel="stylesheet" href="/css/styles/font.css" type="text/css" />
@@ -652,6 +654,9 @@
   <script src="/plugins/select2/js/select2.full.min.js"></script>
   <script src="/plugins/bootstrapdatepicker/js/bootstrap-datepicker.min.js"></script>
   <script src="/plugins/dataTables/datatables.min.js"></script>
+  <script src="/plugins/jqueryValidation/jquery.validate.min.js"></script>
+  <script src="/plugins/jqueryValidation/localization/messages_es.min.js"></script>
+  <script src="/plugins/alert2/sweetalert2.min.js"></script>
 
 
   @if (Session::has('notifier.notice'))
