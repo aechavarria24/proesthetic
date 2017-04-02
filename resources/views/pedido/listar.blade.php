@@ -100,7 +100,7 @@ function aprobarPedido(e){
         new PNotify({
             title: 'Notificación',
             type : 'success',
-            text: 'pedido Aprobado con éxito.',
+            text: 'pedido Aprobado con éxito',
             icon : false
         })
 

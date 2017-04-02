@@ -77,9 +77,9 @@ Route::post('pedido/traer_nombre_paciente', 'pedidoController@traer_nombre_pacie
 
 
 //--GET--//
+Route::get('pedido/{id}/detallePedido', 'pedidoController@detalle');
 Route::get('pedido/get', 'pedidoController@getData');
 Route::get('pedido/traer/valor/{id}', 'pedidoController@get_valor');
-Route::get('pedido/detalle', 'pedidoController@detalle');
 Route::get('pedido/eliminar_session', 'pedidoController@eliminar_session');
 
 Route::resource('pedido','pedidoController');

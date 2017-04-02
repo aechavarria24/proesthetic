@@ -37,13 +37,19 @@ class pedidoController extends Controller
     }
 
 
-    public function detalle (Request $Request) {
-        return view('pedido.detalle');
+    public function detalle($id) {
+    $pedido=pedido::select('pedido.id','clinica.nombre','paciente.nombre as pacienteNombre','paciente.cedula','estado_pedido.nombre as estadoPedido','fechaEntrega')
+    ->join('usuario_clinica','usuario_clinica.id','=','pedido.usuario_id')
+    ->join('clinica','clinica.id','=','usuario_clinica.clinica_id')
+    ->join('paciente','paciente.id','=','pedido.paciente_id')
+    ->join('estado_pedido','estado_pedido.id','=','pedido.estado_pedido_id')
+    ->where('pedido.id',$id)
+    ->get();
+
+        return view('pedido.detalle',compact('pedido'));
     }
     public function aprobarPedido(Request $request){
         $input=$request->all();
-
-
     /* Se debe tomar el id de la session de usuario*/
         $id_usuario=session("id");
         $id_usuario=2;
@@ -53,7 +59,7 @@ class pedidoController extends Controller
             $input["estado_pedido_id"]=2;
             $pedido->update($input);
             $orden_produccion=ordenProduccion::create(['usuario_id'=>$id_usuario,'pedido_id'=>$pedido["id"],'estado_orden_produccion_id'=>$estado_orden_produccion_id]);
-            
+            Notify::success("Orden de producción","Orden"." ". $orden_produccion." "."creado con éxito");
             return json_encode(["respuesta"=>1]);
         }else{
             return json_encode(["respuesta"=>0]);
@@ -81,7 +87,7 @@ class pedidoController extends Controller
             return '<a><i onclick="aprobarPedido(this);" id="'.$pedido->id.'" class="glyphicon glyphicon-plus" title="Aprobar"></i>&nbsp;</a>
             <a><i class="glyphicon glyphicon-trash"  onclick="cancelarPedido(this);" id="'.$pedido->id.'" title="Eliminar"></i>&nbsp;</a>
             <a href="/pedido/'.$pedido->id.'/edit" ><i class="glyphicon glyphicon-edit" title="Editar"></i>&nbsp;</a>
-            <a href="/pedido/'.$pedido->id.'/detalle" ><i class="fa fa-eye" title="Detalle"></i>&nbsp;</a>';
+            <a href="/pedido/'.$pedido->id.'/detallePedido" ><i class="fa fa-eye" title="Detalle"></i>&nbsp;</a>';
         })->editColumn('estado_pedido_id', function($pedido){
 
             switch ($pedido->estado_pedido_id) {
@@ -165,7 +171,7 @@ class pedidoController extends Controller
         $key_array = [];
         $a = session("pedido");
         foreach($a as $val) {
-            if (!in_array($val["servicio_tipo_id"] && $val["id_tabla"], $key_array)) {
+            if (!in_array($val["servicio_tipo_id"] , $key_array)) {
                 $key_array[$i] = $val["servicio_tipo_id"];
             }
             $i++;
@@ -190,17 +196,17 @@ class pedidoController extends Controller
             $valida_paciente[0] = null;
             $valida_paciente = paciente::select('id')
             ->where('cedula','=',$input['cedula'])
-            ->get()->toArray();
+            ->first();
             //dd($valida_paciente[0]);
             //$auxiliar_paciente=0;
-            if ($valida_paciente[0] == null) {
+            if ($valida_paciente == false) {
                 $paciente1=paciente::create(['cedula'=>$input["cedula"],'nombre'=>$input["nombre"]]);
-                $auxiliar_paciente=$paciente1;
+                $auxiliar_paciente=$paciente1->id;
             }else {
-                $auxiliar_paciente=$valida_paciente;
+                $auxiliar_paciente=$valida_paciente->id;
             }
-            $auxiliar_paciente = $auxiliar_paciente[0];
-            $pedido=pedido::create(['usuario_id'=>$input["usuario_id"],'fechaEntrega'=>$input["fechaEntrega"],'paciente_id'=>implode($auxiliar_paciente) ]);
+
+            $pedido=pedido::create(['usuario_id'=>$input["usuario_id"],'fechaEntrega'=>$input["fechaEntrega"],'paciente_id'=>$auxiliar_paciente ]);
             $id=$pedido["id"];
             $session=session("pedido");
 
@@ -253,13 +259,12 @@ class pedidoController extends Controller
                 ->where('pedido.id','=',$id)
                 ->get();
                 // dd($paciente);
-                $medida_Pieza = pedido::select('*')
-                ->join('servicio_tipocontrato_pedido','servicio_tipocontrato_pedido.pedido_id','=',
-                'pedido.id')
+
+                $medida_Pieza = pedido::select('medida_pieza.id as id_pieza','medida_Pieza.cantidad as cantidad','medida_Pieza.dimension as dimension','medida_Pieza.unidadMedidad as unidadMedidad')
+                ->join('servicio_tipocontrato_pedido','servicio_tipocontrato_pedido.pedido_id','=','pedido.id')
                 ->join('medida_pieza','medida_pieza.servicio_tipocontrato_pedido_id','=',
-                'servicio_tipocontrato_pedido.id'
-                )
-                // ->where('pedido.id','=',$id)
+                'servicio_tipocontrato_pedido.id')
+                ->where('pedido.id',$id)
                 ->get();
 
 

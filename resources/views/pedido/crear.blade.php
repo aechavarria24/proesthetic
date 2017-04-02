@@ -141,7 +141,7 @@ $('#fechaEntrega').datepicker({
 var id_pieza=0;
 function AgregarServicio(e){
     var servicio = $("#cbxServicio option:selected").html();
-    
+
     if (servicio!="") {
 
     var servicio_tipo_id =$("#cbxServicio").val();
