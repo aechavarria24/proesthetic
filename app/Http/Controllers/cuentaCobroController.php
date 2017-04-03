@@ -17,16 +17,34 @@ class cuentaCobroController extends Controller
   * @return \Illuminate\Http\Response
   */
 
+  public function detalle($id){
+
+    $cuentaCobro = cuentaCobro::find($id);
+    if ($cuentaCobro == null) {
+      Notify::warning('No se encontraron datos','Espera...');
+      return redirect('/cuentacobro');
+
+    } else {
+
+      return view('cuentaCobro.detalle',compact('cuentaCobro'));
+    }
+
+
+  }
+
   public function getData (Request $Request)
   {
     $cuentascobro = cuentaCobro::all();
     return Datatables::of($cuentascobro)
     ->addColumn('action', function ($cuentaCobro) {
-      return '<a href="/cuentacobro/'.$cuentaCobro->id.'/edit" class=""><i class="glyphicon glyphicon-edit"></i>&nbsp;</a>
-      <a href="/cuentacobro/'.$cuentaCobro->id.'/edit" class=""><i class="glyphicon glyphicon-ok" ></i>&nbsp;</a>';
+      return '<a href="/cuentacobro/'.$cuentaCobro->id.'/edit" class="btn btn-xs "><i class="glyphicon glyphicon-edit"></i>&nbsp;</a>
+      <a href="/cuentacobro/'.$cuentaCobro->id.'/detalle" class="btn btn-xs ">&nbsp;Detalle</a>';
     })
+    ->addColumn('seletion', "")
+
     ->make(true);
-  }
+
+}
 
 
 
@@ -42,8 +60,8 @@ class cuentaCobroController extends Controller
   */
   public function create()
   {
-    //
-    return view('proveedor.crear');
+  return view('cuentacobro.pago');
+
   }
 
   /**
@@ -82,7 +100,13 @@ class cuentaCobroController extends Controller
   */
   public function edit($id)
   {
-
+    $cuentaCobro = cuentaCobro::find($id);
+    if ($cuentaCobro == null) {
+      Notify::warning('No se encontraron datos','Espera...');
+      return redirect('/cuentacobro/show');
+    } else {
+      return view('cuentaCobro.editar',compact('cuentaCobro'));
+    }
   }
 
   /**
@@ -94,7 +118,15 @@ class cuentaCobroController extends Controller
   */
   public function update(Request $request, $id)
   {
-
+    $input = $request->all();
+    $cuentaCobro = cuentaCobro::find($id);
+    if ($cuentaCobro == null) {
+      Notify::warning('No se encontraron datos','Nota: ');
+      return redirect('cuentacobro/show');
+    }
+    $cuentaCobro->update($input);
+    Notify::success("La cuenta de cobro  se modifico con éxito.","Modificacion exitosa");
+    return redirect('cuentacobro/show');
   }
   /**
   * Remove the specified resource from storage.

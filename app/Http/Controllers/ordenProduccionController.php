@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Model\ordenProduccion;
 use App\Model\estado_orden_produccion;
 use App\Model\empleado;
-
 use Notify;
 use Datatables;
 
@@ -50,7 +49,7 @@ class ordenProduccionController extends Controller
 
         $option_estado = "<option>Nada</option>";
        $estados = $this->detalle($ordenProduccion[0]["id"]);
-       
+
        foreach ($estados["data"] as $value) {
            $option_estado .= '<option value = "'.$value["id"].'">'.$value["nombre"].'</option>';
        }
@@ -62,7 +61,7 @@ class ordenProduccionController extends Controller
          return '<a href="/produccion/'.$ordenProduccion->id.'/edit" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i>&nbsp;Insumo</a>
 
             <a href="#"  class="btn btn-xs btn-info"><i class="fa fa-eye" ></i>&nbsp;</a> <select hidden="" class="form-control" ="'.$option_estado.'" id="ddlEstados">
-         
+
         </select>';
        })
 

@@ -15,15 +15,22 @@ class ventaController extends Controller
      * @return \Illuminate\Http\Response
      */
 
+     public function detalle(){
+
+        return view('venta.detalleVenta');
+
+     }
+
 
      public function getData (Request $Request)
      {
        $venta = venta::all();
        return Datatables::of($venta)
        ->addColumn('action', function ($venta) {
-         return '<a href="/venta/'.$venta->id.'/edit" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i></a>
-         <a href="/venta/'.$venta->id.'/edit" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i></a>';
+         return '<a href="/venta/'.$venta->id.'/edit" class="btn btn-xs "><i class="glyphicon glyphicon-edit"></i>&nbsp;</a>
+         <a href="/venta/'.$venta->id.'/detalle" class="btn btn-xs ">&nbsp;Detalle</a>';
        })
+       ->addColumn('seletion', "")
        ->make(true);
      }
 
@@ -31,7 +38,7 @@ class ventaController extends Controller
 
     public function index()
     {
-
+      return redirect('venta/show');
     }
 
     /**

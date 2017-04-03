@@ -13,16 +13,20 @@ Venta
         <table class="table table-striped b-t b-b" id="tblVentas" style="width: 100%;">
           <thead>
             <tr>
+              <th  style="width:1%">Selección</th>
               <th  style="width:20%">Número Venta</th>
               <th  style="width:20%">Número Pedido</th>
-              <th  style="width:25%">Usuario creación</th>
-              <th  style="width:25%">Fecha creación</th>
-              <th  style="width:25%">Opciones</th>
+              <th  style="width:20%">Usuario creación</th>
+              <th  style="width:20%">Fecha creación</th>
+              <th  style="width:20%">Opciones</th>
             </tr>
           </thead>
           <tbody>
           </tbody>
         </table>
+        <div class=" p-a text-center">
+          <a href="/cuentacobro/show" class="btn btn-primary">Generar cuenta de cobro</a>
+        </div>
 
       </div>
 
@@ -40,12 +44,17 @@ $('#tblVentas').DataTable({
   },
   ajax: '/venta/get',
   columns: [
+    {data: 'seletion', name: 'seletion'},
     {data: 'id', name: 'id'},
     {data: 'pedido_id', name: 'pedido_id'},
     {data: 'empleado_id', name: 'empleado_id'},
     {data: 'created_at', name: 'created_at'},
     {data: 'action', name: 'action', orderable: false,searchable: false}
-  ]
+  ],"fnRowCallback": function(nRow, aData, iDisplayIndex) {
+       var opciones = $('td:eq(0)', nRow);
+       let html = '<input class="form-control" type="checkbox" name="s[]" value="'+aData.valorTotal+'" />';
+       opciones.html(html);
+    }
 });
 </script>
 @endsection
