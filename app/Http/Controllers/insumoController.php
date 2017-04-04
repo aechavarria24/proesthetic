@@ -97,11 +97,21 @@ class insumoController extends Controller
     {
       $proveedores = proveedor::all();
       $insumos = insumo::find($id);
+
+      $proveedor = proveedor::select("proveedor.*")
+      ->join("insumo_proveedor", "proveedor.id", "=", "insumo_proveedor.proveedor_id")
+      ->where("insumo_id", $id)->get();
+
+      $p = [];
+      foreach ($proveedor as $key => $value) {
+         $p[] = $value->id;
+      }
+      $proveedores_select = json_encode($p);
       if ($insumos==null) {
         Notify::warning('No se encontraron datos','Espera...');
         return redirect('/insumo/show');
       } else {
-        return view('insumo.editar',compact('insumos'));
+        return view('insumo.editar',compact('insumos','proveedores', 'proveedores_select'));
       }
 
     }

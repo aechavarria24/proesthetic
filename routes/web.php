@@ -183,8 +183,24 @@ Route::resource('proveedor', 'proveedorController');
 
 //--GET--//
 Route::get('venta/get', 'ventaController@getData');
+Route::get('venta/detalle', 'ventaController@detalle');
 
 Route::resource('venta', 'ventaController');
 //------------------------------------------------------------------------------------//
 //--------------------------------Fin rutas de Venta----------------------------------//
+//------------------------------------------------------------------------------------//
+
+//----------------------------Rutas de orden de cuenta de cobro----------------------------//
+
+//--POST--//
+
+//--GET--//
+Route::get('cuentacobro/get', 'cuentaCobroController@getData');
+Route::get('cuentacobro/detalle', 'cuentaCobroController@detalle');
+
+Route::get('cuentacobro/pago', 'cuentaCobroController@create');
+
+Route::resource('cuentacobro', 'cuentaCobroController');
+//------------------------------------------------------------------------------------//
+//--------------------------Fin Rutas de cuenta de cobro-------------------------//
 //------------------------------------------------------------------------------------//
