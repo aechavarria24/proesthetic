@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return redirect('/login');
+	return redirect('/login');
 });
 
 Auth::routes();
@@ -27,12 +27,16 @@ Route::get('proveedor/get', 'proveedorController@getData');
 Route::get('usuarioClinica/get', 'usuarioClinicaController@getData');
 Route::get('usuario/get', 'usuarioController@getData');
 Route::post('clinica/estado/editar', 'clinicaController@cambiar_estado');
+Route::post('produccion/estado/editar', 'ordenProduccionController@cambiar_estado');
+Route::get('insucant/addInsumo', 'ordenProduccionController@add_Insumo');
+Route::get('insumo/eliminar_tabla_asociar', 'ordenProduccionController@eliminar_tabla_asociar');
 Route::get('produccion/get', 'ordenProduccionController@getData');
 Route::get('pedido/get', 'pedidoController@getData');
 Route::get('pedido/detalle', 'pedidoController@detalle');
 Route::get('produccion/detalle/{id}', 'ordenProduccionController@detalle');
 Route::get('venta/get', 'ventaController@getData');
 Route::get('clinica/get','clinicaController@getData');
+Route::get('produccion/asociar/insumo/{id}','ordenProduccionController@asociar_Insumo');
 
 Route::resource('servicio','servicioController');
 Route::resource('contrato','contratoController');

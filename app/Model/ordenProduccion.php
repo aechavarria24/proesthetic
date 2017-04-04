@@ -9,6 +9,6 @@ class ordenProduccion extends Model
   public $table = "orden_produccion";
 
   protected $fillable = [
-    'usuario_id','fechaFin','observacion','pedidoid','estado_orden_produccion'
+    'usuario_id','fechaFin','observacion','pedido_id','estado_orden_produccion_id'
   ];
 }

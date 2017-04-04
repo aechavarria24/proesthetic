@@ -103,7 +103,7 @@ class clinicaController extends Controller
   */
   public function edit($id)
   {
-    $tipoContrato= contrato::all();
+       $tipoContrato= contrato::all();
     // $tipoContrato= contrato::select('tipo_contrato.*')
     // ->join('clinica','tipo_contrato.id','=','clinica.tipo_contrato_id')
     // ->where('clinica.id', $id)
