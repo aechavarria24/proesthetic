@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Model\paciente;
 use App\Model\pedido;
 use App\Model\servicio;
 use App\Model\usuarioClinica;
 use App\Model\clinica;
 use App\Model\servicioTipoContrato;
 use App\Model\medidapieza;
-use App\Model\paciente;
+use App\Model\ordenProduccion;
 use App\Model\servicioTipocontratoPedido;
 use Notify;
 use Datatables;
@@ -36,14 +37,36 @@ class pedidoController extends Controller
     }
 
 
-    public function detalle (Request $Request) {
-        return view('pedido/detalle');
+    public function detalle($id) {
+    $pedido=pedido::select('pedido.id','clinica.nombre','paciente.nombre as pacienteNombre','paciente.cedula','estado_pedido.nombre as estadoPedido','fechaEntrega')
+    ->join('usuario_clinica','usuario_clinica.id','=','pedido.usuario_id')
+    ->join('clinica','clinica.id','=','usuario_clinica.clinica_id')
+    ->join('paciente','paciente.id','=','pedido.paciente_id')
+    ->join('estado_pedido','estado_pedido.id','=','pedido.estado_pedido_id')
+    ->where('pedido.id',$id)
+    ->get();
+
+        return view('pedido.detalle',compact('pedido'));
+    }
+    public function aprobarPedido(Request $request){
+        $input=$request->all();
+    /* Se debe tomar el id de la session de usuario*/
+        $id_usuario=session("id");
+        $id_usuario=2;
+        $estado_orden_produccion_id=1;
+         $pedido=pedido::find($input["id"]);
+        if ($pedido != null && $pedido["estado_pedido_id"] == 1) {
+            $input["estado_pedido_id"]=2;
+            $pedido->update($input);
+            $orden_produccion=ordenProduccion::create(['usuario_id'=>$id_usuario,'pedido_id'=>$pedido["id"],'estado_orden_produccion_id'=>$estado_orden_produccion_id]);
+            Notify::success("Orden de producción","Orden"." ". $orden_produccion." "."creado con éxito");
+            return json_encode(["respuesta"=>1]);
+        }else{
+            return json_encode(["respuesta"=>0]);
+        }
     }
     public function cancelarPedido(Request $Request){
         $input=$Request->all();
-        // var_dump($input);
-        //    exit;
-
         $pedido=pedido::find($input["id"]);
 
         if ($pedido != null && $pedido["estado_pedido_id"] == 1) {
@@ -61,10 +84,10 @@ class pedidoController extends Controller
         $pedido = pedido::all();
         return Datatables::of($pedido)
         ->addColumn('action', function ($pedido) {
-            return '<a href="/producto/'.$pedido->id.'/edit" ><i class="glyphicon glyphicon-plus" title="Agregar insumo"></i>&nbsp;</a>
+            return '<a><i onclick="aprobarPedido(this);" id="'.$pedido->id.'" class="glyphicon glyphicon-plus" title="Aprobar"></i>&nbsp;</a>
             <a><i class="glyphicon glyphicon-trash"  onclick="cancelarPedido(this);" id="'.$pedido->id.'" title="Eliminar"></i>&nbsp;</a>
-            <a href="/produccion/'.$pedido->id.'/edit" ><i class="glyphicon glyphicon-edit" title="Editar"></i>&nbsp;</a>
-            <a href="/produccion/'.$pedido->id.'/detalle" ><i class="fa fa-eye" title="Detalle"></i>&nbsp;</a>';
+            <a href="/pedido/'.$pedido->id.'/edit" ><i class="glyphicon glyphicon-edit" title="Editar"></i>&nbsp;</a>
+            <a href="/pedido/'.$pedido->id.'/detallePedido" ><i class="fa fa-eye" title="Detalle"></i>&nbsp;</a>';
         })->editColumn('estado_pedido_id', function($pedido){
 
             switch ($pedido->estado_pedido_id) {
@@ -114,7 +137,7 @@ class pedidoController extends Controller
     public function create()
     {
         //SELECT * FROM usuario_clinica as A inner join clinica as b on b.id=a.clinica_id
-        $usuarioClinica=  usuarioClinica::select('usuario_clinica.nombre as NombreDoctor','usuario_clinica.apellido as ApellidoDocto','clinica.nombre as usuarioClinica')
+        $usuarioClinica=  usuarioClinica::select('usuario_clinica.id','usuario_clinica.nombre as NombreDoctor','usuario_clinica.apellido as ApellidoDocto','clinica.nombre as usuarioClinica')
         ->join('clinica','usuario_clinica.clinica_id','=','clinica.id')
         ->get();
         // var_dump($usuarioClinica);
@@ -143,79 +166,186 @@ class pedidoController extends Controller
     * @param  \Illuminate\Http\Request  $request
     * @return \Illuminate\Http\Response
     */
+    public function obtener_tipo_servicio(){
+        $i = 0;
+        $key_array = [];
+        $a = session("pedido");
+        foreach($a as $val) {
+            if (!in_array($val["servicio_tipo_id"] , $key_array)) {
+                $key_array[$i] = $val["servicio_tipo_id"];
+            }
+            $i++;
+        }
+        return $key_array;
+    }
+    function traer_nombre_paciente(Request $request){
+
+        $cedula=$request->all();
+                    $nombre = paciente::select('nombre')
+            ->where("cedula",'=',$cedula["cedula"])->get();
+
+            return json_encode($nombre);
+
+    }
+
+    //-----GUARDAR
     public function store(Request $request)
     {
-        $input = $request->all();
-        var_dump($input);
-        exit;
-        return $input;
-    }
+        if (!Session("pedido")==null) {
+            $input = $request->all();
+            $valida_paciente[0] = null;
+            $valida_paciente = paciente::select('id')
+            ->where('cedula','=',$input['cedula'])
+            ->first();
+            //dd($valida_paciente[0]);
+            //$auxiliar_paciente=0;
+            if ($valida_paciente == false) {
+                $paciente1=paciente::create(['cedula'=>$input["cedula"],'nombre'=>$input["nombre"]]);
+                $auxiliar_paciente=$paciente1->id;
+            }else {
+                $auxiliar_paciente=$valida_paciente->id;
+            }
 
-    /**
-    * Display the specified resource.
-    *
-    * @param  int  $id
-    * @return \Illuminate\Http\Response
-    */
-    public function show($id)  {
-        $pedido = pedido::all();
-        return view('pedido.listar');
-    }
+            $pedido=pedido::create(['usuario_id'=>$input["usuario_id"],'fechaEntrega'=>$input["fechaEntrega"],'paciente_id'=>$auxiliar_paciente ]);
+            $id=$pedido["id"];
+            $session=session("pedido");
 
-    /**
-    * Show the form for editing the specified resource.
-    *
-    * @param  int  $id
-    * @return \Illuminate\Http\Response
-    */
-    public function edit($id){
-        $pedido = pedido::find($id);
-        return view('pedido.editar',compact('pedido'));
 
-    }
-    /**
-    * Update the specified resource in storage.
-    *
-    * @param  \Illuminate\Http\Request  $request
-    * @param  int  $id
-    * @return \Illuminate\Http\Response
-    */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+            foreach ($this->obtener_tipo_servicio() as $key => $servicio) {
 
-    /**
-    * Remove the specified resource from storage.
-    *
-    * @param  int  $id
-    * @return \Illuminate\Http\Response
-    */
-    public function destroy($id)
-    {
-        //
-    }
 
-    public function add_medida_pieza_tabla(Request $request){
+                $servicio_tipocontrato_pedido_id=servicioTipocontratoPedido::create(
+                    ['pedido_id'=>$pedido["id"],'servicio_tipocontrato_id'=>$servicio]);
 
-        $input = $request->all();
-        $contador2=count(session(["pedido"=>$input["id"]]))+1;
-        $contador1 = array('contador2' =>$contador2);
-                if (session(["pedido"]) == null || session("pedido") == null) {
+                    foreach (session("pedido") as $key=> $medida) {
+                        if ($servicio==$medida["servicio_tipo_id"]) {
+                            $medidaPieza=medidaPieza::create(
+                                ['servicio_tipocontrato_pedido_id'=>$servicio_tipocontrato_pedido_id["id"],
+                                'dimension'=>$medida["dimension"],'cantidad'=>$medida["cantidad"]
+                                ,'unidadMedidad'=>$medida["unidad"]]);
+                            }
+                        }
+                    }
 
-            session(["pedido"=> [[ "id_tabla" => $input["id"], "unidad" => $input["unidad"], "cantidad" => $input["cantidad"], "dimension" => $input["dimension"], "contadorSession" => $contador2]]]);
-        } else {
-            $pedido = session("pedido");
-            array_push($pedido, [ "id_tabla" => $input["id"], "unidad" => $input["unidad"], "cantidad" => $input["cantidad"], "dimension" => $input["dimension"], "contadorSession" => $contador1["contador2"]]);
-            session(["pedido" => $pedido]);
+                    Notify::success("Pedido","Pedido"." ". $id." "."creado con éxito");
+                    return redirect('pedido/create');
+                }else {
+                    Notify::error("Ingrese un servicio","Atencion...");
+                    return redirect('pedido/create');
+                }
+
+            }
+            /**
+            * Display the specified resource.
+            *
+            * @param  int  $id
+            * @return \Illuminate\Http\Response
+            */
+            public function show($id)  {
+                $pedido = pedido::all();
+                return view('pedido.listar');
+            }
+
+            /**
+            * Show the form for editing the specified resource.
+            *
+            * @param  int  $id
+            * @return \Illuminate\Http\Response
+            */
+            public function edit($id){
+
+
+                $pedido = pedido::find($id);
+                $paciente = paciente::select('*')
+                ->join('pedido','pedido.paciente_id','=','paciente.id')
+                ->where('pedido.id','=',$id)
+                ->get();
+                // dd($paciente);
+
+                $medida_Pieza = pedido::select('medida_pieza.id as id_pieza','medida_Pieza.cantidad as cantidad','medida_Pieza.dimension as dimension','medida_Pieza.unidadMedidad as unidadMedidad')
+                ->join('servicio_tipocontrato_pedido','servicio_tipocontrato_pedido.pedido_id','=','pedido.id')
+                ->join('medida_pieza','medida_pieza.servicio_tipocontrato_pedido_id','=',
+                'servicio_tipocontrato_pedido.id')
+                ->where('pedido.id',$id)
+                ->get();
+
+
+                if ($pedido==null) {
+                    Notify::warning('No se encontraron datos','Espera...');
+                    return redirect('/servicio/show');
+                } else {
+
+
+
+
+                    //   dd($tabla);
+                    // return view('pedido.editar',$tabla);
+                    return view('pedido.editar',compact('pedido','servicio','paciente','medida_Pieza','$tabla'));
+                }
+
+
+            }
+            /**
+            * Update the specified resource in storage.
+            *
+            * @param  \Illuminate\Http\Request  $request
+            * @param  int  $id
+            * @return \Illuminate\Http\Response
+            */
+            public function update(Request $request, $id)
+            {
+                //
+            }
+
+            /**
+            * Remove the specified resource from storage.
+            *
+            * @param  int  $id
+            * @return \Illuminate\Http\Response
+            */
+            public function destroy($id)
+            {
+                //
+            }
+
+            public function add_medida_pieza_tabla(Request $request){
+
+                $input = $request->all();
+
+                // dd(session("pedido"));
+                // var_dump(session("pedido"));
+                // exit;
+                if (session("pedido") == null ) {
+
+                    session(["pedido"=> [[ "id_tabla" => $input["id"], "unidad" => $input["unidad"], "cantidad" => $input["cantidad"], "dimension" => $input["dimension"],"servicio_tipo_id"=>$input["servicio_tipo_id"], "contadorSession" => $input["contador_session"]]]]);
+                } else {
+                    $pedido = session("pedido");
+                    array_push($pedido, [ "id_tabla" => $input["id"], "unidad" => $input["unidad"], "cantidad" => $input["cantidad"], "dimension" => $input["dimension"], "servicio_tipo_id"=>$input["servicio_tipo_id"], "contadorSession" => $input["contador_session"]]);
+                    session(["pedido" => $pedido]);
+                }
+
+
+                return response()->json(session("pedido"));
+
+            }
+            public function delete_medida_pieza_tabla(Request $request){
+                $input=$request->all();
+                // var_dump(session("pedido"));
+                // exit;
+                $session=session("pedido");
+                foreach ($session as $key=>  $value) {
+                    if ($input["contador"]==$value["contadorSession"]) {
+                        unset($session[$key]);
+                        session(["pedido"=>$session]);
+                        // var_dump(session("pedido"));
+                        // exit;
+                        return json_encode(['respuesta'=>1]);
+                    }
+                }
+
+            }
+
+            public function eliminar_session(Request $request){
+                $request->session()->forget('pedido');
+            }
         }
-        //var_dump(session("pedido"));
-        //exit;
-
-        return response()->json(session("pedido"));
-
-    }
-    public function delete_medida_pieza_tabla(Request $Request){
-
-    }
-}

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Model\venta;
+use App\Model\pedido;
 use Datatables;
 
 class ventaController extends Controller
@@ -15,15 +16,22 @@ class ventaController extends Controller
      * @return \Illuminate\Http\Response
      */
 
+     public function detalle(){
+
+        return view('venta.detalleVenta');
+
+     }
+
 
      public function getData (Request $Request)
      {
        $venta = venta::all();
        return Datatables::of($venta)
        ->addColumn('action', function ($venta) {
-         return '<a href="/venta/'.$venta->id.'/edit" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i></a>
-         <a href="/venta/'.$venta->id.'/edit" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i></a>';
+         return '<a href="/venta/'.$venta->id.'/edit" class="btn btn-xs "><i class="glyphicon glyphicon-edit"></i>&nbsp;</a>
+         <a href="/venta/'.$venta->id.'/detalle" class="btn btn-xs ">&nbsp;Detalle</a>';
        })
+       ->addColumn('seletion', "")
        ->make(true);
      }
 
@@ -31,7 +39,7 @@ class ventaController extends Controller
 
     public function index()
     {
-
+      return redirect('venta/show');
     }
 
     /**
@@ -53,7 +61,24 @@ class ventaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      $input=$request->all();
+      foreach ($input as  $value) {
+        $insert_cuenta=pedido::select('pedido.valor','pedido.usurio_id')
+        ->join('tipo_contrato','tipo_contrato.id','=','servicio_tipocontrato.tipoContrato_id')
+        ->join('servicio_tipocontrato','servicio_tipocontrato.servicio_id','=','servicio_tipocontrato_pedido.servicio_tipocontrato_id')
+        ->join('servicio_tipocontrato_pedido','servicio_tipocontrato.id','=',)
+        ->join('clinica',)
+        ->join('usuario_clinica',)
+        ->join('pedido',)
+        ->join('venta','venta.pedido_id','=','pedido.id')
+        ->join('cuenta_cobro',)
+
+        ->where('pedido.id',$value)
+        ->get();
+      }
+
+      dd($insert_cuenta);
+        echo "llego";
     }
 
     /**

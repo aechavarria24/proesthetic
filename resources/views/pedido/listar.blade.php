@@ -68,13 +68,48 @@ function cancelarPedido(e){
             icon : false
         })
 
-        table.ajax.reload();
+        table.ajax.reload(null,false);
 
     }else if (r.respuesta == 0){
         new PNotify({
             title: 'Notificación',
             type : 'error',
             text: 'No se puede cancelar el pedido.',
+            icon : false
+        })
+    }
+});
+}
+function aprobarPedido(e){
+    var id = $(e).attr("id");
+    $.ajax({
+        url:'/pedido/aprobarPedido',
+        dataType:'json',
+        data: {'id':id,
+        '_token': $("#_token").val()
+
+    },
+    type:'post'
+}).done(function(r){
+    // $("#valor").val(r.valor);
+
+    if (r.respuesta == 1) {
+        var table = $('#tblPedido').DataTable();
+
+        new PNotify({
+            title: 'Notificación',
+            type : 'success',
+            text: 'pedido Aprobado con éxito',
+            icon : false
+        })
+
+        table.ajax.reload(null,false);
+
+    }else if (r.respuesta == 0){
+        new PNotify({
+            title: 'Notificación',
+            type : 'error',
+            text: 'Pedido se encuantra en un estado que no se puede aprobar',
             icon : false
         })
     }

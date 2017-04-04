@@ -72,11 +72,15 @@ Route::resource('empleado', 'empleadoController');
 Route::post('pedido/agregarPieza', 'pedidoController@add_medida_pieza_tabla');
 Route::post('pedido/eliminarPieza', 'pedidoController@delete_medida_pieza_tabla');
 Route::post('pedido/cancelarPedido', 'pedidoController@cancelarPedido');
+Route::post('pedido/aprobarPedido', 'pedidoController@aprobarPedido');
+Route::post('pedido/traer_nombre_paciente', 'pedidoController@traer_nombre_paciente');
+
 
 //--GET--//
+Route::get('pedido/{id}/detallePedido', 'pedidoController@detalle');
 Route::get('pedido/get', 'pedidoController@getData');
 Route::get('pedido/traer/valor/{id}', 'pedidoController@get_valor');
-Route::get('pedido/detalle', 'pedidoController@detalle');
+Route::get('pedido/eliminar_session', 'pedidoController@eliminar_session');
 
 Route::resource('pedido','pedidoController');
 //------------------------------------------------------------------------------------//
@@ -184,8 +188,24 @@ Route::resource('proveedor', 'proveedorController');
 
 //--GET--//
 Route::get('venta/get', 'ventaController@getData');
+Route::get('venta/detalle', 'ventaController@detalle');
 
 Route::resource('venta', 'ventaController');
 //------------------------------------------------------------------------------------//
 //--------------------------------Fin rutas de Venta----------------------------------//
+//------------------------------------------------------------------------------------//
+
+//----------------------------Rutas de orden de cuenta de cobro----------------------------//
+
+//--POST--//
+
+//--GET--//
+Route::get('cuentacobro/get', 'cuentaCobroController@getData');
+Route::get('cuentacobro/detalle', 'cuentaCobroController@detalle');
+
+Route::get('cuentacobro/pago', 'cuentaCobroController@create');
+
+Route::resource('cuentacobro', 'cuentaCobroController');
+//------------------------------------------------------------------------------------//
+//--------------------------Fin Rutas de cuenta de cobro-------------------------//
 //------------------------------------------------------------------------------------//

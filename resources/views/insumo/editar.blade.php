@@ -40,7 +40,8 @@
 
 @section('script')
 <script>
-  $("#proveedor").select2();
+var sproveedor = $("#proveedor").select2();
+sproveedor.val(<?= $proveedores_select ?>).trigger("change");
 $("#frmInsumo").validate({
   rules: {
     nombre: {
