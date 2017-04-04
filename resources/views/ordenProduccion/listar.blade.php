@@ -23,7 +23,7 @@ Orden de producción
     </table>
   </div>
 </div>
-
+<input type="hidden" id="_token" name="_token" value="{{csrf_token()}}">
 <div class="modal fade" tabindex="-1" role="dialog" id="mdlEstado">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -34,7 +34,7 @@ Orden de producción
       <div class="modal-body">
         <label for="">Su estado actual es: <span id="estadoActual"></span> </label>
         <select class="form-control" ="" id="ddlEstados">
-          
+
         </select>
       </div>
       <div class="modal-footer">
@@ -47,49 +47,70 @@ Orden de producción
 @endsection
 @section ('script')
 <script type="text/javascript">
+
  function detalle(id){   
 
-    $.ajax({
-        'dataType':'json',
-        'type':'get',
-        'url':'/produccion/detalle/'+id
-    }).done(function (e){
-      if(e.data ==1){
-        new PNotify ({
-          title: 'Espera',
-          text: 'No hay datos para mostrar',
-          type: 'error'
-        });
+  $.ajax({
+    'dataType':'json',
+    'type':'get',
+    'url':'/produccion/detalle/'+id
+  }).done(function (e){
+    if(e.data ==1){
+      new PNotify ({
+        title: 'Espera',
+        text: 'No hay datos para mostrar',
+        type: 'error'
+      });
 
-      }else{
-        
-        
-        $("#estadoActual").text(e.estado);
-        $.each(e.data[0], function(i, e){
-          $("#ddlEstados").append("<option value='"+e.id+"'>"+e.nombre+"</option>");
-        })
-        $("#ddlEstados").removeAttr('hidden');
+    }else{
+
+
+      $("#estadoActual").text(e.estado);
+      $.each(e.data[0], function(i, e){
+        $("#ddlEstados").append("<option value='"+e.id+"'>"+e.nombre+"</option>");
+      })
+      $("#ddlEstados").removeAttr('hidden');
          // $("#mdlEstado").modal();
-      }
+       }
 
-  })};
+     })};
   
 
-$('#tblordenProduccion').DataTable({
-  processing: true,
-  serverSide: true,
-  "language": {
-    "url": "/plugins/dataTables/Spanish.json"
-  },
-  ajax: '/produccion/get',
-  columns: [
-    {data: 'id', name: 'Numero orden'},
-    {data: 'created_at', name: 'Fecha creación'},
-    {data: 'fechaFin', name: 'Fecha finalizacion'},
+  var tabla = $('#tblordenProduccion').DataTable({
+    processing: true,
+    serverSide: true,
+    "language": {
+      "url": "/plugins/dataTables/Spanish.json"
+    },
+    ajax: '/produccion/get',
+    columns: [
+    {data: 'id', name: ' id'},
+    {data: 'created_at', name: 'created_at'},
+    {data: 'fechaFin', name: 'fechaFin'},
     {data: 'estado_orden_produccion', name: 'estado_orden_produccion'},
     {data: 'action', name: 'action', orderable: false,searchable: false}
-  ]
-});
+    ]
+  });
+
+  function cambiar_estado(orden_produccíon, estado){
+    $.ajax({
+      type : "post",
+      dataType : "json",
+      data : {"orden_produccion" : orden_produccíon, "estado": estado, "_token":$("#_token").val()},
+      url : "/produccion/estado/editar"
+    }).done(function (result){
+      if (result.respuesta =='1') {
+        new PNotify({
+          title: 'Cambio de estado',
+          text: ' Se cambiado el estado de la orden de produccion con éxito.',
+          type: 'success'
+        });
+        tabla.ajax.reload();
+      }
+
+    });
+
+  } 
 
 </script>
 @endsection
