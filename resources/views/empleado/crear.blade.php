@@ -77,7 +77,6 @@ $("#username").change(function(){
         data : { usuario : $("#username").val(), _token : $("#txToken").val() },
         url : '/empleado/validar_empleado'
     }).done(function(result){
-
         if (result.respuesta == 1) {
             $("#lblUsuario").css("color", "red");
             $("#username").css("border", "1px solid red");

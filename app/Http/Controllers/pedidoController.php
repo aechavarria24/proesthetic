@@ -201,7 +201,6 @@ class pedidoController extends Controller
         $input = $request->all();
         $contador2=count(session(["pedido"=>$input["id"]]))+1;
         $contador1 = array('contador2' =>$contador2);
-        dd(session("pedido"));
                 if (session(["pedido"]) == null || session("pedido") == null) {
 
             session(["pedido"=> [[ "id_tabla" => $input["id"], "unidad" => $input["unidad"], "cantidad" => $input["cantidad"], "dimension" => $input["dimension"], "contadorSession" => $contador2]]]);
