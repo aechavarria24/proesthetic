@@ -6,14 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class paciente extends Model
 {
-    public $tabla = "paciente";
+  public $table = "paciente";
 
-    protected $fillable = [
-      'cedula','nombre'
-    ];
-
-    public $timestamp = false;
-
-
-
+  protected $fillable = [
+    'cedula','nombre'
+  ];
+public $timestamps = false; 
 }
