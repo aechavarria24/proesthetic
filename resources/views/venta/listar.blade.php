@@ -3,6 +3,9 @@
 Venta
 @endsection
 @section('contenedor')
+<form class="" action="/venta" method="post">
+  {{csrf_field()}}
+
 <div class="box">
   <div class="box-header">
     <h2>Lista de ventas</h2>
@@ -25,7 +28,7 @@ Venta
           </tbody>
         </table>
         <div class=" p-a text-center">
-          <a href="/cuentacobro/show" class="btn btn-primary">Generar cuenta de cobro</a>
+          <button type="submit" class="btn btn-primary">Generar cuenta de cobro</button>
         </div>
 
       </div>
@@ -33,6 +36,8 @@ Venta
     </div>
   </div>
 </div>
+
+</form>
 @endsection
 @section ('script')
 <script type="text/javascript">
@@ -52,7 +57,7 @@ $('#tblVentas').DataTable({
     {data: 'action', name: 'action', orderable: false,searchable: false}
   ],"fnRowCallback": function(nRow, aData, iDisplayIndex) {
        var opciones = $('td:eq(0)', nRow);
-       let html = '<input class="form-control" type="checkbox" name="s[]" value="'+aData.valorTotal+'" />';
+       let html = '<input class="form-control" type="checkbox" name="s[]" value="'+aData.id+'" />';
        opciones.html(html);
     }
 });

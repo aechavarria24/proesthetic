@@ -26,7 +26,7 @@ Cuenta cobro
       </tbody>
     </table>
     <div class=" p-a text-center">
-      <a href="/cuentacobro/pago" class="btn btn-primary">Pagar</a>
+      <a href="/cuentacobro/pago" class="btn btn-primary">Confirmar pago</a>
     </div>
   </div>
 </div>
