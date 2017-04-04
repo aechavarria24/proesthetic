@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Model\ordenProduccion;
 use App\Model\estado_orden_produccion;
+
 use App\Model\insumo;
+
 use Notify;
 use Datatables;
 
@@ -17,6 +19,7 @@ class ordenProduccionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function detalle($id){
       $ordenProduccion = ordenProduccion::find($id);
       $estado = estado_orden_produccion::find($ordenProduccion->estado_orden_produccion_id);
@@ -30,6 +33,7 @@ class ordenProduccionController extends Controller
 
      return ["data"=>$estado_orden, "estado"=>$estado->nombre];
 
+
    }
 
    public function getData(Request $Request)
@@ -37,6 +41,8 @@ class ordenProduccionController extends Controller
      $ordenProduccion = ordenProduccion::select("orden_produccion.*", "estado_orden_produccion.nombre as estado")
      ->join("estado_orden_produccion", "orden_produccion.estado_orden_produccion_id", "=", "estado_orden_produccion.id")
      ->get();
+
+
 
 
      return Datatables::of($ordenProduccion)
