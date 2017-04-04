@@ -210,7 +210,9 @@ class pedidoController extends Controller
             $id=$pedido["id"];
             $session=session("pedido");
 
+
             foreach ($this->obtener_tipo_servicio() as $key => $servicio) {
+
 
                 $servicio_tipocontrato_pedido_id=servicioTipocontratoPedido::create(
                     ['pedido_id'=>$pedido["id"],'servicio_tipocontrato_id'=>$servicio]);

@@ -139,6 +139,7 @@ Route::resource('insumo','insumoController');
 Route::get('servicio/get', 'servicioController@getData');
 
 //--POST--//
+Route::post('servicio/validar_servicio', 'servicioController@validar_servicio');
 
 Route::resource('servicio','servicioController');
 //------------------------------------------------------------------------------------//
@@ -152,6 +153,10 @@ Route::resource('servicio','servicioController');
 
 //--GET--//
 Route::get('contrato/get', 'contratoController@getData');
+Route::get('contrato/eliminar/tabla', 'contratoController@eliminar_tabla_servicio');
+Route::get('contrato/servicio/agregar', 'contratoController@agregar_servicio');
+
+Route::get('contrato/servicio/eliminar', 'contratoController@eliminar_servicio');
 
 
 Route::resource('contrato','contratoController');

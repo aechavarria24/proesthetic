@@ -36,9 +36,9 @@ $('#tblPedido').DataTable({
         "url": "/plugins/dataTables/Spanish.json"
 
     },
-    ajax: '/pedido/get',
+    ajax: '/pedido/get'
     columns: [
-        {data: 'id', name: 'NumeroPedido'},
+        {data: 'id', name: 'NumeroPedid'},
         {data: 'usuario_id', name: 'UsuarioClinica'},
         {data: 'created_at', name: 'FechaSolicitud'},
         {data: 'fechaEntrega', name: 'FechaEntrega'},
@@ -53,7 +53,6 @@ function cancelarPedido(e){
         dataType:'json',
         data: {'id':id,
         '_token': $("#_token").val()
-
     },
     type:'post'
 }).done(function(r){
