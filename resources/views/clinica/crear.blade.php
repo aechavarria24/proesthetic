@@ -27,13 +27,13 @@ Clínica
                     </div>
                     <div class="form-group">
                         <label label = "Dirección">Dirección</label>
-                        <input class="form-control" required="" data-parsley-id="138" type="text" name="direccion" id="direccion">
+                        <input class="form-control" required="" data-parsley-id="138" type="text" name="direccion" id="direccion" maxlength="20">
                     </div>
                     <div class="row m-b">
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <label label = "Teléfono">Teléfono</label>
-                                <input class="form-control" required="" data-parsley-id="138" type="phone" name="telefono" id="telefono">
+                                <input class="form-control" required="" data-parsley-id="138" type="text" name="telefono" id="telefono" maxlength="15">
                             </div>
                         </div>
                     </div>
@@ -50,7 +50,7 @@ Clínica
                     <div class="row m-b">
                         <div class="col-sm-6">
                             <label label = "Fecha de Corte">Fecha de Corte</label>
-                            <input class="form-control" required="" name= "diaCorte"  id= "diaCorte"  type="number"><br>
+                            <input class="form-control" required="" data-parsley-id="138" type="number" min="1" max ="30" name="diaCorte" id="diaCorte" maxlength="2"><br>
                         </div>
                         <div class=" p-a text-center">
                             <button type="submit" class="btn info">Registrar</button>
@@ -83,11 +83,13 @@ $("#frmclinica").validate({
     rules: {
         nombre :{
             required: true,
+            lettersonly : true,
             minlength: 3,
             maxlength: 40
         },
         NIT :{
             required: true,
+            nit : true,
             minlength: 10,
             maxlength: 10
         },
@@ -98,18 +100,17 @@ $("#frmclinica").validate({
         },
         telefono: {
             required: true,
+            digits : true,
             minlength: 8,
             maxlength: 40
         },
         diaCorte : {
             required: true,
-            minlength: 1,
-            maxlength: 2
+            digits : true,
+            minlength: 8,
+            maxlength: 40
         }
     }
 });
-
-
 </script>
-
 @endsection

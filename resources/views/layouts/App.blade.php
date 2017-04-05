@@ -656,6 +656,7 @@
   <script src="/plugins/bootstrapdatepicker/js/bootstrap-datepicker.min.js"></script>
 
   <script src="/plugins/jqueryValidation/jquery.validate.min.js"></script>
+  <script src="/plugins/jqueryValidation/additional-methods.js"></script>
   <script src="/plugins/jqueryValidation/localization/messages_es.min.js"></script>
   <script src="/plugins/alert2/sweetalert2.min.js"></script>
 

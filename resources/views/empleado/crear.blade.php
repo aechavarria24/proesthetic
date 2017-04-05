@@ -52,7 +52,7 @@
                         </div>
                         <div class="form-group">
                             <label class="control-label" label = "Respuesta">Respuesta</label>
-                            <input class="form-control" required="" data-parsley-id="138" type="password" name="respuesta" id="respuesta" tabindex="8">
+                            <input class="form-control" required="" data-parsley-id="138" type="password" name="respuesta" id="respuesta" tabindex="8" maxlength="50">
                         </div>
                     </div>
                     <div class="col-sm-12">
@@ -106,13 +106,15 @@ $("#frmEmpleado").validate({
         elem.closest('.help-block').remove();
     },
     rules: {
-        nombre: {
+        nombre :{
             required: true,
+            lettersonly : true,
             minlength: 3,
             maxlength: 40
         },
         apellido: {
             required: true,
+            lettersonly : true,
             minlength: 3,
             maxlength: 40
         },
@@ -131,5 +133,4 @@ $("#frmEmpleado").validate({
     }
 });
 </script>
-
 @endsection

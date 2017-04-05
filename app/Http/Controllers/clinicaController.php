@@ -24,14 +24,14 @@ class clinicaController extends Controller
     $clinica = clinica::all();
 
      $btnEstado ="";
-    
+
     return Datatables::of($clinica)
 
     ->addColumn('action', function ($clinica) {
         $btnEstado ="";
         if($clinica->estadoClinica == 1){
           $btnEstado .= '<button onclick="cambiar_estado('.$clinica->id.', 0)" class="btn" title = "Inactivar" ><i class="glyphicon glyphicon-remove" ></i></button>';
-          
+
         }else if ($clinica->estadoClinica == 0){
           $btnEstado .= '<button onclick="cambiar_estado('.$clinica->id.', 1)" class="btn" title = "Activar" ><i class="glyphicon glyphicon-ok" ></i></button>';
         }
@@ -46,7 +46,7 @@ class clinicaController extends Controller
 
     ->make(true);
   }
- 
+
 
   public function index()
   {
@@ -115,7 +115,7 @@ class clinicaController extends Controller
     } else {
       return view('clinica.editar',compact('clinica','tipoContrato'));
     }
-    
+
   }
 
   public function cambiar_estado(Request $request){
