@@ -28,7 +28,10 @@
             <div class="form-group">
               <label>Nombre de la Clínica</label>
               <select class="form-control c-select" name="clinica_id">
-            
+                  @foreach($clinica as $clinica)
+                  <option value="{{$clinica->id}}">{{$clinica->nombre}}</option>
+                  @endforeach
+
               </select>
             </div>
 
@@ -37,7 +40,10 @@
             <div class="form-group">
               <label>Rol de usuario</label>
               <select class="form-control c-select" name="rol_id">
-               
+                  @foreach($roles as $value)
+
+               <option value="{{$value->id}}">{{$value->nombre}}</option>
+                @endforeach
               </select>
             </div>
             <div class="form-group">
@@ -51,7 +57,9 @@
             <div class="form-group">
               <label>Pregunta de seguridad</label>
               <select class="form-control c-select" name="pregunta_id">
-                
+                  @foreach($preguntas as $valor)
+                  <option value="{{$valor->id}}">{{$valor->pregunta}}</option>
+                  @endforeach
               </select>
             </div>
             <div class="form-group">

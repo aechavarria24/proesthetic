@@ -18,11 +18,14 @@ use Datatables;
 
 class pedidoController extends Controller
 {
+
     /**
     * Display a listing of the resource.
     *
     * @return \Illuminate\Http\Response
     */
+
+
     public function get_valor($id){
         if ($id==null) {
             $servicio_TipoContrato=0;
@@ -136,6 +139,7 @@ class pedidoController extends Controller
     */
     public function create()
     {
+
         //SELECT * FROM usuario_clinica as A inner join clinica as b on b.id=a.clinica_id
         $usuarioClinica=  usuarioClinica::select('usuario_clinica.id','usuario_clinica.nombre as NombreDoctor','usuario_clinica.apellido as ApellidoDocto','clinica.nombre as usuarioClinica')
         ->join('clinica','usuario_clinica.clinica_id','=','clinica.id')
@@ -242,6 +246,7 @@ class pedidoController extends Controller
             * @return \Illuminate\Http\Response
             */
             public function show($id)  {
+            
                 $pedido = pedido::all();
                 return view('pedido.listar');
             }

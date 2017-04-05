@@ -152,8 +152,8 @@ Route::get('servicio/get', 'servicioController@getData');
 
 //--POST--//
 Route::post('servicio/validar_servicio', 'servicioController@validar_servicio');
-
 Route::resource('servicio','servicioController');
+
 //------------------------------------------------------------------------------------//
 //----------------------------Fin rutas de servicio-----------------------------------//
 //------------------------------------------------------------------------------------//

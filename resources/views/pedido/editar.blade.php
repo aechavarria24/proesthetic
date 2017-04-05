@@ -71,8 +71,7 @@
                   $tabla="";
           $acumulador=1;
           foreach ($medida_Pieza as  $value) {
-              # code...
-
+                    $tabla.='<td>'.$acumulador++.' </td>';
             $tabla.='<tr data-valor ="F-'.$acumulador.'" table table-striped b-t">';
             $tabla.='<td>'.$acumulador++.' </td>';
             $tabla.='<td>'.$value['cantidad'].' </td>';
@@ -96,6 +95,10 @@
 
               </tbody>
             </table>
+            $foreach($medida_Pieza as valor)
+            <input type="text" name="" value="{{$valor->valor}}">
+            @endforeach
+
 
                   </div>
                 </div>
