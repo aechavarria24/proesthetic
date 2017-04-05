@@ -29,20 +29,18 @@ pedido
 @section ('script')
 <script type="text/javascript">
 $('#tblPedido').DataTable({
-
     processing: true,
     serverSide: true,
     "language": {
         "url": "/plugins/dataTables/Spanish.json"
-
     },
-    ajax: '/pedido/get'
+    ajax: '/pedido/get',
     columns: [
         {data: 'id', name: 'NumeroPedid'},
-        {data: 'usuario_id', name: 'UsuarioClinica'},
-        {data: 'created_at', name: 'FechaSolicitud'},
-        {data: 'fechaEntrega', name: 'FechaEntrega'},
-        {data: 'estado_pedido_id', name: 'Estado'},
+        {data: 'usuario_id', name: 'usuario_id'},
+        {data: 'created_at', name: 'created_at'},
+        {data: 'fechaEntrega', name: 'fechaEntrega'},
+        {data: 'estado_pedido_id', name: 'estado_pedido_id'},
         {data: 'action', name: 'action', orderable: false,searchable: false}
     ]
 });

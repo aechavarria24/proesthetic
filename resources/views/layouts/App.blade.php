@@ -647,13 +647,14 @@
   <script src="/scripts/ui-screenfull.js"></script>
   <script src="/scripts/ui-scroll-to.js"></script>
   <script src="/scripts/ui-toggle-class.js"></script>
+    <script src="/plugins/dataTables/datatables.min.js"></script>
   <script src="/scripts/ui-taburl.js"></script>
   <script src="/scripts/app.js"></script>
   <script src="/scripts/ajax.js"></script>
   <script src="/plugins/pnotify/pnotify.custom.min.js"></script>
   <script src="/plugins/select2/js/select2.full.min.js"></script>
   <script src="/plugins/bootstrapdatepicker/js/bootstrap-datepicker.min.js"></script>
-  <script src="/plugins/dataTables/datatables.min.js"></script>
+
   <script src="/plugins/jqueryValidation/jquery.validate.min.js"></script>
   <script src="/plugins/jqueryValidation/localization/messages_es.min.js"></script>
   <script src="/plugins/alert2/sweetalert2.min.js"></script>

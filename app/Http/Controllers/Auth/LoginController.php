@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\Model\User;
 use App\Model\paginas;
+use Notify;
 
 class LoginController extends Controller
 {
@@ -71,10 +72,10 @@ class LoginController extends Controller
 
       session(["permisos"=>$permisos]);
 
-
-
       return $this->sendLoginResponse($request);
-    }
+  }
+
+
     // If the login attempt was unsuccessful we will increment the number of attempts
     // to login and redirect the user back to the login form. Of course, when this
     // user surpasses their maximum number of attempts they will get locked out.
