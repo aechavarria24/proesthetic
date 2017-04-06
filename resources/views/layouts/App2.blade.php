@@ -26,7 +26,7 @@
   <link rel="stylesheet" href="/css/simple-line-icons/css/simple-line-icons.css" type="text/css" />
   <link rel="stylesheet" href="/css/bootstrap/dist/css/bootstrap.min.css" type="text/css" />
   <link rel="stylesheet" href="/plugins/pnotify/pnotify.custom.min.css" type="text/css" />
-   <link rel="stylesheet" href="/plugins/select2/select2.min.css">
+  <link rel="stylesheet" href="/plugins/select2/select2.min.css">
 
   <link rel="stylesheet" href="/plugins/select2/css/select2.min.css"/>
   <link rel="stylesheet" href="/css/styles/app.css" type="text/css" />
@@ -65,32 +65,35 @@
 
               <!-- / Panel -->
               @if(session("permisos") != null)
-                @foreach(session("permisos") as $value)
-                  @if($value["padre"] == 0)
-                    <!-- / Panel -->
-                    <li>
-                      <a href="#" class="b-success" title="Empleado">
-                        <span class="nav-icon text-white no-fade">
-                          <i class="{{$value['icono']}}"></i>
-                        </span>
-                        <span class="nav-text">{{ $value["nombre"] }}</span>
-                      </a>
-                      <!-- / opciones -->
-                      <ul class="nav-sub nav-mega nav-mega-3">
-                      @foreach(session("permisos") as $padre)
-                        @if($value["id"] == $padre["padre"])
-                          <li>
-                            <a href="{{$padre['url']}}">
-                              <span class="nav-text">{{ $padre['nombre'] }}</span>
-                            </a>
-                          </li>
-                        @endif
-                      @endforeach
-                      </ul>
-                    </li>
-                    <!-- / Panel -->
+              @foreach(session("permisos") as $value)
+              @if($value["padre"] == 0)
+              <!-- / Panel -->
+              <li>
+                <a href="" class="b-success" title="Empleado">
+                  <span class="nav-icon text-white no-fade">
+                    <i class="{{$value['icono']}}"></i>
+                  </span>
+                  <span class="nav-text">{{ $value["nombre"] }}</span>
+                </a>
+                <!-- / opciones -->
+                <ul class="nav-sub nav-mega nav-mega-3">
+                  @foreach(session("permisos") as $padre)
+                  @if($value["id"] == $padre["padre"])
+                  <li>
+                    <a href="{{$padre['url']}}">
+                      <span class="nav-text">{{ $padre['nombre'] }}</span>
+                    </a>
+                  </li>
                   @endif
-                @endforeach
+                  @endforeach
+                  <a href="/clinica/show">
+                    <span class="nav-text">Si lista</span>
+                  </a>
+                </ul>
+              </li>
+              <!-- / Panel -->
+              @endif
+              @endforeach
               @endif
               <!-- / Panel -->
               <li>
@@ -759,7 +762,7 @@
     <script src="/scripts/ui-modal.js"></script>
     <script src="/scripts/ui-nav.js"></script>
     <script src="/scripts/ui-list.js"></script>
-     <script src="/plugins/select2/js/select2.full.min.js"></script>
+    <script src="/plugins/select2/js/select2.full.min.js"></script>
     <script src="/scripts/ui-screenfull.js"></script>
     <script src="/scripts/ui-scroll-to.js"></script>
     <script src="/scripts/ui-toggle-class.js"></script>
@@ -771,9 +774,11 @@
     <script src="/plugins/jqueryValidation/localization/messages_es.js"></script>
     <script src="/plugins/bootstrapdatepicker/js/bootstrap-datepicker.min.js"></script>
 
+
+
     @if (Session::has('notifier.notice'))
     <script>
-    new PNotify({!! Session::get('notifier.notice') !!});
+      new PNotify({!! Session::get('notifier.notice') !!});
     </script>
     @endif
     <!-- escript propia de casa pagina -->
