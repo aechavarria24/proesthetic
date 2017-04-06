@@ -46,6 +46,8 @@ Route::get('usuario/get', 'usuarioController@getData');
 
 Route::post('clinica/estado/editar', 'clinicaController@cambiar_estado');
 Route::post('produccion/estado/editar', 'ordenProduccionController@cambiar_estado');
+Route::post('usuario/validar', 'usuarioClinicaController@cambiar_estado');
+
 Route::get('insucant/addInsumo', 'ordenProduccionController@add_Insumo');
 Route::get('insumo/eliminar_tabla_asociar', 'ordenProduccionController@eliminar_tabla_asociar');
 Route::get('produccion/get', 'ordenProduccionController@getData');

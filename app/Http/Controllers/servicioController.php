@@ -124,7 +124,6 @@ class servicioController extends Controller
         if ($servicio == 0) {
             $servicio = 0;
         }
-
         return response()->json(["respuesta" => $servicio]);
     }
 }

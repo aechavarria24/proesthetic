@@ -295,10 +295,11 @@
 <script src="/plugins/pnotify/pnotify.custom.min.js"></script>
 <script src="/plugins/select2/js/select2.full.min.js"></script>
 <script src="/plugins/bootstrapdatepicker/js/bootstrap-datepicker.min.js"></script>
+  <script src="/plugins/jqueryValidation/jquery.validate.min.js"></script>
+  <script src="/plugins/jqueryValidation/additional-methods.js"></script>
+  <script src="/plugins/jqueryValidation/localization/messages_es.min.js"></script>
+  <script src="/plugins/alert2/sweetalert2.min.js"></script>
 
-<script src="/plugins/jqueryValidation/jquery.validate.min.js"></script>
-<script src="/plugins/jqueryValidation/localization/messages_es.min.js"></script>
-<script src="/plugins/alert2/sweetalert2.min.js"></script>
 
 
 @if (Session::has('notifier.notice'))
