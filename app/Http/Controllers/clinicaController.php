@@ -91,7 +91,7 @@ class clinicaController extends Controller
   */
   public function show($id)
   {
-    $clinica = clinica::all();
+ 
     return view('clinica.listar');
   }
 

@@ -34,6 +34,7 @@ Route::resource('clinica','clinicaController');
 
 
 
+
 //--------------------------Rutas de usuarios de la clinica---------------------------//
 
 //--POST--//
