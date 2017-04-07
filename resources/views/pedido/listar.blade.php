@@ -28,7 +28,7 @@ pedido
 @endsection
 @section ('script')
 <script type="text/javascript">
-$('#tblPedido').DataTable({
+var table = $('#tblPedido').DataTable({
     processing: true,
     serverSide: true,
     "language": {
@@ -57,7 +57,7 @@ function cancelarPedido(e){
     // $("#valor").val(r.valor);
 
     if (r.respuesta == 1) {
-        var table = $('#tblPedido').DataTable();
+        
 
         new PNotify({
             title: 'Notificación',
@@ -92,7 +92,7 @@ function aprobarPedido(e){
     // $("#valor").val(r.valor);
 
     if (r.respuesta == 1) {
-        var table = $('#tblPedido').DataTable();
+        
 
         new PNotify({
             title: 'Notificación',
