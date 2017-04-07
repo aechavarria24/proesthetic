@@ -111,13 +111,13 @@ $("#frmEmpleado").validate({
     rules: {
         nombre :{
             required: true,
-            lettersonly : true,
+            lettersAndNumbers : true,
             minlength: 3,
             maxlength: 40
         },
         apellido: {
             required: true,
-            lettersonly : true,
+            lettersAndNumbers : true,
             minlength: 3,
             maxlength: 40
         },
@@ -125,13 +125,6 @@ $("#frmEmpleado").validate({
             required: true,
             minlength: 3,
             maxlength: 40
-        },
-        password: {
-            required: true,
-            minlength: 8
-        },
-        confirmarPassword: {
-            equalTo: "#password"
         }
     }
 });

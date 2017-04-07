@@ -126,10 +126,7 @@
                         <span>Message</span>
                     </a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="/docs.html">
-                        Need help?
-                    </a>
-                    <a href="{{route('logout')}}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                    <a  class="dropdown-item" href="{{route('logout')}}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
                     class="">Cerrar Sesión</a>
                     <form id="logout-form" action="{{route('logout')}}" method="post" style="display:none;">
                         {{csrf_field()}}
@@ -234,10 +231,11 @@
                                 <span>Message</span>
                             </a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="/docs.html">
-                                Need help?
-                            </a>
-                            <a class="dropdown-item" href="/signin.html">Sign out</a>
+                            <a  class="dropdown-item" href="{{route('logout')}}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                            class="">Cerrar Sesión</a>
+                            <form id="logout-form" action="{{route('logout')}}" method="post" style="display:none;">
+                                {{csrf_field()}}
+                            </form>
                         </div>
                     </li>
                 </ul>

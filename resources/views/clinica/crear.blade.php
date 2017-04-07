@@ -49,8 +49,10 @@ Clínica
                     </div>
                     <div class="row m-b">
                         <div class="col-sm-6">
-                            <label label = "Fecha de Corte">Fecha de Corte</label>
-                            <input class="form-control" required="" data-parsley-id="138" type="number" min="1" max ="30" name="diaCorte" id="diaCorte" maxlength="2"><br>
+                            <div class="form-group">
+                                <label label = "Fecha de Corte">Fecha de Corte</label>
+                                <input class="form-control" data-parsley-id="138" type="text" name="diaCorte" id="diaCorte" maxlength="2"><br>
+                            </div>
                         </div>
                         <div class=" p-a text-center">
                             <button type="submit" class="btn info">Registrar</button>
@@ -83,18 +85,19 @@ $("#frmclinica").validate({
     rules: {
         nombre :{
             required: true,
-            lettersonly : true,
+            lettersAndNumbers: true,
             minlength: 3,
             maxlength: 40
         },
         NIT :{
             required: true,
-            nit : true,
+            digits : true,
             minlength: 10,
             maxlength: 10
         },
         direccion: {
             required: true,
+            address: true,
             minlength: 3,
             maxlength: 20
         },
@@ -107,8 +110,8 @@ $("#frmclinica").validate({
         diaCorte : {
             required: true,
             digits : true,
-            minlength: 8,
-            maxlength: 40
+            minlength: 1,
+            maxlength: 2
         }
     }
 });

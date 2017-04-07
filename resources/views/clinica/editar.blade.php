@@ -69,12 +69,13 @@ $("#frmclinica").validate({
     rules: {
         nombre :{
             required: true,
-            lettersonly : true,
+            lettersAndNumbers : true,
             minlength: 3,
             maxlength: 40
         },
         direccion: {
             required: true,
+            address: true,
             minlength: 3,
             maxlength: 20
         },

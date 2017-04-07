@@ -1,4 +1,4 @@
-@extends('layouts.app') @section('titulo') Usuario @endsection @section('contenedor')
+@extends('layouts.app') @section('titulo') Empleado @endsection @section('contenedor')
 <form data-ui-jp="parsley" novalidate="" method="post" action="/empleado" id="frmEmpleado">
     {{csrf_field()}}
     <div class="padding">
@@ -108,23 +108,25 @@ $("#frmEmpleado").validate({
     rules: {
         nombre :{
             required: true,
-            lettersonly : true,
+            personName : true,
             minlength: 3,
             maxlength: 40
         },
         apellido: {
             required: true,
-            lettersonly : true,
+            personName : true,
             minlength: 3,
             maxlength: 40
         },
         username: {
             required: true,
+            user : true,
             minlength: 3,
             maxlength: 40
         },
         password: {
             required: true,
+            securePassword: true,
             minlength: 8
         },
         confirmarPassword: {
