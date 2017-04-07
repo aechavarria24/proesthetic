@@ -28,39 +28,25 @@ clinica
 @endsection
 @section ('script')
 <script type="text/javascript">
-  $(function(){
-    var tabla = $('#tblclinica').DataTable({
-      processing: true,
-      serverSide: true,
-      "language": {
+
+var tabla = $('#tblclinica').DataTable({
+    processing: true,
+    serverSide: true,
+    "language": {
         "url": "/plugins/dataTables/Spanish.json"
-      },
-      ajax: '/clinica/get',
-      columns: [
-      {data: 'NIT', name: 'NIT'},
-      {data: 'nombre', name: 'nombre'},
-      {data: 'telefono', name: 'telefono'},
-      {data: 'direccion', name: 'direccion'},
-      {data: 'estadoClinica', name: 'estadoClinica'},
-      {data: 'action', name: 'action', orderable: false,searchable: false}
-      ]
-    });
+    },
+    ajax: '/clinica/get',
+    columns: [
+        {data: 'NIT', name: 'NIT'},
+        {data: 'nombre', name: 'nombre'},
+        {data: 'telefono', name: 'telefono'},
+        {data: 'direccion', name: 'direccion'},
+        {data: 'estadoClinica', name: 'estadoClinica'},
+        {data: 'action', name: 'action', orderable: false,searchable: false}
+    ]
+});
 
 
-    function cambiar_estado(id_clinica, estado){
-      $.ajax({
-        type : "post",
-        dataType : "json",
-        data : {"clinica_id" : id_clinica, "estado": estado, "_token":$("#token").val()},
-        url : "/clinica/estado/editar"
-      }).done(function (result){
-
-        if (result.respuesta == '1') {
-
-          tabla.ajax.reload();
-        }
-      });
-    } 
 
 
 var tabla = $('#tblclinica').DataTable({
@@ -104,10 +90,6 @@ function cambiar_estado(id_clinica, estado){
 
 
 
-
-
-  });
-  
 
 
 </script>

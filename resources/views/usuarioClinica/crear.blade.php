@@ -1,5 +1,5 @@
 @extends('layouts.app') @section('titulo') Usuario @endsection @section('contenedor')
-<form data-ui-jp="parsley" novalidate="" method="post" action="/usuario">
+<form data-ui-jp="parsley" novalidate="" method="post" action="/usuario" id = "frmUsuario">
     {{csrf_field()}}
     <div class="padding">
         <div class="box">
@@ -100,7 +100,7 @@ $("#username").change(function(){
 
     });
 });
-$("#frmEmpleado").validate({
+$("#frmUsuario").validate({
     errorElement: 'span',
     errorPlacement: function(error, e) {
         let label = jQuery(e).parents('.form-group').find("label").attr("label");
@@ -137,6 +137,7 @@ $("#frmEmpleado").validate({
         },
         password: {
             required: true,
+            securePassword : true,
             minlength: 8
         },
         confirmarPassword: {

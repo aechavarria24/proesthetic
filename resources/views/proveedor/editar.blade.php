@@ -51,7 +51,7 @@ $("#frmProveedor").validate({
     rules: {
         nombre :{
             required: true,
-            lettersonly : true,
+            lettersAndNumbers : true,
             minlength: 3,
             maxlength: 40
         },
