@@ -112,6 +112,7 @@
                         </div>
                     </div>
                 </a>
+
                 <div class="dropdown-menu w dropdown-menu-scale ">
                     <a class="dropdown-item" href="/profile.html">
                         <span>Profile</span>

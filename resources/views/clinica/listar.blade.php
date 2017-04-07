@@ -47,8 +47,6 @@ var tabla = $('#tblclinica').DataTable({
 });
 
 
-
-
 var tabla = $('#tblclinica').DataTable({
     processing: true,
     serverSide: true,
@@ -69,6 +67,7 @@ var tabla = $('#tblclinica').DataTable({
 
 function cambiar_estado(id_clinica, estado){
     $.ajax({
+
         type : "post",
         dataType : "json",
         data : {"clinica_id" : id_clinica, "estado": estado, "_token":$("#token").val()},
@@ -85,12 +84,6 @@ function cambiar_estado(id_clinica, estado){
             tabla.ajax.reload();
         }
     });
-
 }
-
-
-
-
-
 </script>
 @endsection
