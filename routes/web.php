@@ -27,7 +27,6 @@ Route::post('clinica/estado/editar', 'clinicaController@cambiar_estado');
 //--GET--//
 Route::get('clinica/get','clinicaController@getData');
 
-Route::resource('clinica','clinicaController');
 //------------------------------------------------------------------------------------//
 //------------------------------Fin rutas de clinica----------------------------------//
 //------------------------------------------------------------------------------------//
@@ -45,7 +44,10 @@ Route::get('usuarioClinica/get', 'usuarioClinicaController@getData');
 Route::get('usuario/get', 'usuarioController@getData');
 
 Route::post('clinica/estado/editar', 'clinicaController@cambiar_estado');
+Route::resource('clinica','clinicaController');
 Route::post('produccion/estado/editar', 'ordenProduccionController@cambiar_estado');
+Route::post('usuario/validar', 'usuarioClinicaController@cambiar_estado');
+
 Route::get('insucant/addInsumo', 'ordenProduccionController@add_Insumo');
 Route::get('insumo/eliminar_tabla_asociar', 'ordenProduccionController@eliminar_tabla_asociar');
 Route::get('produccion/get', 'ordenProduccionController@getData');
@@ -62,6 +64,7 @@ Route::resource('usuario','usuarioClinicaController');
 
 //--POST--//
 Route::post('empleado/validar_empleado', 'empleadoController@validar_empleado');
+Route::post('empleado/estado/editar', 'empleadoController@cambiar_estado');
 
 //--GET--//
 Route::get('empleado/get', 'empleadoController@getData');

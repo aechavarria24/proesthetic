@@ -1,4 +1,4 @@
-@extends('layouts.app') @section('titulo') Usuario @endsection @section('contenedor')
+@extends('layouts.app') @section('titulo') Empleado @endsection @section('contenedor')
 <form data-ui-jp="parsley" novalidate="" method="post" action="/empleado" id="frmEmpleado">
     {{csrf_field()}}
     <div class="padding">
@@ -52,7 +52,7 @@
                         </div>
                         <div class="form-group">
                             <label class="control-label" label = "Respuesta">Respuesta</label>
-                            <input class="form-control" required="" data-parsley-id="138" type="password" name="respuesta" id="respuesta" tabindex="8">
+                            <input class="form-control" required="" data-parsley-id="138" type="password" name="respuesta" id="respuesta" tabindex="8" maxlength="50">
                         </div>
                     </div>
                     <div class="col-sm-12">
@@ -106,23 +106,27 @@ $("#frmEmpleado").validate({
         elem.closest('.help-block').remove();
     },
     rules: {
-        nombre: {
+        nombre :{
             required: true,
+            personName : true,
             minlength: 3,
             maxlength: 40
         },
         apellido: {
             required: true,
+            personName : true,
             minlength: 3,
             maxlength: 40
         },
         username: {
             required: true,
+            user : true,
             minlength: 3,
             maxlength: 40
         },
         password: {
             required: true,
+            securePassword: true,
             minlength: 8
         },
         confirmarPassword: {
@@ -131,5 +135,4 @@ $("#frmEmpleado").validate({
     }
 });
 </script>
-
 @endsection

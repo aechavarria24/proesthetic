@@ -332,22 +332,7 @@ function guardar_pedido(){
 
 
     $("#frmCrearPedido").submit()
-    // $.ajax({
-    //     type : "POST",
-    //     dataType : "json",
-    //     url : "/pedido/guardar/pedido",
-    //     data : {
-    //         "_token" : $("#_token").val(),
-    //         cedula : $("#cedula").val() ,
-    //         nombre : $("#nombre").val(),
-    //         usuario_id : $("#usuario_id").val(),
-    //         fechaEntrega : $("#fechaEntrega").val()
-    //
-    //
-    //
-    //     }
-    // }).done(function(){
-    //     alert();
+
 }
 
 $("#frmCrearPedido").validate({

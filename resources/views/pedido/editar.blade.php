@@ -3,187 +3,180 @@
 @endsection @section('contenedor')
 <div class="padding">
     <div class="box">
-      <div class="box-header">
-        <h2>Editar</h2>
-      </div>
-      <div class="box-body">
-        <div class="padding">
-          <div class="row">
-              {{Form::model($pedido, ['route' => ['pedido.update',$pedido->id],'method' => 'put'])}}
-              {{csrf_field()}}
-              <div class="col-sm-12">
-                <div class="col-lg-12">
-                  <div class="box">
-                    <div class="box-header">
-                      Paciente
-                    </div>
-                    <div class="box-body">
-                      <div class="row">
-                        <div class="col-sm-6">
-                          <div class="form-group">
-                              @foreach ($paciente as $values)
-                            <label>Cedula del paciente</label>
-                            <input class="form-control" required="" data-parsley-id="136" type="text" name="cedula" value="{{$values->cedula}}">
-                            @endforeach
-                          </div>
+        <div class="box-header">
+            <h2>Editar</h2>
+        </div>
+        <div class="box-body">
+            <div class="padding">
+                <div class="row">
+                    {{Form::model($pedido, ['route' => ['pedido.update',$pedido->id],'method' => 'put', 'id'=>'frmEditarPedido'])}}
+                    {{csrf_field()}}
+                    <div class="col-sm-12">
+                        <div class="col-lg-12">
+                            <div class="box">
+                                <div class="box-header">
+                                    Paciente
+                                </div>
+                                <div class="box-body">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                @foreach ($paciente as $values)
+                                                <label label='Cedula del paciente'>Cedula del paciente</label>
+                                                <input class="form-control" required="" data-parsley-id="136" type="text" name="cedula" value="{{$values->cedula}}">
+                                                <input class="form-control" type="hidden" required="" data-parsley-id="136" type="text" name="cedulaPaciente" value="{{$values->cedula}}">
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label label='Nombre Paciente'>Nombre Paciente</label>
+                                                <input class="form-control" required="" data-parsley-id="136" type="text" name="nombre" value="{{$values->nombre}}" >
+                                                <!-- <input type="hiiden" class="form-control" required="" data-parsley-id="136" type="text" name="nombrePciente" value="{{$values->id}}" > -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-sm-6">
-                          <div class="form-group">
-                            <label>Nombre Paciente</label>
-                            <input class="form-control" required="" data-parsley-id="136" type="text" name="nombre" value="{{$values->nombre}}" >
-                          </div>
-                        </div>
-                      </div>
                     </div>
-                  </div>
+                    <div class="col-sm-12">
+                        <div class="box">
+                            <div class="box-header">
+                                Medidas de la pieza
+                            </div>
+                            <div class="box-body">
+                                <table class="table table-striped b-t col-md-12">
+                                    <thead>
+                                        <tr>
+                                            <th>Servicio</th>
+                                            <th>Cantidad</th>
+                                            <th>Dimensión</th>
+                                            <th>Unidad de medida</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($medida_Pieza as $valor)
+                                        <tr>
+                                            <td>
+                                                <input readonly="true" class="form-control" value="{{$valor->servicio}}">
+                                            </td>
+                                            <td>
+                                                <input class="form-control" type="hidden"  id="{{$valor->id_pieza}}'" name="id_pieza[]"  type="number" value="{{$valor->id_pieza}}">
+                                                <input class="form-control" name="cantidad[]" id="txtCant-{{$valor->id_pieza}}" placeholder="Cantidad" type="number" value="{{$valor->cantidad}}">
+                                            </td>
+                                            <td>
+                                                <!-- <select class="form-control c-select" name="unidadMedida[]" id="{{$valor->id_pieza}}" type="hidden" value="{{$valor->id_pieza}}"> -->
+                                                <select class="form-control c-select" name="unidadMedida[]" id="{{$valor->id_pieza}}" value="">
+                                                    @if( '{{$valor->unidadMedidad}}' == "MM")
+                                                    <option value="MM" >MM</option>
+                                                    <option value="CM">CM</option>
+                                                    @else
+                                                    <option value="MM">MM</option>
+                                                    <option value="CM" selected="">CM</option>
+                                                    @endif
+
+
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <!-- <select class="form-control c-select" type="hidden" name="dimension[]" id="{{$valor->id_pieza}}" value="{{$valor->id_pieza}}"> -->
+                                                <select class="form-control c-select" name="dimension[]" id="{{$valor->id_pieza}}" value="">
+                                                    <option value="ALTO">ALTO</option>
+                                                    <option value="LARGO">LARGO</option>
+                                                    <option value="ANCHO">ANCHO</option>
+                                                    <option value="RADIO">RADIO</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-5" id="containerMedidaPieza">
+
+                    </div>
+
+                    <div class="col-sm-12">
+                        <div class=" p-a text-center">
+                            <button type="submit"  class="btn info">Actualizar</button>
+                        </div>
+                    </div>
+                    {!! Form::close() !!}
                 </div>
-                <div class="col-lg-12">
-                  <div class="box">
-
-                    <div class="box-body">
-
-
-                  </div>
-                </div>
-              </div>
             </div>
-
-            <div class="col-sm-7">
-
-              <div class="box">
-                <div class="box-header">
-                  Medidas de la pieza
-                </div>
-
-                  <div class="">
-                    <table class="table table-striped b-t">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Cantidad</th>
-                  <th>Dimensión</th>
-                  <th>Unidad de medida</th>
-                  <th>Editar</th>
-                </tr>
-              </thead>
-              <tbody>
-                  <?php
-                  $tabla="";
-          $acumulador=1;
-          foreach ($medida_Pieza as  $value) {
-                    $tabla.='<td>'.$acumulador++.' </td>';
-            $tabla.='<tr data-valor ="F-'.$acumulador.'" table table-striped b-t">';
-            $tabla.='<td>'.$acumulador++.' </td>';
-            $tabla.='<td>'.$value['cantidad'].' </td>';
-            $tabla.='<td>'.$value['dimension'].' </td>';
-            $tabla.='<td>'.$value['unidadMedidad'].' </td>';
-            // $tabla.='<td>'.$value['observacion'].' </td>';
-            $tabla.='<td value="'.$acumulador.'"><i id="'.$value["id_pieza"].'"  onclick="editarMedidaPieza(this);" class="glyphicon glyphicon-edit" title="Editar Medida"> </td>';
-            $tabla.='</tr>';
-
-        }
-        $acumulador++;
-
-                   echo $tabla; ?>
-
-
-
-
-                  </td>
-
-                </tr>
-
-              </tbody>
-            </table>
-            $foreach($medida_Pieza as valor)
-            <input type="text" name="" value="{{$valor->valor}}">
-            @endforeach
-
-
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-5" id="containerMedidaPieza">
-              </div>
-
-            </div>
-            <div class="col-sm-12">
-              <div class=" p-a text-center">
-                <button type="submit" class="btn info">Registrar</button>
-              </div>
-
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-
-    </div>
+        </div>
     </div>
 </div>
+
 
 @section('script')
 
 <script type="text/javascript">
-function editarMedidaPieza(e) {
-    var id_pieza = $(e).attr("id");
-    $("#containerMedidaPieza").append(
-        '<div class="box" name="containerMedidaPieza">'
-        +'<div class="box-header" >'
-        +'</div>'
-        +'<div class="box-body">'
-        +'<div class="row">'
-        +'<div style = "padding-top: 1%;">'
-        +'<table class="table table-striped b-t">'
-        +'<thead>'
-        +'<tr>'
-        +'<th>Cantidad</th>'
-        +'<th>Dimensión</th>'
-        +'<th>Unidad de medida</th>'
-        +'<th>Opción</th>'
-        +'</tr>'
-        +'</thead>'
-        +'<tbody id="t-'+id_pieza+'">'
-        +'</tbody>'
-        +'</table>'
-        +'</div>'
-        +'<div class="col-xs-3">'
-        +'<input class="form-control" type="hidden"  id="servi-'+id_pieza+'" name="id_pieza" type="number" value="'+id_pieza+'">'
-        +'<input class="form-control" name="cantidad" id="txtCant-'+id_pieza+'" placeholder="Cantidad" type="number" value="">'
-        +	'</div>'
-        +'<div class=" col-xs-4">'
-        +'<select class="form-control c-select" name="unidadMedida" id="selectUnidadMedida-'+id_pieza+'" value="">'
-        +'<option value="MM">MM</option>'
-        +'<option value="CM">CM</option>'
-        +'</select>'
-        +'</div>'
-        +'<div class="col-xs-3">'
-        +'<select class="form-control c-select" name="dimension" id="selectDimension-'+id_pieza+'" value="">'
-        +'<option value="ALTO">ALTO</option>'
-        +'<option value="LARGO">LARGO</option>'
-        +'<option value="ANCHO">ANCHO</option>'
-        +'<option value="RADIO">RADIO</option>'
-        +'</select>'
-        +'</div>'
-        +'<div>'
-        +'<div class="col-xs-1">'
-        +'<button id="'+id_pieza+'-btn" title="Adicionar" value="'+id_pieza+'" onclick="AgregarMedidaPieza(this);" class="btn btn-icon white" type="button">'
-        // + '<input id="_token" name="_token" type="hidden" value="{{csrf_token()}}">'
-        +'<i class="fa fa-plus" href="#"></i>'
-        +'</button>'
-        +'</div>'
-        +'</div>'
-        +'<div class="box-divider m-a-0"></div>'
+$("#frmEditarPedido").validate({
+    errorElement: 'span',
+    errorPlacement: function(error, e) {
+        let label = jQuery(e).parents('.form-group').find("label").attr("label");
+        jQuery(e).parents('.form-group').find("label").text(label+". ").append(error);
+    },
+    highlight: function(e) {
+        var elem = jQuery(e);
+        elem.closest('.form-group').removeClass('has-error').addClass('has-error');
+        elem.closest('.help-block').remove();
+    },
+    success: function(e) {
+        var elem = jQuery(e);
+        elem.closest('.form-group').removeClass('has-error').addClass('has-success');
+        elem.closest('.help-block').remove();
+    },
+    rules: {
+        nombre: {
+            required: true,
 
-        +'</div>'
+            minlength: 5,
+            maxlength: 45
+        },
+        cedula: {
+            required: true,
+            digits: true,
+            minlength: 7,
+            maxlength: 13,
+        },
+        cantidad: {
+            required: true,
+            minlength: 10,
+            maxlength: 10
+        },
+        containerMedidaPieza: {
+            required: true,
+            minlength: 10,
+            maxlength: 10
+        },
+        id_pieza :{
+            digits : true
+        }
+    }
+});
 
-        +'</div>'
-        +'</div>'
-    );
-    id_pieza++;
+// function guardar(){
+//
+//     // var idTabla=id.split('-');
+//     // var cantidad=($("#txtCant-"+idTabla[0]).val());
+//     var cantidad=($("#txtCant").val());
+//     if (cantidad.length==0||cantidad<=0||cantidad=="") {
+//
+//         new PNotify({
+//             title : 'Atención...',
+//             text : 'Por favor ingrese una cantidad valida en la medida de la pieza',
+//             type : 'error'
+//         });
+//     }else {
+//         $("#frmEditarPedido").submit();
+// }
+// }
 
-
-}
 
 </script>
 @endsection
