@@ -47,7 +47,14 @@ clinica
     });
 
 
-    function cambiar_estado(id_clinica, estado){
+
+
+
+
+
+
+  });
+      function cambiar_estado(id_clinica, estado){
       $.ajax({
         type : "post",
         dataType : "json",
@@ -61,13 +68,6 @@ clinica
         }
       });
     } 
-
-
-
-
-
-  });
-  
 
 </script>
 @endsection

@@ -79,8 +79,8 @@
                   @foreach(session("permisos") as $padre)
                   @if($value["id"] == $padre["padre"])
                   <li>
-                    <a href= '{{ $padre["url"] }}'>
-                    {{ $padre['nombre'] }}
+                    <a href="#" onclick="location.href='{{ $padre["url"] }}'" name="button">
+                    {{ trim($padre['nombre']) }}
                     </a>
                   </li>
                   @endif
