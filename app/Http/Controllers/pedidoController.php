@@ -41,23 +41,23 @@ class pedidoController extends Controller
 
 
     public function detalle($id) {
-    $pedido=pedido::select('pedido.id','clinica.nombre','paciente.nombre as pacienteNombre','paciente.cedula','estado_pedido.nombre as estadoPedido','fechaEntrega')
-    ->join('usuario_clinica','usuario_clinica.id','=','pedido.usuario_id')
-    ->join('clinica','clinica.id','=','usuario_clinica.clinica_id')
-    ->join('paciente','paciente.id','=','pedido.paciente_id')
-    ->join('estado_pedido','estado_pedido.id','=','pedido.estado_pedido_id')
-    ->where('pedido.id',$id)
-    ->get();
+        $pedido=pedido::select('pedido.id','clinica.nombre','paciente.nombre as pacienteNombre','paciente.cedula','estado_pedido.nombre as estadoPedido','fechaEntrega')
+        ->join('usuario_clinica','usuario_clinica.id','=','pedido.usuario_id')
+        ->join('clinica','clinica.id','=','usuario_clinica.clinica_id')
+        ->join('paciente','paciente.id','=','pedido.paciente_id')
+        ->join('estado_pedido','estado_pedido.id','=','pedido.estado_pedido_id')
+        ->where('pedido.id',$id)
+        ->get();
 
         return view('pedido.detalle',compact('pedido'));
     }
     public function aprobarPedido(Request $request){
         $input=$request->all();
-    /* Se debe tomar el id de la session de usuario*/
+        /* Se debe tomar el id de la session de usuario*/
         $id_usuario=session("id");
         $id_usuario=2;
         $estado_orden_produccion_id=1;
-         $pedido=pedido::find($input["id"]);
+        $pedido=pedido::find($input["id"]);
         if ($pedido != null && $pedido["estado_pedido_id"] == 1) {
             $input["estado_pedido_id"]=2;
             $pedido->update($input);
@@ -87,7 +87,7 @@ class pedidoController extends Controller
         $pedido = pedido::all();
         return Datatables::of($pedido)
         ->addColumn('action', function ($pedido) {
-            return '<a><i onclick="aprobarPedido(this);" id="'.$pedido->id.'" class="glyphicon glyphicon-plus" title="Aprobar"></i>&nbsp;</a>
+            return '<a><i onclick="aprobarPedido(this);" id="'.$pedido->id.'" class="fa fa-handshake-o" aria-hidden="true" title="Aprobar"></i>&nbsp;</a>
             <a><i class="glyphicon glyphicon-trash"  onclick="cancelarPedido(this);" id="'.$pedido->id.'" title="Eliminar"></i>&nbsp;</a>
             <a href="/pedido/'.$pedido->id.'/edit" ><i class="glyphicon glyphicon-edit" title="Editar"></i>&nbsp;</a>
             <a href="/pedido/'.$pedido->id.'/detallePedido" ><i class="fa fa-eye" title="Detalle"></i>&nbsp;</a>';
@@ -185,10 +185,10 @@ class pedidoController extends Controller
     function traer_nombre_paciente(Request $request){
 
         $cedula=$request->all();
-                    $nombre = paciente::select('nombre')
-            ->where("cedula",'=',$cedula["cedula"])->get();
+        $nombre = paciente::select('nombre')
+        ->where("cedula",'=',$cedula["cedula"])->get();
 
-            return json_encode($nombre);
+        return json_encode($nombre);
 
     }
 
@@ -246,7 +246,7 @@ class pedidoController extends Controller
             * @return \Illuminate\Http\Response
             */
             public function show($id)  {
-            
+
                 $pedido = pedido::all();
                 return view('pedido.listar');
             }
@@ -258,38 +258,42 @@ class pedidoController extends Controller
             * @return \Illuminate\Http\Response
             */
             public function edit($id){
-
-
                 $pedido = pedido::find($id);
-                $paciente = paciente::select('*')
-                ->join('pedido','pedido.paciente_id','=','paciente.id')
-                ->where('pedido.id','=',$id)
-                ->get();
-                // dd($paciente);
-
-                $medida_Pieza = pedido::select('medida_pieza.id as id_pieza','medida_Pieza.cantidad as cantidad','medida_Pieza.dimension as dimension','medida_Pieza.unidadMedidad as unidadMedidad')
-                ->join('servicio_tipocontrato_pedido','servicio_tipocontrato_pedido.pedido_id','=','pedido.id')
-                ->join('medida_pieza','medida_pieza.servicio_tipocontrato_pedido_id','=',
-                'servicio_tipocontrato_pedido.id')
-                ->where('pedido.id',$id)
-                ->get();
-
 
                 if ($pedido==null) {
                     Notify::warning('No se encontraron datos','Espera...');
-                    return redirect('/servicio/show');
-                } else {
+                    return redirect('/pedido/show');}
+                    elseif ($pedido['estado_pedido_id']==1) {                  # code...
 
+                    $paciente = paciente::select('*')
+                    ->join('pedido','pedido.paciente_id','=','paciente.id')
+                    ->where('pedido.id','=',$id)
+                    ->get();
+                    // dd($paciente);
 
+                    $medida_Pieza = pedido::select('servicio.nombre as servicio','medida_pieza.id as id_pieza','medida_Pieza.cantidad as cantidad','medida_Pieza.dimension as dimension','medida_Pieza.unidadMedidad as unidadMedidad')
+                    ->join('servicio_tipocontrato_pedido','servicio_tipocontrato_pedido.pedido_id','=','pedido.id')
+                    ->join('medida_pieza','medida_pieza.servicio_tipocontrato_pedido_id','=',
+                    'servicio_tipocontrato_pedido.id')
+                    ->join('servicio_tipocontrato','servicio_tipocontrato.id','=','servicio_tipocontrato_pedido.servicio_tipocontrato_id')
+                    ->join('servicio','servicio.id','=','servicio_tipocontrato.servicio_id')
+                    ->where('pedido.id',$id)
+                    ->get();
 
-
-                    //   dd($tabla);
-                    // return view('pedido.editar',$tabla);
+                    $servicio = serviciotipoContrato::select('*')
+                    ->join('servicio','servicio_tipoContrato.servicio_id','=','servicio.id')
+                    // ->join('servicio','servicio_tipoContrato.tipoContrato_id','=','servicio_tipoContrato.tipoContrato_id')
+                    -> get();
                     return view('pedido.editar',compact('pedido','servicio','paciente','medida_Pieza','$tabla'));
+                }else {
+                    Notify::success('El pedido se encuantra en un estado que no se puede editar','Alerta');
+                    return view('pedido.listar');
+                }
+            //   dd($tabla);
+                    // return view('pedido.editar',$tabla);
+
                 }
 
-
-            }
             /**
             * Update the specified resource in storage.
             *
@@ -297,9 +301,28 @@ class pedidoController extends Controller
             * @param  int  $id
             * @return \Illuminate\Http\Response
             */
-            public function update(Request $request, $id)
+            public function update(Request $request)
             {
-                //
+                $input=$request->all();
+                // var_dump($input);
+                // exit;
+                $paciente=paciente::where("cedula",$input['cedulaPaciente'])->first();
+
+                foreach ($input['id_pieza']  as $key =>  $value) {
+                    $medida_Pieza=medidapieza::where('id',$value);
+                    $medida_Pieza->update(["cantidad"=>$input['cantidad'][$key],"dimension"=>$input['dimension'][$key],"unidadMedidad"=>$input['unidadMedida'][$key]]);
+                }
+
+
+                if ($paciente==null && $medida_Pieza==null) {
+                    Notify::warning('Lo siento','pedido no existe');
+                    return view('pedido.listar');
+                }
+                $paciente->update(["cedula"=>$input['cedula'],"nombre"=>$input['nombre']]);
+                Notify::success('Pedido','Pedido actualizado ');
+                return view('pedido.listar');
+
+
             }
 
             /**
