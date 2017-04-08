@@ -7,6 +7,7 @@ use App\Model\usuarioClinica;
 use App\Model\clinica;
 use App\Model\preguntaCliente;
 use App\Model\rol;
+use Datatables;
 use Notify;
 
 
@@ -23,8 +24,8 @@ class usuarioClinicaController extends Controller
         $usuarioClinica = usuarioClinica::all();
         return Datatables::of($usuarioClinica)
         ->addColumn('action', function ($usuario) {
-            return '<a href="/usuarioClinica/'.$usuarioClinica->id.'/edit" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i>&nbsp;Editar</a>
-            <a href="/servicio/'.$usuarioClinica->id.'/edit" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i>&nbsp;Inabilitar</a>';
+            return '<a href="/usuarioClinica/'.$usuario->id.'/edit" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i>&nbsp;Editar</a>
+            <a href="/servicio/'.$usuario->id.'/edit" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i>&nbsp;Inabilitar</a>';
         })
         ->make(true);
     }
@@ -100,7 +101,7 @@ class usuarioClinicaController extends Controller
     public function show($id)
     {
         $usuarioClinica= usuarioClinica::all();
-        return view('usuarioClinica.editar');
+        return view('usuarioClinica.listar');
 
     }
 

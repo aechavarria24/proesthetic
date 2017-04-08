@@ -134,7 +134,7 @@ $("#frmEditarPedido").validate({
     rules: {
         nombre: {
             required: true,
-
+            personName : true,
             minlength: 5,
             maxlength: 45
         },

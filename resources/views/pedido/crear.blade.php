@@ -136,6 +136,9 @@ $(function(){
 $('#cbxServicio').select2();
 $('#fechaEntrega').datepicker({
     format: 'yyyy-mm-dd',
+    startDate: '0d',
+    endDate: '+3m'
+
 });
 
 var id_pieza=0;
@@ -144,239 +147,238 @@ function AgregarServicio(e){
 
     if (servicio!="") {
 
-    var servicio_tipo_id =$("#cbxServicio").val();
-    // alert(servicio_tipo_id);
+        var servicio_tipo_id =$("#cbxServicio").val();
+        // alert(servicio_tipo_id);
 
-    $("#containerMedidaPieza").append(
-        '<div class="box" name="containerMedidaPieza">'
-        +'<div class="box-header" >'
-        +'Medidas de la pieza de: '+' '+servicio+''
-        +'</div>'
-        +'<div class="box-body">'
-        +'<div class="row">'
-        +'<div class="col-xs-3">'
-        +'<input class="form-control" type="hidden"  id="servi-'+id_pieza+'" name="servicio_tipo_id" type="number" value="'+servicio_tipo_id+'">'
-        +'<input class="form-control" name="cantidad" id="txtCant-'+id_pieza+'" placeholder="Cantidad" type="number" value="">'
-        +	'</div>'
-        +'<div class=" col-xs-4">'
-        +'<select class="form-control c-select" name="unidadMedida" id="selectUnidadMedida-'+id_pieza+'" value="">'
-        +'<option value="MM">MM</option>'
-        +'<option value="CM">CM</option>'
-        +'</select>'
-        +'</div>'
-        +'<div class="col-xs-3">'
-        +'<select class="form-control c-select" name="dimension" id="selectDimension-'+id_pieza+'" value="">'
-        +'<option value="ALTO">ALTO</option>'
-        +'<option value="LARGO">LARGO</option>'
-        +'<option value="ANCHO">ANCHO</option>'
-        +'<option value="RADIO">RADIO</option>'
-        +'</select>'
-        +'</div>'
-        +'<div>'
-        +'<div class="col-xs-1">'
-        +'<button id="'+id_pieza+'-btn" title="Adicionar" value="'+id_pieza+'" onclick="AgregarMedidaPieza(this);" class="btn btn-icon white" type="button">'
-        // + '<input id="_token" name="_token" type="hidden" value="{{csrf_token()}}">'
-        +'<i class="fa fa-plus" href="#"></i>'
-        +'</button>'
-        +'</div>'
-        +'</div>'
-        +'<div class="box-divider m-a-0"></div>'
+        $("#containerMedidaPieza").append(
+            '<div class="box" name="containerMedidaPieza">'
+            +'<div class="box-header" >'
+            +'Medidas de la pieza de: '+' '+servicio+''
+            +'</div>'
+            +'<div class="box-body">'
+            +'<div class="row">'
+            +'<div class="col-xs-3">'
+            +'<input class="form-control" type="hidden"  id="servi-'+id_pieza+'" name="servicio_tipo_id" type="number" value="'+servicio_tipo_id+'">'
+            +'<input class="form-control" name="cantidad" id="txtCant-'+id_pieza+'" placeholder="Cantidad" maxlength="1"  type="number" min="0" max="100" value="">'
+            +	'</div>'
+            +'<div class=" col-xs-4">'
+            +'<select class="form-control c-select" name="unidadMedida" id="selectUnidadMedida-'+id_pieza+'" value="">'
+            +'<option value="MM">MM</option>'
+            +'<option value="CM">CM</option>'
+            +'</select>'
+            +'</div>'
+            +'<div class="col-xs-3">'
+            +'<select class="form-control c-select" name="dimension" id="selectDimension-'+id_pieza+'" value="">'
+            +'<option value="ALTO">ALTO</option>'
+            +'<option value="LARGO">LARGO</option>'
+            +'<option value="ANCHO">ANCHO</option>'
+            +'<option value="RADIO">RADIO</option>'
+            +'</select>'
+            +'</div>'
+            +'<div>'
+            +'<div class="col-xs-1">'
+            +'<button id="'+id_pieza+'-btn" title="Adicionar" value="'+id_pieza+'" onclick="AgregarMedidaPieza(this);" class="btn btn-icon white" type="button">'
+            // + '<input id="_token" name="_token" type="hidden" value="{{csrf_token()}}">'
+            +'<i class="fa fa-plus" href="#"></i>'
+            +'</button>'
+            +'</div>'
+            +'</div>'
+            +'<div class="box-divider m-a-0"></div>'
 
-        +'</div>'
-        +'<div style = "padding-top: 2%;">'
-        +'<table class="table table-striped b-t">'
-        +'<thead>'
-        +'<tr>'
-        +'<th>Cantidad</th>'
-        +'<th>Dimensión</th>'
-        +'<th>Unidad de medida</th>'
-        +'<th>Opción</th>'
-        +'</tr>'
-        +'</thead>'
-        +'<tbody id="t-'+id_pieza+'">'
-        +'</tbody>'
-        +'</table>'
-        +'</div>'
-        +'</div>'
-        +'</div>'
-    );
-    id_pieza++;
-} else {
+            +'</div>'
+            +'<div style = "padding-top: 2%;">'
+            +'<table class="table table-striped b-t">'
+            +'<thead>'
+            +'<tr>'
+            +'<th>Cantidad</th>'
+            +'<th>Dimensión</th>'
+            +'<th>Unidad de medida</th>'
+            +'<th>Opción</th>'
+            +'</tr>'
+            +'</thead>'
+            +'<tbody id="t-'+id_pieza+'">'
+            +'</tbody>'
+            +'</table>'
+            +'</div>'
+            +'</div>'
+            +'</div>'
+        );
+        id_pieza++;
+    } else {
 
-
-new PNotify({
-    title : 'Atención...',
-    text : 'Por favor seleccione un servicio',
-    type : 'error'
-});}
-
-}
-function traer_nombre_paciente(e){
-    var cedula=$(e).val();
-
-    $.ajax({
-        type: "POST",
-        datatype : "json",
-        url: "/pedido/traer_nombre_paciente",
-        data:{
-            "_token" : $("#_token").val(),
-            "cedula" : cedula
-        }
-    }).done(function(nombre){
-        var json = JSON.parse(nombre);
-        console.log(":)");
-        $("#nombre").val(json[0].nombre);
-
-    });
-
-}
-var contador=0;
-var contador_session=0;
-function AgregarMedidaPieza(e){
-
-    var id=$(e).val();
-    // alert(id);
-    var idTabla=id.split('-');
-    var cantidad=($("#txtCant-"+idTabla[0]).val());
-    if (cantidad.length==0||cantidad<=0) {
 
         new PNotify({
             title : 'Atención...',
-            text : 'Por favor ingrese una cantidad valida en la medida de la pieza',
+            text : 'Por favor seleccione un servicio',
             type : 'error'
+        });}
+
+    }
+    function traer_nombre_paciente(e){
+        var cedula=$(e).val();
+
+        $.ajax({
+            type: "POST",
+            datatype : "json",
+            url: "/pedido/traer_nombre_paciente",
+            data:{
+                "_token" : $("#_token").val(),
+                "cedula" : cedula
+            }
+        }).done(function(nombre){
+            var json = JSON.parse(nombre);
+            console.log(":)");
+            $("#nombre").val(json[0].nombre);
+
         });
-    }else {
-        var unidad=($("#selectUnidadMedida-"+idTabla[0]).val());
-        var dimension=($("#selectDimension-"+idTabla[0]).val());
-        var servicio_tipo_id=($("#servi-"+idTabla[0]).val());
-        var oID = $(this).attr("tbody");
+
+    }
+    var contador=0;
+    var contador_session=0;
+    function AgregarMedidaPieza(e){
+
+        var id=$(e).val();
+        // alert(id);
+        var idTabla=id.split('-');
+        var cantidad=($("#txtCant-"+idTabla[0]).val());
+        if (cantidad.length==0||cantidad<=0) {
+
+            new PNotify({
+                title : 'Atención...',
+                text : 'Por favor ingrese una cantidad valida en la medida de la pieza',
+                type : 'error'
+            });
+        }else {
+            var unidad=($("#selectUnidadMedida-"+idTabla[0]).val());
+            var dimension=($("#selectDimension-"+idTabla[0]).val());
+            var servicio_tipo_id=($("#servi-"+idTabla[0]).val());
+            var oID = $(this).attr("tbody");
+
+            $.ajax({
+                type: "post",
+                datatype : "json",
+                url: "/pedido/agregarPieza",
+                data:{
+                    "_token" : $("#_token").val(),
+                    "cantidad" : cantidad,
+                    "unidad" : unidad,
+                    "dimension" : dimension,
+                    "id" : id,
+                    "servicio_tipo_id" : servicio_tipo_id,
+                    "contador_session" : contador_session
+
+                }
+            }).done(function(result){
+                //Por programar :)
+                contador=0;
+                $('#t-'+id).empty();
+                $.each(result, function(index_value, valor_pieza){
+                    //console.log(id, valor_pieza);
+                    if (id == valor_pieza.id_tabla) {
+                        $('#t-'+id).append('<tr id="#t-'+contador_session+'"><td>'+valor_pieza.cantidad+'</td><td>'+valor_pieza.dimension+'</td><td>'+valor_pieza.unidad+'</td><td><button class="btn btn-icon white" title="Eliminar"   onclick="EliminarMedidaPieza(this);" type="button" value="'+contador_session+'" id="#t-'+contador_session+'" ><i class="fa fa-trash" href="#"></i></button></td></tr>');
+                        //alert(valor_pieza.cantidad);
+                        //alert(valor_pieza.dimension);
+                    }
+                    contador++;
+                    //console.log(valor_pieza);
+                });
+                contador_session++;
+                //console.log(result.respuesta);
+            });
+            contador++;
+
+        }
+
+    }
+
+    function EliminarMedidaPieza(e){
+        var contador=$(e).val();
 
         $.ajax({
             type: "post",
-            datatype : "json",
-            url: "/pedido/agregarPieza",
+            dataType : "json",
+            url: "/pedido/eliminarPieza",
             data:{
                 "_token" : $("#_token").val(),
-                "cantidad" : cantidad,
-                "unidad" : unidad,
-                "dimension" : dimension,
-                "id" : id,
-                "servicio_tipo_id" : servicio_tipo_id,
-                "contador_session" : contador_session
-
+                // "cantidad" : cantidad,
+                // "unidad" : unidad,
+                // "dimension" : dimension,
+                "contador" : contador
             }
         }).done(function(result){
-            //Por programar :)
-            contador=0;
-            $('#t-'+id).empty();
-            $.each(result, function(index_value, valor_pieza){
-                //console.log(id, valor_pieza);
-                if (id == valor_pieza.id_tabla) {
-                    $('#t-'+id).append('<tr id="#t-'+contador_session+'"><td>'+valor_pieza.cantidad+'</td><td>'+valor_pieza.dimension+'</td><td>'+valor_pieza.unidad+'</td><td><button class="btn btn-icon white" title="Eliminar"   onclick="EliminarMedidaPieza(this);" type="button" value="'+contador_session+'" id="#t-'+contador_session+'" ><i class="fa fa-trash" href="#"></i></button></td></tr>');
-                    //alert(valor_pieza.cantidad);
-                    //alert(valor_pieza.dimension);
-                }
-                contador++;
-                //console.log(valor_pieza);
-            });
-            contador_session++;
-            //console.log(result.respuesta);
+            // console.log(result);
+            if (result.respuesta==1) {
+                var tr = $(e).closest("tr");
+                tr.remove();
+                //alert(valor_pieza.dimension);
+            }
+
+
         });
-        contador++;
+    }
+
+
+    // $('#tabla > tbody:last').append('<tr id="ultima"><td>Ultima fila</td></tr>');
+    //  $('#tabla > tbody:last').append('<tr id="ultima"><td>Ultima fila</td></tr>');
+    function cambiar_valor_servicio(e){
+        var id = $(e).val();
+        $.ajax({
+            url:'/pedido/traer/valor/'+id,
+            dataType:'json',
+            type:'get'
+        }).done(function(r){
+            $("#valor").val(r.valor);
+        })
+    }
+
+    function guardar_pedido(){
+
+
+        $("#frmCrearPedido").submit()
 
     }
 
-}
-
-function EliminarMedidaPieza(e){
-    var contador=$(e).val();
-
-    $.ajax({
-        type: "post",
-        dataType : "json",
-        url: "/pedido/eliminarPieza",
-        data:{
-            "_token" : $("#_token").val(),
-            // "cantidad" : cantidad,
-            // "unidad" : unidad,
-            // "dimension" : dimension,
-            "contador" : contador
+    $("#frmCrearPedido").validate({
+        errorElement: 'span',
+        errorPlacement: function(error, e) {
+            let label = jQuery(e).parents('.form-group').find("label").attr("label");
+            jQuery(e).parents('.form-group').find("label").text(label+". ").append(error);
+        },
+        highlight: function(e) {
+            var elem = jQuery(e);
+            elem.closest('.form-group').removeClass('has-error').addClass('has-error');
+            elem.closest('.help-block').remove();
+        },
+        success: function(e) {
+            var elem = jQuery(e);
+            elem.closest('.form-group').removeClass('has-error').addClass('has-success');
+            elem.closest('.help-block').remove();
+        },
+        rules: {
+            nombre: {
+                required: true,
+                personName:true,
+                minlength: 3,
+                maxlength: 45
+            },
+            cedula: {
+                required: true,
+                minlength: 7,
+                maxlength: 13
+            },
+            fechaEntrega: {
+                required: true,
+                minlength: 10,
+                maxlength: 10
+            },
+            containerMedidaPieza: {
+                required: true,
+                minlength: 10,
+                maxlength: 10
+            }
         }
-    }).done(function(result){
-        // console.log(result);
-        if (result.respuesta==1) {
-            var tr = $(e).closest("tr");
-            tr.remove();
-            //alert(valor_pieza.dimension);
-        }
-
-
     });
-}
 
 
-// $('#tabla > tbody:last').append('<tr id="ultima"><td>Ultima fila</td></tr>');
-//  $('#tabla > tbody:last').append('<tr id="ultima"><td>Ultima fila</td></tr>');
-function cambiar_valor_servicio(e){
-    var id = $(e).val();
-    $.ajax({
-        url:'/pedido/traer/valor/'+id,
-        dataType:'json',
-        type:'get'
-    }).done(function(r){
-        $("#valor").val(r.valor);
-    })
-}
-
-function guardar_pedido(){
-
-
-    $("#frmCrearPedido").submit()
-
-}
-
-$("#frmCrearPedido").validate({
-    errorElement: 'span',
-    errorPlacement: function(error, e) {
-        let label = jQuery(e).parents('.form-group').find("label").attr("label");
-        jQuery(e).parents('.form-group').find("label").text(label+". ").append(error);
-    },
-    highlight: function(e) {
-        var elem = jQuery(e);
-        elem.closest('.form-group').removeClass('has-error').addClass('has-error');
-        elem.closest('.help-block').remove();
-    },
-    success: function(e) {
-        var elem = jQuery(e);
-        elem.closest('.form-group').removeClass('has-error').addClass('has-success');
-        elem.closest('.help-block').remove();
-    },
-    rules: {
-        nombre: {
-            required: true,
-            minlength: 5,
-            maxlength: 45
-        },
-        cedula: {
-            required: true,
-            minlength: 7,
-            maxlength: 13
-        },
-        fechaEntrega: {
-            required: true,
-            minlength: 10,
-            maxlength: 10
-        },
-        containerMedidaPieza: {
-            required: true,
-            minlength: 10,
-            maxlength: 10
-        }
-    }
-});
-
-
-
-
-</script>
-@endsection
+    </script>
+    @endsection

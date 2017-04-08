@@ -286,7 +286,7 @@ class pedidoController extends Controller
                     -> get();
                     return view('pedido.editar',compact('pedido','servicio','paciente','medida_Pieza','$tabla'));
                 }else {
-                    Notify::success('El pedido se encuantra en un estado que no se puede editar','Alerta');
+                    Notify::warning('El pedido se encuentra en un estado que no se puede editar','Alerta');
                     return view('pedido.listar');
                 }
             //   dd($tabla);
