@@ -6,8 +6,8 @@
     <div class="box-body">
         <div class="padding">
             <div class="row">
-                <form data-ui-jp="parsley" novalidate="" method="post" action="/contrato">
-                    {{csrf_field()}}
+                <form data-ui-jp="parsley" novalidate="" method="post" action="/contrato" id="frmcrearcontrato">
+                    {{ csrf_field() }}
                     <div class="col-sm-5">
                         <div class="col-lg-12">
                             <div class="box">
@@ -86,8 +86,8 @@
                     </div>
                     <div class="col-sm-12">
                         <div class=" p-a text-center">
-                            {{csrf_field()}}
-                            <button type="submit" class="btn info">Registrar</button>
+                            
+                            <button type="button" onclick="crearcontrato();" class="btn info">Registrar</button>
                         </div>
                     </div>
                 </form>
@@ -196,6 +196,9 @@ function registrar_servicio(){
 $("#txtNombre").change(function(){
     return registrar_servicio();
 });
+function crearcontrato(){
+    $("#frmcrearcontrato").submit()
+}
 
 </script>
 @endsection

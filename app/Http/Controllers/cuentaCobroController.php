@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Model\cuentaCobro;
+use App\Model\paciente;
+use App\Model\usuarioClinica;
+use App\Model\clinica;
 use Notify;
 use Datatables;
 
@@ -17,19 +20,12 @@ class cuentaCobroController extends Controller
   * @return \Illuminate\Http\Response
   */
 
-  public function detalle($id){
+  public function detalle($id) {
+  $cuentaCobro=cuentaCobro::select('cuenta_cobro.id')
 
-    $cuentaCobro = cuentaCobro::find($id);
-    if ($cuentaCobro == null) {
-      Notify::warning('No se encontraron datos','Espera...');
-      return redirect('/cuentacobro');
-
-    } else {
+  ->get();
 
       return view('cuentaCobro.detalle',compact('cuentaCobro'));
-    }
-
-
   }
 
   public function getData (Request $Request)
@@ -58,9 +54,19 @@ class cuentaCobroController extends Controller
   *
   * @return \Illuminate\Http\Response
   */
-  public function create()
+  public function create(Request $request)
   {
-  return view('cuentacobro.pago');
+    $input=$request->all();
+
+    $pago=cuentacobro::whereIn('id',$input['s'])->sum('valorTotal');
+
+    $usuarioClinica=  usuarioClinica::select('usuario_clinica.id','usuario_clinica.nombre as NombreDoctor','usuario_clinica.apellido as ApellidoDocto','clinica.nombre as usuarioClinica')
+    ->join('clinica','usuario_clinica.clinica_id','=','clinica.id')
+
+
+    ->get();
+
+   return view('cuentacobro.pago', compact('usuarioClinica','pago'));
 
   }
 
@@ -72,7 +78,30 @@ class cuentaCobroController extends Controller
   */
   public function store(Request $request)
   {
-    //
+    $input=$request->all();
+
+      foreach ($input['s'] as  $value) {
+        $insert_cuenta=pedido::select('pedido.valor','pedido.usurio_id')
+        // ->join('tipo_contrato','tipo_contrato.id','=','servicio_tipocontrato.tipoContrato_id')
+        // ->join('clinica',)
+        // ->join('usuario_clinica',)
+        // ->join('cuenta_cobro',)
+        ->join('servicio_tipocontrato_pedido','servicio_tipocontrato_pedido.pedido_id','=','pedido.id')
+        ->join('servicio_tipocontrato','servicio_tipocontrato.id','=','servicio_tipocontrato_pedido.servicio_tipocontrato_id')
+        ->join('venta','venta.pedido_id','=','pedido.id')
+        ->where('pedido.id',$value)
+        ->get();
+        var_dump($insert_cuenta);
+        exit;
+
+
+        $cuenta_cobro=cuentaCobro::create($insert_cuenta);
+        dd($cuenta_cobro);
+      }
+
+
+
+        echo "llego";
 
 
   }

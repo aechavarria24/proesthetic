@@ -100,7 +100,7 @@ class usuarioClinicaController extends Controller
     public function show($id)
     {
         $usuarioClinica= usuarioClinica::all();
-        return view('usuarioClinica.editar');
+        return view('usuarioClinica.listar');
 
     }
 

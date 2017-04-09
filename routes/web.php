@@ -216,9 +216,10 @@ Route::resource('venta', 'ventaController');
 
 //--GET--//
 Route::get('cuentacobro/get', 'cuentaCobroController@getData');
-Route::get('cuentacobro/detalle', 'cuentaCobroController@detalle');
+Route::get('cuentacobro/{id}/detalle', 'cuentaCobroController@detalle');
 
-Route::get('cuentacobro/pago', 'cuentaCobroController@create');
+
+Route::post('cuentacobro/pago', 'cuentaCobroController@create');
 
 Route::resource('cuentacobro', 'cuentaCobroController');
 //------------------------------------------------------------------------------------//

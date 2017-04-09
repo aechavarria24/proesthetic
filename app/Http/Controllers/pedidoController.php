@@ -246,7 +246,7 @@ class pedidoController extends Controller
             * @return \Illuminate\Http\Response
             */
             public function show($id)  {
-            
+
                 $pedido = pedido::all();
                 return view('pedido.listar');
             }

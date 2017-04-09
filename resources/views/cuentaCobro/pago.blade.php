@@ -13,22 +13,29 @@
             </div>
             <div class="box-body">
               <div class="row">
+
                 <div class="col-md-4">
-                  <div class="form-group">
+                <div class="form-group">
                     <label>Nombre de la clícina</label>
-                    <input class="form-control" required="" data-parsley-id="136" type="text" name="cedula" value="Clínica soma" readonly="">
-                  </div>
+                    @foreach($usuarioClinica as $values)
+                    <input class="form-control" required="" data-parsley-id="136" type="text" name="usuarioClinica" disabled="false" value="{{$values->usuarioClinica}}">
+                    <input type="hidden" id = "usuario_id" name="usuario_id" value="{{$values->id}}">
+                    @endforeach
+                </div>
                 </div>
                 <div class="col-md-4">
-                  <div class="form-group">
-                    <label>Nombre del doctor</label>
-                    <input class="form-control" required="" data-parsley-id="136" type="text" name="cedula" value="Duban" readonly="">
-                  </div>
+                <div class="form-group">
+                    <label>Nombre Doctor</label>
+                    @foreach($usuarioClinica as $values)
+                    <input class="form-control" required="" data-parsley-id="136" type="text" name="usuarioClinica" disabled="false" value="{{$values->NombreDoctor}} {{$values->ApellidoDocto}}">
+                    <input type="hidden" id = "usuario_id" name="usuario_id" value="{{$values->id}}">
+                    @endforeach
+                </div>
                 </div>
                 <div class="col-md-4">
                   <div class="form-group">
                     <label>Fecha de solicitud</label>
-                    <input class="form-control" required="" data-parsley-id="136" type="text" name="cedula" value="30-03-2017" readonly="">
+                    <input class="form-control" required="" data-parsley-id="136" type="text" name="cedula" value="" readonly="">
                   </div>
                 </div>
               </div>
@@ -38,7 +45,7 @@
         </div>
 
         <div class=" p-a text-center">
-          <strong><h3>Total a pagar : $307.000 </h3></strong>
+          <strong><h3>Total a pagar : $<?=$pago ?></h3></strong>
         </div>
         <div class=" p-a text-center">
           <a href="/cuentacobro" class="btn btn-primary">Confirmar pago</a>

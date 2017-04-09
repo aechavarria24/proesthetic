@@ -3,7 +3,10 @@
 Cuenta cobro
 @endsection
 @section('contenedor')
+<form class="" action="/cuentacobro/pago" method="post">
+
 <div class="box">
+  {{ csrf_field() }}
   <div class="box-header">
     <h2>Lista cuentas de cobro</h2>
 
@@ -23,13 +26,20 @@ Cuenta cobro
         </tr>
       </thead>
       <tbody>
+
       </tbody>
+
     </table>
-    <div class=" p-a text-center">
-      <a href="/cuentacobro/pago" class="btn btn-primary">Confirmar pago</a>
+    <div class="col-sm-12">
+        <div class=" p-a text-center">
+
+            <button  class="btn primary" type="submit" name="button">Confirmar pago</button>
+        </div>
     </div>
+
   </div>
 </div>
+</form>
 @endsection
 @section ('script')
 <script type="text/javascript">
@@ -51,7 +61,7 @@ $('#tblCuentaCobro').DataTable({
   ],
   "fnRowCallback": function(nRow, aData, iDisplayIndex) {
        var opciones = $('td:eq(0)', nRow);
-       let html = '<input class="form-control" type="checkbox" name="s[]" value="'+aData.valorTotal+'" />';
+       let html = '<input class="form-control" type="checkbox" name="s[]" value="'+aData.id+'" />';
        opciones.html(html);
     }
 });
