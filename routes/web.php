@@ -37,11 +37,14 @@ Route::get('clinica/get','clinicaController@getData');
 //--------------------------Rutas de usuarios de la clinica---------------------------//
 
 //--POST--//
+Route::POST('/usuarioClinica/estado/editar', 'usuarioClinicaController@cambiar_estado');
+Route::post('/usuarioClinica/validar_usuario', 'usuarioClinicaController@validar_usuario');
 
 
 //--GET--//
 Route::get('usuarioClinica/get', 'usuarioClinicaController@getData');
 Route::get('usuario/get', 'usuarioController@getData');
+
 
 Route::post('clinica/estado/editar', 'clinicaController@cambiar_estado');
 Route::resource('clinica','clinicaController');

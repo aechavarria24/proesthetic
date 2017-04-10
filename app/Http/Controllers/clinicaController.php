@@ -23,6 +23,7 @@ class clinicaController extends Controller
     {
         $clinica = clinica::all();
 
+
         $btnEstado ="";
 
         return Datatables::of($clinica)
@@ -30,12 +31,12 @@ class clinicaController extends Controller
         ->addColumn('action', function ($clinica) {
             $btnEstado ="";
             if($clinica->estadoClinica == 1){
-                $btnEstado .= '<button  onclick="cambiar_estado('.$clinica->id.', 0)" class="btn" title = "Inactivar" ><i class="glyphicon glyphicon-remove" ></i></button>';
+                $btnEstado .= '<button  onclick="cambiar_estado('.$clinica->id.', 0)" title = "Inactivar" ><i class="glyphicon glyphicon-remove" ></i></button>';
             }else if ($clinica->estadoClinica == 0){
-                $btnEstado .= '<button onclick="cambiar_estado('.$clinica->id.', 1)" class="btn" title = "Activar" ><i class="glyphicon glyphicon-ok" ></i></button>';
+                $btnEstado .= '<button onclick="cambiar_estado('.$clinica->id.', 1)"  title = "Activar" ><i class="glyphicon glyphicon-ok" ></i></button>';
             }
 
-            return $btnEstado .= '<a href="/clinica/'.$clinica->id.'/edit" class="btn" title = "Editar"><i class="glyphicon glyphicon-edit"></i></a>';
+            return $btnEstado .= '<a href="/clinica/'.$clinica->id.'/edit" title = "Editar"><i class="glyphicon glyphicon-edit"></i></a>';
         })
 
         ->editColumn('estadoClinica', function ($clinica){
@@ -66,7 +67,7 @@ class clinicaController extends Controller
     }
 
     /**
-    * Store a newly created resource in storage.
+    *  a newly created resource in storage.
     *
     * @param  \Illuminate\Http\Request  $request
     * @return \Illuminate\Http\Response

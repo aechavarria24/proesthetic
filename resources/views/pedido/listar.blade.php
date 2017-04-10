@@ -57,7 +57,7 @@ function cancelarPedido(e){
     // $("#valor").val(r.valor);
 
     if (r.respuesta == 1) {
-        
+
 
         new PNotify({
             title: 'Notificación',
@@ -90,9 +90,9 @@ function aprobarPedido(e){
     type:'post'
 }).done(function(r){
     // $("#valor").val(r.valor);
-
+    
     if (r.respuesta == 1) {
-        
+
 
         new PNotify({
             title: 'Notificación',
