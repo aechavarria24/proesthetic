@@ -684,7 +684,7 @@ $.validator.addMethod( "lettersonly", function( value, element ) {
 }, "por favor, sólo escribe letras" );
 
 $.validator.addMethod( "personName", function( value, element ) {
-	return this.optional( element ) || /^([A-ZÁÉÍÓÚ]{1}[a-zñáéíóú]+[\s]*)+$/.test( value );
+	return this.optional( element ) || /^[A-ZñÑa-z+\s+áéíóú]+$/i.test( value );
 }, "Por favor, escribe un nombre valido" );
 
 $.validator.addMethod( "user", function( value, element ) {

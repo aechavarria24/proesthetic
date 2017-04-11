@@ -58,6 +58,8 @@ class contratoController extends Controller
     {
         //
         $input = $request->all();
+        dd($input);
+        exit;
         contrato::create($input);
         Notify::success("El contrato \"". $input['nombre'] ."\", se registro con éxito.","Registro exitoso");
         return view('tipoContrato.crear');
@@ -137,8 +139,6 @@ public function agregar_servicio(Request $request){
     }
 
     return response()->json(session("contrato"));
-
-
 }
 
     function eliminar_tabla_servicio(Request $request){
@@ -154,13 +154,14 @@ public function agregar_servicio(Request $request){
 
         foreach ($contrato as $key => $value) {
             if ($value["servicio"] == $input["id"]) {
+                $servicio = $contrato[$key];
                 unset($contrato[$key]);
                 session(["contrato"=>$contrato]);
                 break;
             }
         }
 
-        return response()->json(["respuesta"=>1]);
+        return response()->json(["session"=>session("contrato"), "servicioEliminado"=>$servicio]);
 
 
 
