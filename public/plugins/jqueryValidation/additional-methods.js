@@ -683,9 +683,34 @@ $.validator.addMethod( "lettersonly", function( value, element ) {
 	return this.optional( element ) || /^[a-z]+$/i.test( value );
 }, "por favor, sólo escribe letras" );
 
-$.validator.addMethod( "nit", function( value, element ) {
-	return this.optional( element ) || /[0-9]+-+[0-9]$/.test( value );
-}, "Por favor, escribe un NIT valido" );
+$.validator.addMethod( "personName", function( value, element ) {
+	return this.optional( element ) || /^[A-ZñÑa-z+\s+áéíóú]+$/i.test( value );
+}, "Por favor, escribe un nombre valido" );
+
+$.validator.addMethod( "user", function( value, element ) {
+	return this.optional( element ) || /^[a-z\d_]{4,15}$/i.test( value );
+}, "No valido" );
+
+
+
+$.validator.addMethod( "lettersAndNumbers", function( value, element ) {
+	return this.optional( element ) || /^[a-zA-Z-0-9]+(\s*[a-zA-Z-0-9]*)*[a-zA-Z-0-9]+$/.test( value );
+}, "Por favor, escribe un valor valido" );
+
+$.validator.addMethod( "address", function( value, element ) {
+	return this.optional( element ) || /^[a-zA-Z-0-9-#]+(\s*[a-zA-Z-0-9-#]*)*[a-zA-Z-0-9-#]+$/.test( value );
+}, "Por favor, escribe un valor valido" );
+
+
+
+
+$.validator.addMethod( "securePassword", function( value, element ) {
+	return this.optional( element ) || /(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/.test( value );
+}, "Por favor, escribe una clave segura" );
+
+
+
+
 
 $.validator.addMethod( "validarServicio", function( value, element ) {
 	var validar = false;

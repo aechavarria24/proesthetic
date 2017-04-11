@@ -10,6 +10,6 @@ class usuarioClinica extends Model
 
     protected $fillable = [
         'rol_id', 'username', 'nombre', 'apellido', 'password', 'pregunta_id', 'respuesta',
-        'clinica_id'
+        'clinica_id','estado'
     ];
 }

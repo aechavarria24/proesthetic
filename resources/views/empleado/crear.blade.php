@@ -1,4 +1,4 @@
-@extends('layouts.app') @section('titulo') Usuario @endsection @section('contenedor')
+@extends('layouts.app') @section('titulo') Empleado @endsection @section('contenedor')
 <form data-ui-jp="parsley" novalidate="" method="post" action="/empleado" id="frmEmpleado">
     {{csrf_field()}}
     <div class="padding">
@@ -11,17 +11,17 @@
                     <div class="col-sm-4 offset-sm-2">
                         <div class="form-group">
                             <label class="control-label" label="Nombre">Nombre</label>
-                            <input class="form-control" required="" data-parsley-id="136" type="text" name="nombre" id ="nombre" tabindex="1">
+                            <input class="form-control" required="" data-parsley-id="136" type="text" name="nombre" id ="nombre" tabindex="1" maxlength="40">
                         </div>
 
                         <div class="form-group" id = "divUsuario">
                             <label class="control-label" label="Usuario" id = "lblUsuario">Usuario</label>
-                            <input class="form-control" required="" data-parsley-id="136" type="text" name="username"  id ="username" tabindex="3">
+                            <input class="form-control" required="" data-parsley-id="136" type="text" name="username"  id ="username" tabindex="3" maxlength="45">
                         </div>
 
                         <div class="form-group">
                             <label class="control-label" label = "Clave">Clave</label>
-                            <input class="form-control" required="" data-parsley-id="138" type="password" name="password" id = "password" tabindex="5">
+                            <input class="form-control" required="" data-parsley-id="138" type="password" name="password" id = "password" tabindex="5" maxlength = "20">
                         </div>
 
                         <div class="form-group">
@@ -36,7 +36,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label class="control-label" label = "Apellido">Apellido</label>
-                            <input class="form-control" required="" data-parsley-id="138" type="text" name="apellido" id="apellido" tabindex="2">
+                            <input class="form-control" required="" data-parsley-id="138" type="text" name="apellido" id="apellido" tabindex="2" maxlength="40">
                         </div>
                         <div class="form-group">
                             <label class="control-label" label = "Rol de usuario">Rol de usuario</label>
@@ -48,7 +48,7 @@
                         </div>
                         <div class="form-group">
                             <label class="control-label" label = "Confirmar clave">Confirmar clave</label>
-                            <input class="form-control" required="" data-parsley-id="138" type="password" name = "confirmarPassword"id ="confirmarPassword" tabindex="6">
+                            <input class="form-control" required="" data-parsley-id="138" type="password" name = "confirmarPassword"id ="confirmarPassword" tabindex="6" maxlength="20">
                         </div>
                         <div class="form-group">
                             <label class="control-label" label = "Respuesta">Respuesta</label>
@@ -108,27 +108,31 @@ $("#frmEmpleado").validate({
     rules: {
         nombre :{
             required: true,
-            lettersonly : true,
+            personName : true,
             minlength: 3,
             maxlength: 40
         },
         apellido: {
             required: true,
-            lettersonly : true,
+            personName : true,
             minlength: 3,
             maxlength: 40
         },
         username: {
             required: true,
+            user : true,
             minlength: 3,
             maxlength: 40
         },
         password: {
             required: true,
-            minlength: 8
+            securePassword: true,
+            minlength: 8,
+            maxlength: 20
         },
         confirmarPassword: {
-            equalTo: "#password"
+            equalTo: "#password",
+            maxlength: 20
         }
     }
 });
