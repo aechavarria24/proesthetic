@@ -42,7 +42,7 @@ class empleadoController extends Controller
             }
             return $btnEstado.='<a href="/empleado/'.$empleado["id"].'/edit" title = "Editar" class="btn btn-xsy"><i class="glyphicon glyphicon-edit"></i></a>
             <a href="/empleado/'.$empleado["id"].'/edit" title = "Inhabilitar" class="btn btn-xs"><i class="glyphicon glyphicon-trash"></i></a>';
-        })->editColumn('estado',function($empleado){ return $empleado["estado"] != 1 ? "Activo":"Inactivo";})
+        })->editColumn('estado',function($empleado){ return $empleado["estado"] == 1 ? "Activo":"Inactivo";})
         ->make(true);
     }
 

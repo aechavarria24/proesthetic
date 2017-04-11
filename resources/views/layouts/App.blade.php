@@ -61,7 +61,6 @@
                             <li class="nav-header hidden-folded">
                                 <span class="text-xs">Main</span>
                             </li>
-
                             <!-- / Panel -->
                             @if(session("permisos") != null)
                             @foreach(session("permisos") as $value)
@@ -90,227 +89,235 @@
                             <!-- / Panel -->
                             @endif
                             @endforeach
-                            @endif
-                            <!-- / Panel -->
-                        </ul>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-        <div data-flex-no-shrink>
-            <div class="nav-fold dropup">
-                <a data-toggle="dropdown">
-                    <div class="pull-left">
-                        <div class="inline"><span class="avatar w-40 grey">JR</span></div>
-                        <img src="/images/a0.jpg" alt="..." class="w-40 img-circle hide">
-                    </div>
-                    <div class="clear hidden-folded p-x">
-                        <span class="block _500 text-muted">Jean Reyes</span>
-                        <div class="progress-xxs m-y-sm lt progress">
-                            <div class="progress-bar info" style="width: 15%;">
+                            {{--
+                                @else
+                                <script type="text/javascript">
+                                setTimeout(function(){
+                                    document.getElementById('logout-form').submit();
+                                },100)
+                                </script>
+                                --}}
+                                @endif
+                                <!-- / Panel -->
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div data-flex-no-shrink>
+                <div class="nav-fold dropup">
+                    <a data-toggle="dropdown">
+                        <div class="pull-left">
+                            <div class="inline"><span class="avatar w-40 grey">JR</span></div>
+                            <img src="/images/a0.jpg" alt="..." class="w-40 img-circle hide">
+                        </div>
+                        <div class="clear hidden-folded p-x">
+                            <span class="block _500 text-muted">Jean Reyes</span>
+                            <div class="progress-xxs m-y-sm lt progress">
+                                <div class="progress-bar info" style="width: 15%;">
+                                </div>
                             </div>
                         </div>
+                    </a>
+                    <div class="dropdown-menu w dropdown-menu-scale ">
+                        <a class="dropdown-item" href="/profile.html">
+                            <span>Profile</span>
+                        </a>
+                        <a class="dropdown-item" href="/setting.html">
+                            <span>Settings</span>
+                        </a>
+                        <a class="dropdown-item" href="/app.inbox.html">
+                            <span>Inbox</span>
+                        </a>
+                        <a class="dropdown-item" href="/app.message.html">
+                            <span>Message</span>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a  class="dropdown-item" href="{{route('logout')}}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                        class="">Cerrar Sesión</a>
+                        <form id="logout-form" action="{{route('logout')}}" method="post" style="display:none;">
+                            {{csrf_field()}}
+                        </form>
                     </div>
-                </a>
-                <div class="dropdown-menu w dropdown-menu-scale ">
-                    <a class="dropdown-item" href="/profile.html">
-                        <span>Profile</span>
-                    </a>
-                    <a class="dropdown-item" href="/setting.html">
-                        <span>Settings</span>
-                    </a>
-                    <a class="dropdown-item" href="/app.inbox.html">
-                        <span>Inbox</span>
-                    </a>
-                    <a class="dropdown-item" href="/app.message.html">
-                        <span>Message</span>
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a  class="dropdown-item" href="{{route('logout')}}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-                    class="">Cerrar Sesión</a>
-                    <form id="logout-form" action="{{route('logout')}}" method="post" style="display:none;">
-                        {{csrf_field()}}
-                    </form>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!-- / -->
-
-<!-- content -->
-<div id="content" class="app-content box-shadow-z2 bg pjax-container" role="main">
-
-
-    <div class="app-header white bg b-b">
-        <div class="navbar" data-pjax>
-            <a data-toggle="modal" data-target="#aside" class="navbar-item pull-left hidden-lg-up p-r m-a-0">
-                <i class="ion-navicon"></i>
-            </a>
-            <div class="navbar-item pull-left h5" id="pageTitle">
-                @yield('titulo')</div>
-                <!-- nabar right -->
-                <ul class="nav navbar-nav pull-right">
-                    <li class="nav-item dropdown pos-stc-xs">
-                        <a class="nav-link" data-toggle="dropdown">
-                            <i class="ion-android-search w-24"></i>
-                        </a>
-                        <div class="dropdown-menu text-color w-md animated fadeInUp pull-right">
-                            <!-- search form -->
-                            <form class="navbar-form form-inline navbar-item m-a-0 p-x v-m" role="search">
-                                <div class="form-group l-h m-a-0">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="Search projects...">
-                                        <span class="input-group-btn">
-                                            <button type="submit" class="btn white b-a no-shadow"><i class="fa fa-search"></i></button>
-                                        </span>
-                                    </div>
-                                </div>
-                            </form>
-                            <!-- / search form -->
-                        </div>
-                    </li>
-                    <li class="nav-item dropdown pos-stc-xs">
-                        <a class="nav-link clear" data-toggle="dropdown">
-                            <i class="ion-android-notifications-none w-24"></i>
-                            <span class="label up p-a-0 danger"></span>
-                        </a>
-                        <!-- dropdown -->
-                        <div class="dropdown-menu pull-right w-xl animated fadeIn no-bg no-border no-shadow">
-                            <div class="scrollable" style="max-height: 220px">
-                                <ul class="list-group list-group-gap m-a-0">
-                                    <li class="list-group-item dark-white box-shadow-z0 b">
-                                        <span class="pull-left m-r">
-                                            <img src="/images/a0.jpg" alt="..." class="w-40 img-circle">
-                                        </span>
-                                        <span class="clear block">
-                                            Use awesome <a href="/#" class="text-primary">animate.css</a><br>
-                                            <small class="text-muted">10 minutes ago</small>
-                                        </span>
-                                    </li>
-                                    <li class="list-group-item dark-white box-shadow-z0 b">
-                                        <span class="pull-left m-r">
-                                            <img src="/images/a1.jpg" alt="..." class="w-40 img-circle">
-                                        </span>
-                                        <span class="clear block">
-                                            <a href="/#" class="text-primary">Joe</a> Added you as friend<br>
-                                            <small class="text-muted">2 hours ago</small>
-                                        </span>
-                                    </li>
-                                    <li class="list-group-item dark-white text-color box-shadow-z0 b">
-                                        <span class="pull-left m-r">
-                                            <img src="/images/a2.jpg" alt="..." class="w-40 img-circle">
-                                        </span>
-                                        <span class="clear block">
-                                            <a href="/#" class="text-primary">Danie</a> sent you a message<br>
-                                            <small class="text-muted">1 day ago</small>
-                                        </span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <!-- / dropdown -->
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link clear" data-toggle="dropdown">
-                            <span class="avatar w-32">
-                                <img src="/images/a3.jpg" class="w-full rounded" alt="...">
-                            </span>
-                        </a>
-                        <div class="dropdown-menu w dropdown-menu-scale pull-right">
-                            <a class="dropdown-item" href="/profile.html">
-                                <span>Profile</span>
-                            </a>
-                            <a class="dropdown-item" href="/setting.html">
-                                <span>Settings</span>
-                            </a>
-                            <a class="dropdown-item" href="/app.inbox.html">
-                                <span>Inbox</span>
-                            </a>
-                            <a class="dropdown-item" href="/app.message.html">
-                                <span>Message</span>
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a  class="dropdown-item" href="{{route('logout')}}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-                            class="">Cerrar Sesión</a>
-                            <form id="logout-form" action="{{route('logout')}}" method="post" style="display:none;">
-                                {{csrf_field()}}
-                            </form>
-                        </div>
-                    </li>
-                </ul>
-                <!-- / navbar right -->
-            </div>
-        </div>
-        <div class="app-footer white bg p-a b-t">
-            <div class="pull-right text-sm text-muted">Version 1.0.1</div>
-            <span class="text-sm text-muted">&copy; Copyright.</span>
-        </div>
-        <div class="app-body">
-
-            <!-- ############ PAGE START-->
-            <!-- only need a height for layout 4 -->
-            @yield('contenedor')
-            <!-- ############ PAGE END-->
-
-        </div>
-    </div>
     <!-- / -->
 
-
-    <!-- ############ SWITHCHER START-->
-
-    <!-- ############ SWITHCHER END-->
-
-    <!-- ############ LAYOUT END-->
-</div>
-
-<!-- build:js scripts/app.min.js -->
-<!-- jQuery -->
-<script src="/libs/jquery/dist/jquery.js"></script>
-<!-- Bootstrap -->
-<script src="/libs/tether/dist/js/tether.min.js"></script>
-<script src="/libs/bootstrap/dist/js/bootstrap.js"></script>
-<!-- core -->
-<script src="/libs/jQuery-Storage-API/jquery.storageapi.min.js"></script>
-<script src="/libs/PACE/pace.min.js"></script>
-<script src="/libs/jquery-pjax/jquery.pjax.js"></script>
-<script src="/libs/blockUI/jquery.blockUI.js"></script>
-<script src="/libs/jscroll/jquery.jscroll.min.js"></script>
-
-<script src="/scripts/config.lazyload.js"></script>
-<script src="/scripts/ui-load.js"></script>
-<script src="/scripts/ui-jp.js"></script>
-<script src="/scripts/ui-include.js"></script>
-<script src="/scripts/ui-device.js"></script>
-<script src="/scripts/ui-form.js"></script>
-<script src="/scripts/ui-modal.js"></script>
-<script src="/scripts/ui-nav.js"></script>
-<script src="/scripts/ui-list.js"></script>
-<script src="/scripts/ui-screenfull.js"></script>
-<script src="/scripts/ui-scroll-to.js"></script>
-<script src="/scripts/ui-toggle-class.js"></script>
-<script src="/plugins/dataTables/datatables.min.js"></script>
-<script src="/scripts/ui-taburl.js"></script>
-<script src="/scripts/app.js"></script>
-<script src="/scripts/ajax.js"></script>
-<script src="/plugins/pnotify/pnotify.custom.min.js"></script>
-<script src="/plugins/select2/js/select2.full.min.js"></script>
-<script src="/plugins/bootstrapdatepicker/js/bootstrap-datepicker.min.js"></script>
-<script src="/plugins/jqueryValidation/jquery.validate.min.js"></script>
-<script src="/plugins/jqueryValidation/additional-methods.js"></script>
-<script src="/plugins/jqueryValidation/localization/messages_es.min.js"></script>
-<script src="/plugins/alert2/sweetalert2.min.js"></script>
+    <!-- content -->
+    <div id="content" class="app-content box-shadow-z2 bg pjax-container" role="main">
 
 
+        <div class="app-header white bg b-b">
+            <div class="navbar" data-pjax>
+                <a data-toggle="modal" data-target="#aside" class="navbar-item pull-left hidden-lg-up p-r m-a-0">
+                    <i class="ion-navicon"></i>
+                </a>
+                <div class="navbar-item pull-left h5" id="pageTitle">
+                    @yield('titulo')</div>
+                    <!-- nabar right -->
+                    <ul class="nav navbar-nav pull-right">
+                        <li class="nav-item dropdown pos-stc-xs">
+                            <a class="nav-link" data-toggle="dropdown">
+                                <i class="ion-android-search w-24"></i>
+                            </a>
+                            <div class="dropdown-menu text-color w-md animated fadeInUp pull-right">
+                                <!-- search form -->
+                                <form class="navbar-form form-inline navbar-item m-a-0 p-x v-m" role="search">
+                                    <div class="form-group l-h m-a-0">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" placeholder="Search projects...">
+                                            <span class="input-group-btn">
+                                                <button type="submit" class="btn white b-a no-shadow"><i class="fa fa-search"></i></button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </form>
+                                <!-- / search form -->
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown pos-stc-xs">
+                            <a class="nav-link clear" data-toggle="dropdown">
+                                <i class="ion-android-notifications-none w-24"></i>
+                                <span class="label up p-a-0 danger"></span>
+                            </a>
+                            <!-- dropdown -->
+                            <div class="dropdown-menu pull-right w-xl animated fadeIn no-bg no-border no-shadow">
+                                <div class="scrollable" style="max-height: 220px">
+                                    <ul class="list-group list-group-gap m-a-0">
+                                        <li class="list-group-item dark-white box-shadow-z0 b">
+                                            <span class="pull-left m-r">
+                                                <img src="/images/a0.jpg" alt="..." class="w-40 img-circle">
+                                            </span>
+                                            <span class="clear block">
+                                                Use awesome <a href="/#" class="text-primary">animate.css</a><br>
+                                                <small class="text-muted">10 minutes ago</small>
+                                            </span>
+                                        </li>
+                                        <li class="list-group-item dark-white box-shadow-z0 b">
+                                            <span class="pull-left m-r">
+                                                <img src="/images/a1.jpg" alt="..." class="w-40 img-circle">
+                                            </span>
+                                            <span class="clear block">
+                                                <a href="/#" class="text-primary">Joe</a> Added you as friend<br>
+                                                <small class="text-muted">2 hours ago</small>
+                                            </span>
+                                        </li>
+                                        <li class="list-group-item dark-white text-color box-shadow-z0 b">
+                                            <span class="pull-left m-r">
+                                                <img src="/images/a2.jpg" alt="..." class="w-40 img-circle">
+                                            </span>
+                                            <span class="clear block">
+                                                <a href="/#" class="text-primary">Danie</a> sent you a message<br>
+                                                <small class="text-muted">1 day ago</small>
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- / dropdown -->
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link clear" data-toggle="dropdown">
+                                <span class="avatar w-32">
+                                    <img src="/images/a3.jpg" class="w-full rounded" alt="...">
+                                </span>
+                            </a>
+                            <div class="dropdown-menu w dropdown-menu-scale pull-right">
+                                <a class="dropdown-item" href="/profile.html">
+                                    <span>Profile</span>
+                                </a>
+                                <a class="dropdown-item" href="/setting.html">
+                                    <span>Settings</span>
+                                </a>
+                                <a class="dropdown-item" href="/app.inbox.html">
+                                    <span>Inbox</span>
+                                </a>
+                                <a class="dropdown-item" href="/app.message.html">
+                                    <span>Message</span>
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a  class="dropdown-item" href="{{route('logout')}}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                                class="">Cerrar Sesión</a>
+                                <form id="logout-form" action="{{route('logout')}}" method="post" style="display:none;">
+                                    {{csrf_field()}}
+                                </form>
+                            </div>
+                        </li>
+                    </ul>
+                    <!-- / navbar right -->
+                </div>
+            </div>
+            <div class="app-footer white bg p-a b-t">
+                <div class="pull-right text-sm text-muted">Version 1.0.1</div>
+                <span class="text-sm text-muted">&copy; Copyright.</span>
+            </div>
+            <div class="app-body">
 
-@if (Session::has('notifier.notice'))
-<script>
-new PNotify({!! Session::get('notifier.notice') !!});
-</script>
-@endif
-<!-- escript propia de casa pagina -->
-@yield('script')
+                <!-- ############ PAGE START-->
+                <!-- only need a height for layout 4 -->
+                @yield('contenedor')
+                <!-- ############ PAGE END-->
+
+            </div>
+        </div>
+        <!-- / -->
+
+
+        <!-- ############ SWITHCHER START-->
+
+        <!-- ############ SWITHCHER END-->
+
+        <!-- ############ LAYOUT END-->
+    </div>
+
+    <!-- build:js scripts/app.min.js -->
+    <!-- jQuery -->
+    <script src="/libs/jquery/dist/jquery.js"></script>
+    <!-- Bootstrap -->
+    <script src="/libs/tether/dist/js/tether.min.js"></script>
+    <script src="/libs/bootstrap/dist/js/bootstrap.js"></script>
+    <!-- core -->
+    <script src="/libs/jQuery-Storage-API/jquery.storageapi.min.js"></script>
+    <script src="/libs/PACE/pace.min.js"></script>
+    <script src="/libs/jquery-pjax/jquery.pjax.js"></script>
+    <script src="/libs/blockUI/jquery.blockUI.js"></script>
+    <script src="/libs/jscroll/jquery.jscroll.min.js"></script>
+
+    <script src="/scripts/config.lazyload.js"></script>
+    <script src="/scripts/ui-load.js"></script>
+    <script src="/scripts/ui-jp.js"></script>
+    <script src="/scripts/ui-include.js"></script>
+    <script src="/scripts/ui-device.js"></script>
+    <script src="/scripts/ui-form.js"></script>
+    <script src="/scripts/ui-modal.js"></script>
+    <script src="/scripts/ui-nav.js"></script>
+    <script src="/scripts/ui-list.js"></script>
+    <script src="/scripts/ui-screenfull.js"></script>
+    <script src="/scripts/ui-scroll-to.js"></script>
+    <script src="/scripts/ui-toggle-class.js"></script>
+    <script src="/plugins/dataTables/datatables.min.js"></script>
+    <script src="/scripts/ui-taburl.js"></script>
+    <script src="/scripts/app.js"></script>
+    <script src="/scripts/ajax.js"></script>
+    <script src="/plugins/pnotify/pnotify.custom.min.js"></script>
+    <script src="/plugins/select2/js/select2.full.min.js"></script>
+    <script src="/plugins/bootstrapdatepicker/js/bootstrap-datepicker.min.js"></script>
+    <script src="/plugins/jqueryValidation/jquery.validate.min.js"></script>
+    <script src="/plugins/jqueryValidation/additional-methods.js"></script>
+    <script src="/plugins/jqueryValidation/localization/messages_es.min.js"></script>
+    <script src="/plugins/alert2/sweetalert2.min.js"></script>
+
+
+
+    @if (Session::has('notifier.notice'))
+    <script>
+    new PNotify({!! Session::get('notifier.notice') !!});
+    </script>
+    @endif
+    <!-- escript propia de casa pagina -->
+    @yield('script')
 
 </script>
 <!-- endbuild -->

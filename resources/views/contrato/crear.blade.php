@@ -32,8 +32,12 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-sm-12">
+                            <div class=" p-a text-center">
+                                <button type="submit" class="btn info">Registrar</button>
+                            </div>
+                        </div>
                     </div>
-
                     <div class="col-sm-7">
                         <div class="box">
                             <div class="box-header">
@@ -47,7 +51,7 @@
                                             <select class="form-control c-select" id = "chxServicio">
                                                 <option value ="">Seleccionar </option>
                                                 @foreach ($servicio as $value)
-                                                <option value ="{{ $value->id }}" id ="{{ $value->id }}">{{ $value->nombre }} </option>
+                                                <option value ="{{ $value->id }}" id ="select-{{ $value->id }}">{{ $value->nombre }} </option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -84,12 +88,6 @@
                             </table>
                         </div>
                     </div>
-                    <div class="col-sm-12">
-                        <div class=" p-a text-center">
-                            {{csrf_field()}}
-                            <button type="submit" class="btn info">Registrar</button>
-                        </div>
-                    </div>
                 </form>
             </div>
         </div>
@@ -98,6 +96,8 @@
 @endsection
 @section('script')
 <script type = "text/javascript">
+
+$("#chxServicio").select2();
 
 $(function(){
 
@@ -129,7 +129,6 @@ function agregar_servicio(){
             icon: false
         });
     }else {
-
         $.ajax({
             type: "GET",
             dataType : "JSON",
@@ -138,13 +137,13 @@ function agregar_servicio(){
                 servicio : servicio,
                 nombre : nombre_servicio,
                 valor : valor,
-                "_token" : $("input[name='_token']").val()
+                //    "_token" : $("input[name='_token']").val()
             }
         }).done(function(result){
             $("#tbl_contrato_servicio").empty();
             $.each(result, function(i, v){
-                $("#tbl_contrato_servicio").append("<tr><td>"+v.nombre+"</td><td>"+v.valor+"</td><td><button class = 'btn btn-xs'  type ='button' onclick='eliminar_servicio("+v.servicio+")'><i class ='fa fa-trash'></i></button></td></tr>");
-                $("#"+v.servicio+"").css("display", "none");
+                $("#tbl_contrato_servicio").append("<tr id = "+v.servicio+"><td>"+v.nombre+"</td><td>"+v.valor+"</td><td><button class = 'btn btn-xs'  type ='button' onclick='eliminar_servicio("+v.servicio+")'><i class ='fa fa-trash'></i></button></td></tr>");
+                $("#select-"+v.servicio+"").remove();
             });
 
             $("#chxServicio").val("");
@@ -156,24 +155,30 @@ function agregar_servicio(){
 
 function eliminar_servicio(e){
     $.ajax({
-        type : "get",
+        type : "GET",
         dataType : "JSON",
         data : {id : e },
         url : "/contrato/servicio/eliminar"
     }).done(function(result){
-        if (result.respuesta==1) {
-            var tr = $(e).closest("tr");
-            tr.remove();
-        }
+        console.log(result);
+        $("#tbl_contrato_servicio").empty();
+        $.each(result.session, function(i, v){
+            $("#tbl_contrato_servicio").append("<tr id = tr-"+v.servicio+"><td>"+v.nombre+"</td><td>"+v.valor+"</td><td><button class = 'btn btn-xs'  type ='button' onclick='eliminar_servicio("+v.servicio+")'><i class ='fa fa-trash'></i></button></td></tr>");
+        });
+
+        $("#chxServicio").val("");
+        $("#txtValor").val("");
+        $("#chxServicio").append('<option value ="'+result.servicioEliminado.servicio+'" id ="select-'+result.servicioEliminado.servicio+'">'+result.servicioEliminado.nombre+'</option>');
+
     });
 }
 
 function registrar_servicio(){
     var validar = false;
     $.ajax({
-        type : 'POST',
+        type : 'GET',
         datatype : 'json',
-        data : {"_token" : $("#token").val() , id : $("#txtNombre").val() },
+        //    data : {"_token" : $("#token").val() , id : $("#txtNombre").val() },
         url : '/servicio/validar_servicio',
         async : false
     }).done(function(result){
