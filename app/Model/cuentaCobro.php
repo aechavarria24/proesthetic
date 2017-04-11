@@ -9,6 +9,6 @@ class cuentaCobro extends Model
   public $table = "cuenta_cobro";
 
   protected $fillable = [
-    'id','valorTotal'
+    'id','valorTotal','created_at'
   ];
 }
