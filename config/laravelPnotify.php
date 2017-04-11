@@ -102,7 +102,7 @@ return [
     /*
      * Delay in milliseconds before the notice is removed.
     */
-    'delay' => 8e3,
+    'delay' => 3000,
 
     /*
      * Reset the hide timer if the mouse moves over the notice.
@@ -120,4 +120,3 @@ return [
     'insert_brs' => true,
 
 ];
-

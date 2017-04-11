@@ -6,27 +6,28 @@
             <div class="box-header">
                 <h2>Registrar</h2>
             </div>
+            <input type="hidden" name="token" id="token" value="{{csrf_token()}}">
             <div class="box-body">
                 <div class="row">
                     <div class="col-sm-4 offset-sm-2">
                         <div class="form-group">
-                            <label>Cedula</label>
+                            <label label="cedula">Cedula</label>
                             <input class="form-control" required="" data-parsley-id="136" type="text" name="cedula">
                         </div>
                         <div class="form-group">
-                            <label>Nombre</label>
+                            <label label="Nombre">Nombre</label>
                             <input class="form-control" required="" data-parsley-id="136" type="text" name="nombre">
                         </div>
                         <div class="form-group">
-                            <label>Apellido</label>
+                            <label Label="Apellido">Apellido</label>
                             <input class="form-control" required="" data-parsley-id="138" type="text" name="apellido">
                         </div>
                         <div class="form-group">
-                            <label>Usuario</label>
+                            <label label="Usuario">Usuario</label>
                             <input class="form-control" required="" data-parsley-id="136" type="text" name="username" id ="username">
                         </div>
                         <div class="form-group">
-                            <label>Nombre de la Clínica</label>
+                            <label Label="Nombre de la Clínica">Nombre de la Clínica</label>
                             <select class="form-control c-select" name="clinica_id">
                                 @foreach($clinica as $clinica)
                                 <option value="{{$clinica->id}}">{{$clinica->nombre}}</option>
@@ -38,7 +39,7 @@
                     </div>
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <label>Rol de usuario</label>
+                            <label labe="Rol de Usuario">Rol de usuario</label>
                             <select class="form-control c-select" name="rol_id">
                                 @foreach($roles as $value)
 
@@ -47,15 +48,15 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Clave</label>
+                            <label label="Clave">Clave</label>
                             <input class="form-control" required="" data-parsley-id="138" type="password" name="password">
                         </div>
                         <div class="form-group">
-                            <label>Confirmar clave</label>
+                            <label label="Confirma clave">Confirmar clave</label>
                             <input class="form-control" required="" data-parsley-id="138" type="password" name="clave_1">
                         </div>
                         <div class="form-group">
-                            <label>Pregunta de seguridad</label>
+                            <label label="Pregunta de seguridad">Pregunta de seguridad</label>
                             <select class="form-control c-select" name="pregunta_id">
                                 @foreach($preguntas as $valor)
                                 <option value="{{$valor->id}}">{{$valor->pregunta}}</option>
@@ -63,13 +64,13 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Respuesta</label>
+                            <label label="Respuesta">Respuesta</label>
                             <input class="form-control" required="" data-parsley-id="138" type="password" name="respuesta">
                         </div>
                     </div>
                     <div class="col-sm-12">
                         <div class=" p-a text-center">
-                            <input type="hidden" value = "{{csrf_token()}}" name ="_token" id ="_token" >
+                            <!-- <input type="hidden" value = "{{csrf_token()}}" name ="_token" id ="_token" > -->
                             <button type="submit" class="btn info">Registrar</button>
                         </div>
                     </div>
@@ -83,16 +84,18 @@
 <script>
 $("#username").change(function(){
     $.ajax({
-        type : 'post',
+        url : '/usuarioClinica/validar_usuario',
         datatype : 'json',
-        data : { usuario : $("#username").val(), _token : $("#txToken").val() },
-        url : '/empleado/validar_empleado'
-    }).done(function(result){
-        if (result.respuesta == 1) {
+        data : { usuario : $("#username").val(),
+         "_token":$("#token").val() },
+         type : 'post',
+    }).done(function(r){
+            if(r.respuesta==1) {
             $("#lblUsuario").css("color", "red");
             $("#username").css("border", "1px solid red");
             $("#lblUsuario").text("Usuario, Usuario ya existe(*)");
         }else{
+
             $("#lblUsuario").css("color", "");
             $("#username").css("border", "");
             $("#lblUsuario").text("Usuario");

@@ -2,16 +2,15 @@
 
 <div class="Pading">
   <div class="box">
-    <div class="box-header">
+    <div class="box-header" style="text-align: center;">
       <h2>Asociar Insumos</h2>
     </div>
     <div class="box-body">
       <div class="row">
 
-        <div class="col-sm-5">
+        <div class="col-sm-5 offset-sm-1 ">
           {{Form::model($pedido,[])}}
           <br>
-
           <div class="form-group">
             <label>Pedido</label>
             {{Form::text('jhkjh ', $pedido[0]["idt"],['class'=>'form-control', 'readonly'])}}
@@ -72,8 +71,24 @@
           {!! Form::close()!!}
         </div>
 
-        <div class="col-md-7">
+        <div class="col-sm-6">
 
+          <div style = "padding-top: 2%;">
+            <div class="form-group">
+              <label>Medidas de la pieza $nombre_pieza</label>
+              <table class="table table-striped b-t">
+                <thead>
+                  <tr>
+                    <th>Cantidad</th>
+                    <th>Dimensión</th>
+                    <th>Unidad de medida</th>
+                  </tr>
+                </thead>
+                <tbody id="t-'+id_pieza+'">
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -90,9 +105,9 @@
       dataType : "JSON",
       data : {
        // _token : $("#_token").val()
-      },
-      url : "/insumo/eliminar_tabla_asociar"
-    });
+     },
+     url : "/insumo/eliminar_tabla_asociar"
+   });
   });
 
   $("#insumo").select2();
@@ -105,7 +120,7 @@
     }
   });
 
-  
+
   function addInsumo(){
     insumo = $("#insumo_id").val()
     cantidad = $("#cantidad").val()
@@ -120,18 +135,18 @@
         _token : $("#_token").val()
       }
 
-    }).done(function(response){
-     $("#tbl_asociar_insumo").empty();
-     $.each(response, function(i, v){
-      $("#tbl_asociar_insumo").append("<tr><td>"+v.insumo+"</td><td>"+v.cantidad+"</td></tr>");
-    });
+    }).done(function(r){
+        $("#tbl_asociar_insumo").empty();
+       $.each(r, function(i, v){
+        $("#tbl_asociar_insumo").append("<tr><td>"+v.insumo+"</td><td>"+v.cantidad+"</td></tr>");
+      });
 
 
 
    })
   }
 
-  
+
 
 </script>
 @endsection

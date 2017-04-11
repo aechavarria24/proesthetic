@@ -51,7 +51,7 @@ Clínica
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label label = "Fecha de Corte">Fecha de Corte</label>
-                                <input class="form-control" data-parsley-id="138" type="text" name="diaCorte" id="diaCorte" maxlength="2"><br>
+                                <input class="form-control" data-parsley-id="138" type="text" name="diaCorte" id="diaCorte" maxlength="2" max="30"><br>
                             </div>
                         </div>
                         <div class=" p-a text-center">

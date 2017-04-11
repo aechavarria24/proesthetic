@@ -186,7 +186,7 @@ public function add_Insumo(Request $request){
 
   }else{
 
-    session(["insumo"=>[ "insumo"=>$input["insumo"], "cantidad"=>$input["cantidad"] ]]);
+    session(["insumo"=>[[ "insumo"=>$input["insumo"], "cantidad"=>$input["cantidad"] ]]]);
 
   }
 

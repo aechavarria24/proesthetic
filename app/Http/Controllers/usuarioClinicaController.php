@@ -7,11 +7,24 @@ use App\Model\usuarioClinica;
 use App\Model\clinica;
 use App\Model\preguntaCliente;
 use App\Model\rol;
+use Datatables;
 use Notify;
 
 
 class usuarioClinicaController extends Controller
 {
+    public function cambiar_estado(Request $request){
+        $input = $request->all();
+        $usuario_clinica =usuarioClinica::find($input['usuario_id']);
+        if($usuario_clinica ==null){
+            Notify::warning ('No se encontraron datos','Espera');
+            return redirect('/usuario/show');
+        }
+        $usuario_clinica -> update(["estado"=>$input['estado']]);
+        return json_encode(['respuesta'=>'1']);
+
+    }
+
     /**
     * Display a listing of the resource.
     *
@@ -21,10 +34,24 @@ class usuarioClinicaController extends Controller
     public function getData (Request $Request)
     {
         $usuarioClinica = usuarioClinica::all();
+
+
         return Datatables::of($usuarioClinica)
         ->addColumn('action', function ($usuario) {
-            return '<a href="/usuarioClinica/'.$usuarioClinica->id.'/edit" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i>&nbsp;Editar</a>
-            <a href="/servicio/'.$usuarioClinica->id.'/edit" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i>&nbsp;Inabilitar</a>';
+             $btnEstado="";
+            if ($usuario->estado==1) {
+
+                $btnEstado .= '<a  onclick="cambiar_estado('.$usuario->id.', 2)" title = "Inactivar" ><i class="glyphicon glyphicon-remove" ></i>&nbsp;</a>';
+
+            }elseif ($usuario->estado==2) {
+                $btnEstado .= '<a  onclick="cambiar_estado('.$usuario->id.', 1)" title = "Activar" ><i class="glyphicon glyphicon-ok" ></i>&nbsp;</a>';
+            }
+
+            return $btnEstado .= '<a href="/usuario/'.$usuario->id.'/edit" title = "Editar"><i class="glyphicon glyphicon-edit"></i>&nbsp;</a>';
+        })
+        ->editColumn('estado', function ($usuario){
+            return  $usuario->estado == 1 ? "Activo" : "Inactivo";
+
         })
         ->make(true);
     }
@@ -100,7 +127,7 @@ class usuarioClinicaController extends Controller
     public function show($id)
     {
         $usuarioClinica= usuarioClinica::all();
-        return view('usuarioClinica.editar');
+        return view('usuarioClinica.listar');
 
     }
 
@@ -112,7 +139,13 @@ class usuarioClinicaController extends Controller
     */
     public function edit($id)
     {
-        $usuarioClinica = usuarioClinica::find($id);
+        $usuarioClinica = usuarioClinica::select('usuario_clinica.password as password','usuario_clinica.id as id','usuario_clinica.nombre as nombre','usuario_clinica.username as username','clinica.nombre as clinica_nombre')
+        ->join('clinica','clinica.id','=','usuario_clinica.clinica_id')
+        ->where('usuario_clinica.id',$id)
+        ->first();
+        // var_dump($usuarioClinica);
+        // exit;
+
         if ($usuarioClinica==null) {
             Notify::warning('No se encontraron datos','Espera...');
             return redirect('/usuarioClinica/show');
@@ -131,13 +164,19 @@ class usuarioClinicaController extends Controller
     public function update(Request $request, $id){
         $input = $request->all();
         $usuarioClinica = usuarioClinica::find($id);
-        if ($usuarioClinica==null) {
+
+        if ($input['password']!=$input['confirmarPassword']) {
+            Notify::warning('Contraseña y confirmar contraseña no coinciden','Alerta: ');
+            return redirect('usuario/'.$id.'/edit');
+        }elseif ($usuarioClinica==null) {
             Notify::warning('No se encontraron datos','Nota: ');
-            return redirect('usuarioClinica/show');
+            return redirect('usuario/show');
         }
+        $input['password'] = bcrypt($input['password']);
+        $input['confirmarPassword'] = bcrypt($input['password']);
         $usuarioClinica->update($input);
         Notify::success("El usuario \"". $input['nombre'] ."\", se modifico con éxito.","Modificacion exitosa");
-        return redirect('usuarioClinica/show');
+        return redirect('usuario/show');
     }
 
     /**
@@ -151,14 +190,19 @@ class usuarioClinicaController extends Controller
         //
     }
 
-    public function validar_servicio(Request $request){
+    public function validar_usuario(Request $request){
         $input = $request->all();
+        // dd($input);
 
-        $servicio = usuarioClinica::select("*")->where("username", "=", $input["id"])->count();
+        $usuario_clinica = usuarioClinica::select("*")
+        ->where("username", "=", $input["usuario"])
+        ->count();
 
-        if ($servicio == 0) {
-            $servicio = 0;
-        }
-        return response()->json(["respuesta" => $servicio]);
+                if ($usuario_clinica == 0) {
+                    return response()->json(['respuesta'=>$usuario_clinica]);
+        }else{
+            $usuario_clinica=1;
+        return response()->json(['respuesta'=>$usuario_clinica]);
+    }
     }
 }

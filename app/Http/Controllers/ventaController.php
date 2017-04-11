@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Model\venta;
 use App\Model\pedido;
+use App\Model\servicioTipoContrato;
+use App\Model\servicioTipocontratoPedido;
 use Datatables;
 
 class ventaController extends Controller
@@ -63,16 +65,11 @@ class ventaController extends Controller
     {
       $input=$request->all();
       foreach ($input as  $value) {
-        $insert_cuenta=pedido::select('pedido.valor','pedido.usurio_id')
+        $insert_cuenta=pedido::select('venta.id as id_venta','pedido.id as pedido_id')
         ->join('tipo_contrato','tipo_contrato.id','=','servicio_tipocontrato.tipoContrato_id')
         ->join('servicio_tipocontrato','servicio_tipocontrato.servicio_id','=','servicio_tipocontrato_pedido.servicio_tipocontrato_id')
-        ->join('servicio_tipocontrato_pedido','servicio_tipocontrato.id','=',)
-        ->join('clinica',)
-        ->join('usuario_clinica',)
-        ->join('pedido',)
+        ->join('servicio_tipocontrato_pedido','servicio_tipocontrato_pedido.pedido_id','=','pedido.id')
         ->join('venta','venta.pedido_id','=','pedido.id')
-        ->join('cuenta_cobro',)
-
         ->where('pedido.id',$value)
         ->get();
       }

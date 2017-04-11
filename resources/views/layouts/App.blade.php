@@ -118,6 +118,23 @@
                                 </div>
                             </div>
                         </div>
+
+                    </div>
+                </a>
+
+                <div class="dropdown-menu w dropdown-menu-scale ">
+                    <a class="dropdown-item" href="/profile.html">
+                        <span>Profile</span>
+                    </a>
+                    <a class="dropdown-item" href="/setting.html">
+                        <span>Settings</span>
+                    </a>
+                    <a class="dropdown-item" href="/app.inbox.html">
+                        <span>Inbox</span>
+                    </a>
+                    <a class="dropdown-item" href="/app.message.html">
+                        <span>Message</span>
+
                     </a>
                     <div class="dropdown-menu w dropdown-menu-scale ">
                         <a class="dropdown-item" href="/profile.html">
