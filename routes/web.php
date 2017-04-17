@@ -38,7 +38,7 @@ Route::get('clinica/get','clinicaController@getData');
 
 //--POST--//
 Route::POST('/usuarioClinica/estado/editar', 'usuarioClinicaController@cambiar_estado');
-Route::post('/usuarioClinica/validar_usuario', 'usuarioClinicaController@validar_usuario');
+Route::POST('/usuarioClinica/validar_usuario', 'usuarioClinicaController@validar_usuario');
 
 
 //--GET--//
@@ -207,7 +207,7 @@ Route::resource('proveedor', 'proveedorController');
 
 //--GET--//
 Route::get('venta/get', 'ventaController@getData');
-Route::get('venta/detalle', 'ventaController@detalle');
+Route::get('venta/{id}/detalle', 'ventaController@detalle');
 
 Route::resource('venta', 'ventaController');
 //------------------------------------------------------------------------------------//
@@ -220,10 +220,14 @@ Route::resource('venta', 'ventaController');
 
 //--GET--//
 Route::get('cuentacobro/get', 'cuentaCobroController@getData');
+Route::post('/cuentaCobro/eliminarVenta', 'cuentaCobroController@eliminarVenta');
 Route::get('cuentacobro/{id}/detalle', 'cuentaCobroController@detalle');
+Route::get('/cuentacobro/{id}/adicionar', 'cuentaCobroController@adicionar');
+Route::post('/agregar_venta', 'cuentaCobroController@agregar_venta');
 
 
 Route::post('cuentacobro/pago', 'cuentaCobroController@create');
+Route::post('cuentacobro/pagarCuenta', 'cuentaCobroController@pagarCuenta');
 
 Route::resource('cuentacobro', 'cuentaCobroController');
 //------------------------------------------------------------------------------------//
