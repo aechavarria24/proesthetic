@@ -220,6 +220,7 @@ Route::resource('venta', 'ventaController');
 
 //--GET--//
 Route::get('cuentacobro/get', 'cuentaCobroController@getData');
+Route::get('cuentacobro/{id}/pdf', 'CuentaCobroController@generar_Pdf');
 Route::post('/cuentaCobro/eliminarVenta', 'cuentaCobroController@eliminarVenta');
 Route::get('cuentacobro/{id}/detalle', 'cuentaCobroController@detalle');
 Route::get('/cuentacobro/{id}/adicionar', 'cuentaCobroController@adicionar');
