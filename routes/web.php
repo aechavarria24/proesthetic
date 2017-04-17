@@ -48,7 +48,6 @@ Route::get('usuario/get', 'usuarioController@getData');
 
 Route::post('clinica/estado/editar', 'clinicaController@cambiar_estado');
 Route::resource('clinica','clinicaController');
-Route::post('produccion/estado/editar', 'ordenProduccionController@cambiar_estado');
 Route::post('usuario/validar', 'usuarioClinicaController@cambiar_estado');
 
 Route::get('insucant/addInsumo', 'ordenProduccionController@add_Insumo');
@@ -106,15 +105,18 @@ Route::resource('pedido','pedidoController');
 
 //----------------------------Rutas de orden de produccion----------------------------//
 
+Route::post('produccion/estado/editar', 'ordenProduccionController@cambiar_estado');
 //--POST--//
+Route::post('pedido/retornar', 'ordenProduccionController@cambiar_estado_retornar');
+
 
 //--GET--//
 Route::get('produccion/get', 'ordenProduccionController@getData');
 Route::get('produccion/detalle/{id}', 'ordenProduccionController@detalle');
-
 Route::get('venta/get', 'ventaController@getData');
 Route::get('clinica/get','clinicaController@getData');
 Route::get('produccion/asociar/insumo/{id}','ordenProduccionController@asociar_Insumo');
+Route::get('pedido/{id}/retornar', 'ordenProduccionController@retornar');
 
 
 Route::resource('produccion', 'ordenProduccionController');
@@ -169,6 +171,7 @@ Route::resource('servicio','servicioController');
 //--------------------------------Rutas de contrato-----------------------------------//
 
 //--POST--//
+Route::get('contrato/crear','contratoController@store');
 
 //--GET--//
 Route::get('contrato/get', 'contratoController@getData');

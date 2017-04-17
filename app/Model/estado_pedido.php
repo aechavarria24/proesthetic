@@ -4,13 +4,13 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
-class estado_orden_produccion extends Model
+class estado_pedido extends Model
 {
-    public $table = "estado_orden_produccion";
+    public $table = "estado_pedido";
 
     protected $fillable = [
       'nombre'
     ];
-    public $timestamps = false;
 
+    public $timestamps = false;
 }

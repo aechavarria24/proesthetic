@@ -1,4 +1,8 @@
-@extends('layouts.app') @section('titulo') Contrato @endsection @section('contenedor')
+@extends('layouts.app')
+@section('titulo')
+Contrato
+@endsection
+@section('contenedor')
 <div class="box">
     <div class="box-header">
         <h2>Registrar</h2>
@@ -6,8 +10,8 @@
     <div class="box-body">
         <div class="padding">
             <div class="row">
-                <form data-ui-jp="parsley" novalidate="" method="post" action="/contrato" id="frmcrearcontrato">
-                    {{ csrf_field() }}
+                <form data-ui-jp="parsley" novalidate="" method="get" action="/contrato/crear" id="frmcrearcontrato">
+                    {{csrf_field()}}
                     <div class="col-sm-5">
                         <div class="col-lg-12">
                             <div class="box">
@@ -55,14 +59,12 @@
                                                 @endforeach
                                             </select>
                                         </div>
-
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label>Valor</label>
                                             <input class="form-control" id="txtValor" placeholder="valor" type="number" min ="1" title = "Centimetros, Milimetros, Radianes">
                                         </div>
-
                                     </div>
                                     <div class = "col-sm-1">
                                         <div class="form-group">
@@ -88,14 +90,11 @@
                             </table>
                         </div>
                     </div>
-
                     <div class="col-sm-12">
                         <div class=" p-a text-center">
-                            
-                            <button type="button" onclick="crearcontrato();" class="btn info">Registrar</button>
+                            <button type="submit" class="btn info">Registrar</button>
                         </div>
                     </div>
-
                 </form>
             </div>
         </div>
@@ -112,13 +111,12 @@ $(function(){
     $.ajax({
         type : 'GET',
         dataType : 'JSON',
-        data : {
-            //_token : $("#_token").val()
-        },
+        data : {},
         url : '/contrato/eliminar/tabla'
     });
 
 });
+
 function agregar_servicio(){
     var servicio = $("#chxServicio").val();
     var valor = $("#txtValor").val();
@@ -145,7 +143,6 @@ function agregar_servicio(){
                 servicio : servicio,
                 nombre : nombre_servicio,
                 valor : valor,
-                //    "_token" : $("input[name='_token']").val()
             }
         }).done(function(result){
             $("#tbl_contrato_servicio").empty();
@@ -179,31 +176,6 @@ function eliminar_servicio(e){
         $("#chxServicio").append('<option value ="'+result.servicioEliminado.servicio+'" id ="select-'+result.servicioEliminado.servicio+'">'+result.servicioEliminado.nombre+'</option>');
 
     });
-}
-
-function registrar_servicio(){
-    var validar = false;
-    $.ajax({
-        type : 'GET',
-        datatype : 'json',
-        //    data : {"_token" : $("#token").val() , id : $("#txtNombre").val() },
-        url : '/servicio/validar_servicio',
-        async : false
-    }).done(function(result){
-        if (result.respuesta == 1) {
-            $("#lblNombreclass = 'btn btn-xs'  ").css("color", "red");
-            //$("#lblNombre").css("border", "1px solid red");
-            $("#lblNombre").text("Nombre, servicio ya existe(*)");
-            validar = false;
-        }else{
-            $("#lblNombre").css("color", "");
-            $("#lblNombre").css("border", "");
-            $("#lblNombre").text("Nombre");
-            validar = true;
-        }
-
-    });
-    return validar;
 }
 
 $("#txtNombre").change(function(){

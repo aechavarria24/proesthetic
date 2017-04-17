@@ -90,24 +90,27 @@ function aprobarPedido(e){
     type:'post'
 }).done(function(r){
     // $("#valor").val(r.valor);
-    
+
     if (r.respuesta == 1) {
-
-
         new PNotify({
             title: 'Notificación',
             type : 'success',
             text: 'pedido Aprobado con éxito',
             icon : false
         })
-
         table.ajax.reload(null,false);
-
     }else if (r.respuesta == 0){
         new PNotify({
             title: 'Notificación',
             type : 'error',
             text: 'Pedido se encuantra en un estado que no se puede aprobar',
+            icon : false
+        })
+    }else if (r.respuesta == 2){
+        new PNotify({
+            title: 'Ooops',
+            type : 'error',
+            text: 'Ha ocurrido una excepción, por favor reintente',
             icon : false
         })
     }

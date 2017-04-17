@@ -27,8 +27,7 @@
           <input class="form-control" value="{{$values->observacion}}" rows="8" cols="80" data-parsley-id="136" type="text" name="observacion" readonly="">
 
           <!-- <textarea name="name" value="{{$values->observacion}}" rows="8" cols="80"></textarea> -->
-        </div>
-        <div class="form-group">
+        </div>        <div class="form-group">
           <label>Número Pedido</label>
           <input class="form-control" required="" value="{{$values->pedido_id}}" data-parsley-id="136" type="text" name="pedidoid" readonly="">
         </div>

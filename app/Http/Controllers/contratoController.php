@@ -6,33 +6,32 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Model\contrato;
 use App\Model\servicio;
+use App\Model\servicioTipoContrato;
 use Notify;
 use Datatables;
 
-class contratoController extends Controller
-{
+class contratoController extends Controller{
     /**
     * Display a listing of the resource.
     *
     * @return \Illuminate\Http\Response
     */
 
-    public function getData (Request $Request)
-    {
+    public function getData (Request $Request){
         $contrato = contrato::all();
         return Datatables::of($contrato)
         ->addColumn('action', function ($contrato) {
-            return '<a href="/contrato/'.$contrato->id.'/edit" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i>&nbsp;Editar</a>
-            <a href="/contrato/'.$contrato->id.'/edit" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i>&nbsp;Inabilitar</a>';
-        })
-        ->make(true);
+            return '<a href="/contrato/'.$contrato->id.'/edit" class="btn btn-xs
+            btn-primary"><i class="glyphicon glyphicon-edit"></i>&nbsp;Editar</a>
+            <a href="/contrato/'.$contrato->id.'/edit" class="btn btn-xs btn-danger">
+            <i class="glyphicon glyphicon-trash"></i>&nbsp;Inabilitar</a>';
+        })->make(true);
     }
 
 
 
 
-    public function index()
-    {
+    public function index(){
         return view('contrato.index');
     }
 
@@ -41,8 +40,7 @@ class contratoController extends Controller
     *
     * @return \Illuminate\Http\Response
     */
-    public function create()
-    {
+    public function create(){
         //
         $servicio = servicio::all();
         return view('contrato.crear', compact("servicio"));
@@ -54,16 +52,33 @@ class contratoController extends Controller
     * @param  \Illuminate\Http\Request  $request
     * @return \Illuminate\Http\Response
     */
-    public function store(Request $request)
-    {
-        //
+    public function store(Request $request){
         $input = $request->all();
-        dd($input);
-        exit;
-        contrato::create($input);
-        Notify::success("El contrato \"". $input['nombre'] ."\", se registro con éxito.","Registro exitoso");
-        return view('tipoContrato.crear');
+        $servicio = session("contrato");
+        \DB::beginTransaction();
+        $id_contrato = contrato::create($input);
+        if ($id_contrato != null ) {
+            try {
 
+                foreach ($servicio as $key => $value) {
+                    servicioTipoContrato::create(["servicio_id"=>$value["servicio"],
+                    "tipoContrato_id"=>$id_contrato["id"], "valor"=>$value["valor"]]);
+                }
+
+                Notify::success("El contrato \"". $input['nombre'] ."\", se
+                registro con éxito.","Registro exitoso");
+
+                \DB::commit();
+            } catch (\Exception $e) {
+                \DB::rollBack();
+                Notify::error("El contrato \"". $input['nombre'] ."\", no se pudo
+                registrar con éxito, debido a una excepción","Error");
+            }
+        }else{
+            Notify::error("El contrato \"". $input['nombre'] ."\", no se pudo
+            registrar con éxito","Error");
+        }
+        return redirect('/contrato/create');
     }
 
     /**
@@ -72,8 +87,7 @@ class contratoController extends Controller
     * @param  int  $id
     * @return \Illuminate\Http\Response
     */
-    public function show($id)
-    {
+    public function show($id){
         $contrato = contrato::all();
         return view('contrato.listar');
     }
@@ -102,8 +116,7 @@ class contratoController extends Controller
 * @param  int  $id
 * @return \Illuminate\Http\Response
 */
-public function update(Request $request, $id)
-{
+public function update(Request $request, $id){
     $input = $request->all();
     $contrato = contrato::find($id);
     if ($contrato==null) {
@@ -111,7 +124,8 @@ public function update(Request $request, $id)
         return redirect('contrato/show');
     }
     $contrato->update($input);
-    Notify::success("El Contrato \"". $input['nombre'] ."\", se modifico con éxito.","Modificacion exitosa");
+    Notify::success("El Contrato \"". $input['nombre'] ."\", se modifico con
+    éxito.","Modificacion exitosa");
     return redirect('contrato/show');
 }
 
@@ -121,8 +135,7 @@ public function update(Request $request, $id)
 * @param  int  $id
 * @return \Illuminate\Http\Response
 */
-public function destroy($id)
-{
+public function destroy($id){
     //
 }
 
@@ -131,39 +144,39 @@ public function agregar_servicio(Request $request){
     $input = $request->all();
 
     if (session("contrato") == null) {
-        session(["contrato"=>[["servicio" => $input["servicio"], "valor" => $input["valor"], "nombre"=>$input["nombre"] ] ]] );
+        session(["contrato"=>[["servicio" => $input["servicio"],
+        "valor" => $input["valor"], "nombre"=>$input["nombre"] ] ]] );
     }else{
         $contrato = session("contrato");
-        array_push($contrato, ["servicio" => $input["servicio"], "valor" => $input["valor"], "nombre"=>$input["nombre"]]);
+        array_push($contrato, ["servicio" => $input["servicio"],
+        "valor" => $input["valor"], "nombre"=>$input["nombre"]]);
         session(["contrato" => $contrato]);
     }
 
     return response()->json(session("contrato"));
 }
 
-    function eliminar_tabla_servicio(Request $request){
-        $input = $request->all();
-        $request->session("contrato")->flush();
-    }
+function eliminar_tabla_servicio(Request $request){
+    $input = $request->all();
+    $request->session("contrato")->flush();
+}
 
 
-    function eliminar_servicio(Request $request){
-        $input = $request->all();
+function eliminar_servicio(Request $request){
+    $input = $request->all();
 
-        $contrato = session("contrato");
+    $contrato = session("contrato");
 
-        foreach ($contrato as $key => $value) {
-            if ($value["servicio"] == $input["id"]) {
-                $servicio = $contrato[$key];
-                unset($contrato[$key]);
-                session(["contrato"=>$contrato]);
-                break;
-            }
+    foreach ($contrato as $key => $value) {
+        if ($value["servicio"] == $input["id"]) {
+            $servicio = $contrato[$key];
+            unset($contrato[$key]);
+            session(["contrato"=>$contrato]);
+            break;
         }
-
-        return response()->json(["session"=>session("contrato"), "servicioEliminado"=>$servicio]);
-
-
-
     }
+
+    return response()->json(["session"=>session("contrato"),
+    "servicioEliminado"=>$servicio]);
+}
 }
