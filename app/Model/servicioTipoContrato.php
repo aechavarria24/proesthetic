@@ -11,4 +11,6 @@ class servicioTipoContrato extends Model
     protected $fillable = [
       'servicio_id','tipoContrato_id','valor'
     ];
+    
+    public $timestamps = false;
 }
