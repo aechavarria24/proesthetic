@@ -3,7 +3,7 @@
 Cuenta cobro
 @endsection
 @section('contenedor')
-<form class="" action="/cuentacobro/pago" method="post">
+<form class="" action="/cuentacobro/pagarCuenta" method="post">
 
 <div class="box">
   {{ csrf_field() }}
@@ -19,6 +19,7 @@ Cuenta cobro
           <th  style="width:20%">Cuenta cobro </th>
           <th  style="width:20%">Fecha creación</th>
           <th  style="width:20%">Valor </th>
+          <th  style="width:20%">Estado </th>
           <th  style="width:20%">Opciones</th>
 
 
@@ -30,14 +31,16 @@ Cuenta cobro
       </tbody>
 
     </table>
-    <div class="col-sm-12">
+
         <div class=" p-a text-center">
 
             <button  class="btn primary" type="submit" name="button">Confirmar pago</button>
         </div>
-    </div>
+    
+
 
   </div>
+
 </div>
 </form>
 @endsection
@@ -56,6 +59,7 @@ $('#tblCuentaCobro').DataTable({
     {data: 'id', name: 'id'},
     {data: 'created_at', name: 'created_at'},
     {data: 'valorTotal', name: 'valorTotal'},
+    {data: 'estado', name: 'estado'},
     {data: 'action', name: 'action', orderable: false,searchable: false}
 
   ],
