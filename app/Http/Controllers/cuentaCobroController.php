@@ -12,6 +12,7 @@ use App\Model\venta;
 use App\Model\cuentaCobroVenta;
 use Notify;
 use Datatables;
+use PDF;
 
 
 class cuentaCobroController extends Controller
@@ -21,6 +22,18 @@ class cuentaCobroController extends Controller
     *
     * @return \Illuminate\Http\Response
     */
+    public function generar_Pdf($id){
+        $cuentaCobro = venta::select('cuentaCobro_venta.id as cobroVentaId','cuenta_cobro.id as cuentaCobro','venta.id as numventa','venta.pedido_id as pedido_id',
+        'venta.empleado_id as empleado_id','venta.created_at as fechaCreacion','cuenta_cobro.valorTotal as valorTotal')
+        ->join('cuentaCobro_venta','cuentaCobro_venta.venta_id','=','venta.id')
+        ->join('cuenta_cobro','cuenta_cobro.id','=','cuentaCobro_venta.cuentaCobro_id')
+        ->where('cuenta_cobro.id',$id)
+        ->get();
+
+          $pdf = PDF::loadView('cuentaCobro.pdf',compact('cuentaCobro'));
+          return $pdf->download('cuentaCobro'.$id.'.pdf');
+
+    }
 
     public function detalle($id) {
         $cuentaCobro = venta::select('cuentaCobro_venta.id as cobroVentaId','cuenta_cobro.id as cuentaCobro','venta.id as numventa','venta.pedido_id as pedido_id',

@@ -78,6 +78,7 @@
         <div class=" p-a text-center">
           <a class="btn btn-info" href="/cuentacobro/show">Regresar</a>
           <a href="/cuentacobro/{{$valor->cuentaCobro}}/adicionar" class="btn btn-success " type="button">Agregar venta</a>
+          <a target="_blanck" href="/cuentacobro/{{$valor->cuentaCobro}}/pdf" class="btn btn-info " type="button">Exportar PDF</a>
         </div>
       </div>
     </div>
