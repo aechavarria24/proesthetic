@@ -736,8 +736,8 @@ $.validator.addMethod( "validarUsuario", function( value, element ) {
 	$.ajax({
 		type : 'POST',
 		datatype : 'json',
-		data : {"_token" : $("#_token").val() , id : $("#username").val() },
-		url : '/usuario/validar_usuario',
+		data : {"_token" : $("#token").val() , id : $("#username").val() },
+		url : '/usuario/validar',
 		async : false
 	}).done(function(result){
 		if (result.respuesta == 1) {
@@ -748,7 +748,26 @@ $.validator.addMethod( "validarUsuario", function( value, element ) {
 
 	});
 	return validar;
-}, "Usuario ya existe" );
+}, "Ya existe" );
+
+$.validator.addMethod( "validarEmpleado", function( value, element ) {
+	var validar = false;
+	$.ajax({
+		type : 'post',
+		datatype : 'json',
+		data : { usuario : $("#username").val(), _token : $("#txToken").val() },
+		url : '/empleado/validar_empleado',
+		async : false
+	}).done(function(result){
+		if (result.respuesta == 1) {
+			validar = false;
+		}else{
+			validar = true;
+		}
+
+	});
+	return validar;
+}, "Ya existe" );
 
 $.validator.addMethod( "letterswithbasicpunc", function( value, element ) {
 	return this.optional( element ) || /^[a-z\-.,()'"\s]+$/i.test( value );

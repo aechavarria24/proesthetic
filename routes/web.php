@@ -27,6 +27,7 @@ Route::post('clinica/estado/editar', 'clinicaController@cambiar_estado');
 //--GET--//
 Route::get('clinica/get','clinicaController@getData');
 
+Route::resource('clinica','clinicaController');
 //------------------------------------------------------------------------------------//
 //------------------------------Fin rutas de clinica----------------------------------//
 //------------------------------------------------------------------------------------//
@@ -37,8 +38,8 @@ Route::get('clinica/get','clinicaController@getData');
 //--------------------------Rutas de usuarios de la clinica---------------------------//
 
 //--POST--//
-Route::POST('/usuarioClinica/estado/editar', 'usuarioClinicaController@cambiar_estado');
-Route::POST('/usuarioClinica/validar_usuario', 'usuarioClinicaController@validar_usuario');
+Route::post('usuarioClinica/estado/editar', 'usuarioClinicaController@cambiar_estado');
+Route::post('usuario/validar', 'usuarioClinicaController@validar_usuario');
 
 
 //--GET--//
@@ -46,9 +47,6 @@ Route::get('usuarioClinica/get', 'usuarioClinicaController@getData');
 Route::get('usuario/get', 'usuarioController@getData');
 
 
-Route::post('clinica/estado/editar', 'clinicaController@cambiar_estado');
-Route::resource('clinica','clinicaController');
-Route::post('usuario/validar', 'usuarioClinicaController@cambiar_estado');
 
 Route::get('insucant/addInsumo', 'ordenProduccionController@add_Insumo');
 Route::get('insumo/eliminar_tabla_asociar', 'ordenProduccionController@eliminar_tabla_asociar');

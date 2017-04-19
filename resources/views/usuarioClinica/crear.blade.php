@@ -82,7 +82,7 @@
 @endsection
 @section('script')
 <script>
-$("#username").change(function(){
+$("#username1").change(function(){
     $.ajax({
         url : '/usuarioClinica/validar_usuario',
         datatype : 'json',

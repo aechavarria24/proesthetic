@@ -38,7 +38,7 @@ class usuarioClinicaController extends Controller
 
         return Datatables::of($usuarioClinica)
         ->addColumn('action', function ($usuario) {
-             $btnEstado="";
+            $btnEstado="";
             if ($usuario->estado==1) {
 
                 $btnEstado .= '<a  onclick="cambiar_estado('.$usuario->id.', 2)" title = "Inactivar" ><i class="glyphicon glyphicon-remove" ></i>&nbsp;</a>';
@@ -192,17 +192,15 @@ class usuarioClinicaController extends Controller
 
     public function validar_usuario(Request $request){
         $input = $request->all();
-        // dd($input);
-
         $usuario_clinica = usuarioClinica::select("*")
-        ->where("username", "=", $input["usuario"])
+        ->where("username", "=", $input["id"])
         ->count();
 
-                if ($usuario_clinica == 0) {
-                    return response()->json(['respuesta'=>$usuario_clinica]);
+        if ($usuario_clinica == 0) {
+            return response()->json(['respuesta'=>$usuario_clinica]);
         }else{
             $usuario_clinica=1;
-        return response()->json(['respuesta'=>$usuario_clinica]);
-    }
+            return response()->json(['respuesta'=>$usuario_clinica]);
+        }
     }
 }
