@@ -31,7 +31,7 @@ class cuentaCobroController extends Controller
         ->get();
 
           $pdf = PDF::loadView('cuentaCobro.pdf',compact('cuentaCobro'));
-          return $pdf->download('cuentaCobro'.$id.'.pdf');
+          return $pdf->stream('cuentaCobro'.$id.'.pdf');
 
     }
 
