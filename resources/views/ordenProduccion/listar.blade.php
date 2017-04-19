@@ -119,7 +119,6 @@ function detalle(id){
                         acciones.mensaje_venta();
                     }
                 });
-
             },
             mensaje_venta : function() {
                 var cur_value = 1,

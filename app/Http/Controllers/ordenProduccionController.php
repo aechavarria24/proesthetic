@@ -14,11 +14,7 @@ use App\Model\servicioTipoContrato;
 use App\Model\servicioTipocontratoPedido;
 use App\Model\estado_venta;
 use App\Model\venta;
-
-
-
 use App\Model\insumo;
-
 use Notify;
 use Datatables;
 
@@ -119,7 +115,6 @@ class ordenProduccionController extends Controller{
     public function create(){
         return redirect('produccion/show');
     }
-
 
     /**
     * Store a newly created resource in storage.
