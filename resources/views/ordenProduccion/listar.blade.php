@@ -105,7 +105,7 @@ function detalle(id){
                     text: ' Se cambiado el estado de la orden de produccion con éxito.',
                     type: 'success'
                 });
-                tabla.ajax.reload();
+                tabla.ajax.reload(false,null);
             }else if (result.respuesta == '3') {
                 new PNotify({
                     title: 'Cambio de estado',

@@ -9,14 +9,10 @@ use App\Model\estado_orden_produccion;
 use App\Model\pedido;
 use App\Model\estado_pedido;
 use App\Model\medidapieza;
-
 use App\Model\servicio;
 use App\Model\servicioTipoContrato;
 use App\Model\servicioTipocontratoPedido;
-
-
 use App\Model\insumo;
-
 use Notify;
 use Datatables;
 
@@ -113,8 +109,7 @@ class ordenProduccionController extends Controller
     public function cambiar_estado(Request $request){
         $respuesta = 0;
         $estados = estado_orden_produccion::all();
-        var_dump($estados);
-        exit;
+
         $input = $request->all();
         $orden_produccion =ordenProduccion::find($input['orden_produccion']);
         if($orden_produccion ==null){
@@ -349,8 +344,7 @@ class ordenProduccionController extends Controller
             \DB::commit();
         } catch (\Exception $e) {
             \DB::rollBack();
-            Notify::Error("Ha ocurrido un error al retornar el pedido, "
-            . $pedido["id"].", Por favor cuelva a intentarlo "."Notificación");
+            Notify::Error("Ha ocurrido un error al retornar el pedido, Por favor vuelva a intentarlo "."Notificación");
         }
         return redirect('/pedido/show');;
     }
