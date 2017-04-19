@@ -49,7 +49,7 @@ Retornar
                                         <div class="form-group">
                                             <label>Observación</label>
                                             <!-- <input class="form-control" value="" rows="8" cols="80" data-parsley-id="136" type="text" name="observacion" readonly=""> -->
-                                            <textarea name="observacion" value="" rows="8" cols="80" placeholder="aquí se podrá desahogar..."></textarea>
+                                            <textarea name="observacion" value="" rows="8" cols="80"></textarea>
                                         </div>
                                         <div class=" p-a text-center">
                                             <button type="submit" class="btn btn-info" name="button">Retornar</button>

@@ -1,5 +1,5 @@
 @extends('layouts.app') @section('titulo') Empleado @endsection @section('contenedor')
-<form data-ui-jp="parsley" novalidate="" method="post" action="/empleado" id="frmEmpleado">
+<form data-ui-jp="parsley" method="post" action="/empleado" id="frmEmpleado" >
     {{csrf_field()}}
     <div class="padding">
         <div class="box">
@@ -70,25 +70,7 @@
 
 @section('script')
 <script>
-$("#username").change(function(){
-    $.ajax({
-        type : 'post',
-        datatype : 'json',
-        data : { usuario : $("#username").val(), _token : $("#txToken").val() },
-        url : '/empleado/validar_empleado'
-    }).done(function(result){
-        if (result.respuesta == 1) {
-            $("#lblUsuario").css("color", "red");
-            $("#username").css("border", "1px solid red");
-            $("#lblUsuario").text("Usuario, Usuario ya existe(*)");
-        }else{
-            $("#lblUsuario").css("color", "");
-            $("#username").css("border", "");
-            $("#lblUsuario").text("Usuario");
-        }
 
-    });
-});
 $("#frmEmpleado").validate({
     errorElement: 'span',
     errorPlacement: function(error, e) {
@@ -120,6 +102,7 @@ $("#frmEmpleado").validate({
         },
         username: {
             required: true,
+            validarEmpleado:true,
             user : true,
             minlength: 3,
             maxlength: 40

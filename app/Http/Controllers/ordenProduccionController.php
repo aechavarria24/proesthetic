@@ -12,12 +12,13 @@ use App\Model\medidapieza;
 use App\Model\servicio;
 use App\Model\servicioTipoContrato;
 use App\Model\servicioTipocontratoPedido;
+use App\Model\estado_venta;
+use App\Model\venta;
 use App\Model\insumo;
 use Notify;
 use Datatables;
 
-class ordenProduccionController extends Controller
-{
+class ordenProduccionController extends Controller{
     /**
     * Display a listing of the resource.
     *
@@ -40,8 +41,7 @@ class ordenProduccionController extends Controller
 
     }
 
-    public function getData(Request $Request)
-    {
+    public function getData(Request $Request){
         $ordenProduccion = ordenProduccion::select("orden_produccion.*", "estado_orden_produccion.nombre as estado")
         ->join("estado_orden_produccion", "orden_produccion.estado_orden_produccion_id", "=", "estado_orden_produccion.id")
         ->get();
@@ -50,16 +50,27 @@ class ordenProduccionController extends Controller
 
             $estado_id = ordenProduccion::select("*")
             ->where("estado_orden_produccion_id", "=",
-            estado_orden_produccion::select("*")->where("nombre", "=", "Venta Generada")->first()["id"])
-            ->where("pedido_id", "=", $ordenProduccion["pedido_id"])->get();
+            estado_orden_produccion::select("*")->where("nombre", "=",
+            "Venta Generada")->first()["id"])
+            ->where("pedido_id", "=", $ordenProduccion["pedido_id"])
+            ->get();
+
+            $estado_terminado = ordenProduccion::select("*")
+            ->where("estado_orden_produccion_id", "=",
+            estado_orden_produccion::select("*")->where("nombre", "=",
+            "Terminado")->first()["id"])
+            ->get();
+
 
             if (count($estado_id) == 0) {
 
                 $option_estado = "";
                 $estados = $this->detalle($ordenProduccion->id);
 
-                foreach ($estados["data"] as $value) {
-                    $option_estado .= '<li><button class="btn btn-link" onclick = "cambiar_estado('.$ordenProduccion->id.','.$value["id"].')">'.$value["nombre"].'</button></li>';
+                if ($ordenProduccion->estado != "Enviado"){
+                    foreach ($estados["data"] as $value) {
+                        $option_estado .= '<li><button class="btn btn-link" onclick = "cambiar_estado('.$ordenProduccion->id.','.$value["id"].')">'.$value["nombre"].'</button></li>';
+                    }
                 }
 
                 $btn_insumo= '<a href="/produccion/asociar/insumo/'.$ordenProduccion->id.'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i>&nbsp;Insumo</a>';
@@ -73,13 +84,13 @@ class ordenProduccionController extends Controller
                 </ul>
                 </div>';
 
-                if ($option_estado === "") {
-                    return $btn_insumo;
-                } else {
+                if ($option_estado != "") {
                     return $btn_insumo . $btn_cambiar_estado;
+                }else{
+                    return "No disponible";
                 }
             } else {
-                return "";
+                return "No disponible";
             }
 
 
@@ -91,8 +102,8 @@ class ordenProduccionController extends Controller
         })
         ->make(true);
     }
-    public function index()
-    {
+
+    public function index(){
         return redirect('produccion/show');
     }
 
@@ -101,56 +112,8 @@ class ordenProduccionController extends Controller
     *
     * @return \Illuminate\Http\Response
     */
-    public function create()
-    {
+    public function create(){
         return redirect('produccion/show');
-    }
-
-    public function cambiar_estado(Request $request){
-        $respuesta = 0;
-        $estados = estado_orden_produccion::all();
-
-        $input = $request->all();
-        $orden_produccion =ordenProduccion::find($input['orden_produccion']);
-        if($orden_produccion ==null){
-            $respuesta = '3';
-        }else {
-            if ($input['estado'] == estado_orden_produccion::select("*")->where("nombre", "=", "Enviado")->first()["id"]) {
-                \DB::beginTransaction();
-                try {
-                    $pedido = pedido::select("*")->where("id", "=",
-                    $orden_produccion["pedido_id"])->first();
-                    $pedido->update(["estado_pedido_id"=>estado_pedido::select("id")
-                    ->where("nombre", "=", "Enviado")->first()["id"]]);
-                    $orden_produccion -> update(["estado_orden_produccion_id"
-                    =>$input['estado']]);
-                    \DB::commit();
-                    $respuesta = '1';
-                } catch (\Exception $e) {
-                    \DB::rollBack();
-                    $respuesta = '3';
-                }
-            }else if ($input['estado'] == estado_orden_produccion::select("*")->where("nombre", "=", "Procesando")->first()["id"]) {
-                \DB::beginTransaction();
-                try {
-                    $pedido = pedido::select("*")->where("id", "=",
-                    $orden_produccion["pedido_id"])->first();
-                    $pedido->update(["estado_pedido_id"=>estado_pedido::select("id")
-                    ->where("nombre", "=", "Procesando")->first()["id"]]);
-                    $orden_produccion -> update(["estado_orden_produccion_id"
-                    =>$input['estado']]);
-                    \DB::commit();
-                    $respuesta = '1';
-                } catch (\Exception $e) {
-                    \DB::rollBack();
-                    $respuesta = '3';
-                }
-            } // Fin if estado 135
-        } //Fin else $orden_produccion
-
-
-        return json_encode(['respuesta'=>$respuesta]);
-
     }
 
     /**
@@ -159,8 +122,7 @@ class ordenProduccionController extends Controller
     * @param  \Illuminate\Http\Request  $request
     * @return \Illuminate\Http\Response
     */
-    public function store(Request $request)
-    {
+    public function store(Request $request){
         return redirect('produccion/show');
     }
 
@@ -170,8 +132,7 @@ class ordenProduccionController extends Controller
     * @param  int  $id
     * @return \Illuminate\Http\Response
     */
-    public function show($id)
-    {
+    public function show($id){
         $ordenProduccion = ordenProduccion::all();
 
         return view('ordenProduccion.listar');
@@ -183,8 +144,7 @@ class ordenProduccionController extends Controller
     * @param  int  $id
     * @return \Illuminate\Http\Response
     */
-    public function edit($id)
-    {
+    public function edit($id){
         $insumo= orden_produccion::all();
 
         $insumo = orden_produccion::find($id);
@@ -242,8 +202,7 @@ class ordenProduccionController extends Controller
     }
 
 
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id){
 
     }
 
@@ -253,8 +212,7 @@ class ordenProduccionController extends Controller
     * @param  int  $id
     * @return \Illuminate\Http\Response
     */
-    public function destroy($id)
-    {
+    public function destroy($id){
         //
     }
 
@@ -313,8 +271,7 @@ class ordenProduccionController extends Controller
 
     }
 
-    public function cambiar_estado_retornar(Request $request)
-    {
+    public function cambiar_estado_retornar(Request $request){
         $input = $request->all();
         $var = 0;
         $fecha_fin = (getdate()["year"]."-".getdate()["mon"]."-".getdate()["mday"]);
@@ -348,5 +305,72 @@ class ordenProduccionController extends Controller
         }
         return redirect('/pedido/show');;
     }
+
+    public function cambiar_estado(Request $request){
+        $respuesta = 0;
+        $estados = estado_orden_produccion::all();
+        $input = $request->all();
+        $orden_produccion =ordenProduccion::find($input['orden_produccion']);
+        if($orden_produccion ==null){
+            $respuesta = '3';
+        }else {
+            if ($input['estado'] == estado_orden_produccion::select("*")->where("nombre", "=", "Enviado")->first()["id"]) {
+                \DB::beginTransaction();
+                try {
+                    $pedido = pedido::select("*")->where("id", "=",
+                    $orden_produccion["pedido_id"])->first();
+                    $pedido->update(["estado_pedido_id"=>estado_pedido::select("id")
+                    ->where("nombre", "=", "Enviado")->first()["id"]]);
+                    $orden_produccion -> update(["estado_orden_produccion_id"
+                    =>$input['estado']]);
+                    \DB::commit();
+                    $respuesta = '1';
+                } catch (\Exception $e) {
+                    \DB::rollBack();
+                    $respuesta = '3';
+                }
+            }else if ($input['estado'] == estado_orden_produccion::select("*")->where("nombre", "=", "Procesando")->first()["id"]) {
+                \DB::beginTransaction();
+                try {
+                    $pedido = pedido::select("*")->where("id", "=",
+                    $orden_produccion["pedido_id"])->first();
+                    $pedido->update(["estado_pedido_id"=>estado_pedido::select("id")
+                    ->where("nombre", "=", "Procesando")->first()["id"]]);
+                    $orden_produccion -> update(["estado_orden_produccion_id"
+                    =>$input['estado']]);
+                    \DB::commit();
+                    $respuesta = '1';
+                } catch (\Exception $e) {
+                    \DB::rollBack();
+                    $respuesta = '3';
+                }
+            }else if ($input['estado'] == estado_orden_produccion::select("*")->where("nombre", "=", "Venta Generada")->first()["id"]) {
+                \DB::beginTransaction();
+                try {
+                    $fecha_fin = (getdate()["year"]."-".getdate()["mon"]."-".getdate()["mday"]);
+                    $pedido = pedido::select("*")->where("id", "=",
+                    $orden_produccion["pedido_id"])->first();
+                    $pedido->update(["estado_pedido_id"=>estado_pedido::select("id")
+                    ->where("nombre", "=", "Cumplido")->first()["id"]]);
+                    $orden_produccion -> update(["estado_orden_produccion_id"
+                    =>$input['estado'], "fechaFin"=>$fecha_fin]);
+                    venta::create(["pedido_id"=>$pedido["id"],
+                    "empleado_id"=>\Auth::user()->id,
+                    "estado_venta_id"=>estado_venta::select("*")
+                    ->where("nombre", "=", "Aprobada")->first()["id"]
+                ]);
+                \DB::commit();
+                $respuesta = 'venta';
+            } catch (\Exception $e) {
+                \DB::rollBack();
+                $respuesta = '3';
+            }
+        }// Fin if estado
+    } //Fin else $orden_produccion
+
+
+    return json_encode(['respuesta'=>$respuesta]);
+
+}
 
 }

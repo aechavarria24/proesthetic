@@ -155,7 +155,9 @@ class empleadoController extends Controller
 
 
     public function validar_empleado(Request $request){
-        $empleado =  empleado::where('username', $request['usuario'])->first();
+        $input = $request->all();
+        $empleado =  empleado::select("username")
+        ->where('username', "=", $input['usuario'])->first();
         if ($empleado == null) {
             $empleado = 0;
         }else {
