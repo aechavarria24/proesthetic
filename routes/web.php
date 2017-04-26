@@ -41,17 +41,10 @@ Route::resource('clinica','clinicaController');
 Route::post('usuarioClinica/estado/editar', 'usuarioClinicaController@cambiar_estado');
 Route::post('usuario/validar', 'usuarioClinicaController@validar_usuario');
 
-
 //--GET--//
+Route::get('clinica/get','clinicaController@getData');
 Route::get('usuarioClinica/get', 'usuarioClinicaController@getData');
 Route::get('usuario/get', 'usuarioController@getData');
-
-
-
-Route::get('insucant/addInsumo', 'ordenProduccionController@add_Insumo');
-Route::get('insumo/eliminar_tabla_asociar', 'ordenProduccionController@eliminar_tabla_asociar');
-Route::get('produccion/get', 'ordenProduccionController@getData');
-
 
 Route::resource('usuario','usuarioClinicaController');
 //------------------------------------------------------------------------------------//
@@ -103,18 +96,22 @@ Route::resource('pedido','pedidoController');
 
 //----------------------------Rutas de orden de produccion----------------------------//
 
-Route::post('produccion/estado/editar', 'ordenProduccionController@cambiar_estado');
 //--POST--//
+Route::post('produccion/estado/editar', 'ordenProduccionController@cambiar_estado');
 Route::post('pedido/retornar', 'ordenProduccionController@cambiar_estado_retornar');
 
 
 //--GET--//
 Route::get('produccion/get', 'ordenProduccionController@getData');
 Route::get('produccion/detalle/{id}', 'ordenProduccionController@detalle');
-Route::get('venta/get', 'ventaController@getData');
-Route::get('clinica/get','clinicaController@getData');
+Route::get('insucant/addInsumo', 'ordenProduccionController@add_Insumo');
+Route::get('insumo/eliminar_tabla_asociar', 'ordenProduccionController@eliminar_tabla_asociar');
+Route::get('produccion/get', 'ordenProduccionController@getData');
 Route::get('produccion/asociar/insumo/{id}','ordenProduccionController@asociar_Insumo');
 Route::get('pedido/{id}/retornar', 'ordenProduccionController@retornar');
+Route::get('produccion/insumo/eliminar','ordenProduccionController@eliminar_insumo');
+Route::get('produccion/insumo/guardar', 'ordenProduccionController@store');
+
 
 
 Route::resource('produccion', 'ordenProduccionController');
@@ -126,11 +123,15 @@ Route::resource('produccion', 'ordenProduccionController');
 
 
 //-----------------------Rutas de insumo por orden de produccion----------------------//
-Route::resource('insumoordenproduccion','insumoOrdenProduccionController');
 
 //--POST--//
-
+Route::post('asosiar/insumos','insumoOrdenProduccionController@guardar_insumos');
 //--GET--//
+
+
+
+
+Route::resource('insumoordenproduccion','insumoOrdenProduccionController');
 //------------------------------------------------------------------------------------//
 //--------------------Fin rutas de insumo por orden de produccion---------------------//
 //------------------------------------------------------------------------------------//
@@ -210,6 +211,7 @@ Route::resource('proveedor', 'proveedorController');
 Route::get('venta/get', 'ventaController@getData');
 Route::get('venta/{id}/detalle', 'ventaController@detalle');
 Route::get('venta/{id}/pdf', 'ventaController@generar_Pdf');
+
 
 Route::resource('venta', 'ventaController');
 //------------------------------------------------------------------------------------//

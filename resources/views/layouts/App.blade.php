@@ -172,7 +172,8 @@
                     <i class="ion-navicon"></i>
                 </a>
                 <div class="navbar-item pull-left h5" id="pageTitle">
-                    @yield('titulo')</div>
+                    @yield('titulo')
+                </div>
                     <!-- nabar right -->
                     <ul class="nav navbar-nav pull-right">
                         <li class="nav-item dropdown pos-stc-xs">

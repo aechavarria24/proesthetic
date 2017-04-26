@@ -702,6 +702,9 @@ $.validator.addMethod( "address", function( value, element ) {
 }, "Por favor, escribe un valor valido" );
 
 
+$.validator.addMethod("SelectNotEquals", function(value, element, arg){
+ return validar = (value == 0) ? false : true ;
+}, "Por favor, escoja una opcion");
 
 
 $.validator.addMethod( "securePassword", function( value, element ) {
