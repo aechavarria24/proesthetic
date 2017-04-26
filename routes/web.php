@@ -209,6 +209,7 @@ Route::resource('proveedor', 'proveedorController');
 //--GET--//
 Route::get('venta/get', 'ventaController@getData');
 Route::get('venta/{id}/detalle', 'ventaController@detalle');
+Route::get('venta/{id}/pdf', 'ventaController@generar_Pdf');
 
 Route::resource('venta', 'ventaController');
 //------------------------------------------------------------------------------------//
@@ -228,7 +229,7 @@ Route::get('/cuentacobro/{id}/adicionar', 'cuentaCobroController@adicionar');
 Route::post('/agregar_venta', 'cuentaCobroController@agregar_venta');
 
 
-Route::post('cuentacobro/pago', 'cuentaCobroController@create');
+Route::get('cuentacobro/{id}/pago', 'cuentaCobroController@create');
 Route::post('cuentacobro/pagarCuenta', 'cuentaCobroController@pagarCuenta');
 
 Route::resource('cuentacobro', 'cuentaCobroController');

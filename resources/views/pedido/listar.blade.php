@@ -36,7 +36,7 @@ var table = $('#tblPedido').DataTable({
     },
     ajax: '/pedido/get',
     columns: [
-        {data: 'id', name: 'NumeroPedid'},
+        {data: 'id', name: 'id'},
         {data: 'usuario_id', name: 'usuario_id'},
         {data: 'created_at', name: 'created_at'},
         {data: 'fechaEntrega', name: 'fechaEntrega'},

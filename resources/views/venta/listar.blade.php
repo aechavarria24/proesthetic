@@ -52,7 +52,7 @@ $('#tblVentas').DataTable({
     {data: 'seletion', name: 'seletion'},
     {data: 'id', name: 'id'},
     {data: 'pedido_id', name: 'pedido_id'},
-    {data: 'empleado_id', name: 'empleado_id'},
+    {data: 'username', name: 'username'},
     {data: 'created_at', name: 'created_at'},
     {data: 'action', name: 'action', orderable: false,searchable: false}
   ],"fnRowCallback": function(nRow, aData, iDisplayIndex) {

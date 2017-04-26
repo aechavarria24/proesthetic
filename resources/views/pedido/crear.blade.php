@@ -22,9 +22,9 @@ Pedido
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <div class="form-group">
-                                                <label class="control-label" label = "Cedula paciente">Cedula del paciente</label>
+                                                <label class="control-label" label = "Cedula paciente" >Cedula del paciente</label>
                                                 <input id="_token" name="_token" type="hidden" value="{{csrf_token()}}">
-                                                <input class="form-control" required="" data-parsley-id="136" type="text" id="cedula" name="cedula" onchange="traer_nombre_paciente(this);">
+                                                <input class="form-control" required="" placeholder="123456789" data-parsley-id="136" type="text" id="cedula" name="cedula" onchange="traer_nombre_paciente(this);">
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
@@ -55,17 +55,24 @@ Pedido
                                     <div class="form-group">
                                         <div class="form-group">
                                             <label>Cínica</label>
-                                            <input class="form-control" required="" data-parsley-id="136" type="text" name="nombre"  disabled="false" value="{{$values->usuarioClinica}}">
+                                            <input class="form-control" required="" data-parsley-id="136" type="text" name="nombre"   disabled="false" value="{{$values->usuarioClinica}}">
                                             <input class="form-control" type="hidden" name="empleado_id"  value="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <label label="Descripción">Descripción</label>
+                                            <textarea name="observacion" required="" placeholder="Observación del pedido" class="form-control" rows="12" cols="80"></textarea>
                                         </div>
                                     </div>
                                     <h6>Fecha entrega</h6>
                                     <div class="input-group date">
-                                        <input type="text" class="form-control" id="fechaEntrega" name="fechaEntrega">
+                                        <input type="text" class="form-control" id="fechaEntrega" name="fechaEntrega" placeholder="2040-12-31">
                                         <div class="input-group-addon">
                                             <span class="fa fa-calendar"></span>
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
@@ -364,12 +371,18 @@ function AgregarServicio(e){
             cedula: {
                 required: true,
                 minlength: 7,
-                maxlength: 13
+                maxlength: 13,
+                number: true
             },
             fechaEntrega: {
                 required: true,
                 minlength: 10,
                 maxlength: 10
+            },
+            observacion: {
+                required: true,
+                minlength: 10,
+                maxlength: 200
             },
             containerMedidaPieza: {
                 required: true,
