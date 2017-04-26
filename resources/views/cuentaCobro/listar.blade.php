@@ -4,9 +4,9 @@ Cuenta cobro
 @endsection
 @section('contenedor')
 <form class="" action="/cuentacobro/pagarCuenta" method="post">
-
+{{ csrf_field() }}
 <div class="box">
-  {{ csrf_field() }}
+
   <div class="box-header">
     <h2>Lista cuentas de cobro</h2>
 
@@ -34,9 +34,10 @@ Cuenta cobro
 
         <div class=" p-a text-center">
 
-            <button  class="btn primary" type="submit" name="button">Confirmar pago</button>
+            <button  class="btn primary" type="submit" name="pago" value="pago">Confirmar pago</button>
+            <button  class="btn primary" onclick="sumar();" type="submit" name="suma" value="suma">Suma total</button>
         </div>
-    
+
 
 
   </div>

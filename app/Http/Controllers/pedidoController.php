@@ -225,7 +225,7 @@ class pedidoController extends Controller
                 $auxiliar_paciente=$valida_paciente->id;
             }
 
-            $pedido=pedido::create(['usuario_id'=>$input["usuario_id"],'fechaEntrega'=>$input["fechaEntrega"],'paciente_id'=>$auxiliar_paciente ]);
+            $pedido=pedido::create(['usuario_id'=>$input["usuario_id"],'fechaEntrega'=>$input["fechaEntrega"],'observacion'=>$input["observacion"],'paciente_id'=>$auxiliar_paciente ]);
             $id=$pedido["id"];
             $session=session("pedido");
 

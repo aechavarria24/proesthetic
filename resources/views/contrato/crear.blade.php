@@ -22,14 +22,14 @@ Contrato
                                     <div class="row">
                                         <div class="col-sm-12">
                                             <div class="form-group">
-                                                <label>Nombre del Contrato</label>
-                                                <input class="form-control" required="" data-parsley-id="136" type="text" name="nombre">
+                                                <label label="Nombre del Contrato">Nombre del Contrato</label>
+                                                <input class="form-control" required="true" data-parsley-id="136" type="text" name="nombre">
                                             </div>
                                         </div>
                                         <div class="col-sm-12">
                                             <div class="form-group">
-                                                <label>Descripción</label>
-                                                <textarea name="descripcion" class="form-control" rows="8" cols="80"></textarea>
+                                                <label label="Descripción">Descripción</label>
+                                                <textarea name="descripcion" required="" class="form-control" rows="8" cols="80"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -62,8 +62,8 @@ Contrato
                                     </div>
                                     <div class="col-sm-4">
                                         <div class="form-group">
-                                            <label>Valor</label>
-                                            <input class="form-control" id="txtValor" placeholder="valor" type="number" min ="1" title = "Centimetros, Milimetros, Radianes">
+                                            <label label="Valor">Valor</label>
+                                            <input class="form-control" name="valor" id="txtValor" placeholder="valor" type="number" min ="1" title = "Centimetros, Milimetros, Radianes">
                                         </div>
                                     </div>
                                     <div class = "col-sm-1">
@@ -184,6 +184,48 @@ $("#txtNombre").change(function(){
 function crearcontrato(){
     $("#frmcrearcontrato").submit()
 }
+$("#frmcrearcontrato").validate({
+    errorElement: 'span',
+    errorPlacement: function(error, e) {
+        let label = jQuery(e).parents('.form-group').find("label").attr("label");
+        jQuery(e).parents('.form-group').find("label").text(label+". ").append(error);
+    },
+    highlight: function(e) {
+        var elem = jQuery(e);
+        elem.closest('.form-group').removeClass('has-error').addClass('has-error');
+        elem.closest('.help-block').remove();
+    },
+    success: function(e) {
+        var elem = jQuery(e);
+        elem.closest('.form-group').removeClass('has-error').addClass('has-success');
+        elem.closest('.help-block').remove();
+    },
+    rules: {
+        nombre: {
+            required: true,
+            personName:true,
+            minlength: 3,
+            maxlength: 45
+        },
+        cedula: {
+            required: true,
+            minlength: 7,
+            maxlength: 13,
+            number: true
+        },
+        valor: {
+            required: true,
+            minlength: 1,
+            maxlength: 1
+        },
+        containerMedidaPieza: {
+            required: true,
+            minlength: 10,
+            maxlength: 10
+        }
+    }
+});
+
 
 </script>
 @endsection
