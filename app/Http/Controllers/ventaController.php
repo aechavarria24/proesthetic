@@ -12,6 +12,7 @@ use App\Model\cuentaCobro;
 use App\Model\cuentaCobroVenta;
 use Notify;
 use Datatables;
+use PDF;
 
 class ventaController extends Controller
 {
@@ -22,10 +23,15 @@ class ventaController extends Controller
     */
 
     public function detalle($id){
-        $venta=venta::select('pedido.id as pedido','clinica.nombre as nombreClinica','pedido.fechaEntrega','pedido.created_at as fechaSolicitud','venta.id as venta','usuario_clinica.nombre as nombreDoctor','usuario_clinica.apellido as apellidoDoctor')
+        $venta=venta::select('empleado.username as username',
+        'pedido.id as pedido','clinica.nombre as nombreClinica',
+        'pedido.fechaEntrega','pedido.created_at as fechaSolicitud',
+        'venta.id as venta','usuario_clinica.nombre as nombreDoctor',
+        'usuario_clinica.apellido as apellidoDoctor')
         ->join('pedido','pedido.id','=','venta.pedido_id')
         ->join('usuario_clinica','usuario_clinica.id','=','pedido.usuario_id')
         ->join('clinica','clinica.id','=','usuario_clinica.clinica_id')
+        ->join('empleado','empleado.id','=','venta.empleado_id')
         ->where('venta.id',$id)
         ->get();
 
@@ -34,14 +40,34 @@ class ventaController extends Controller
         return view('venta.detalleVenta',compact('venta'));
 
     }
+    public function generar_Pdf($id){
+        $venta=venta::select('empleado.username','pedido.id as pedido',
+        'clinica.nombre as nombreClinica','pedido.fechaEntrega',
+        'pedido.created_at as fechaSolicitud','venta.id as venta',
+        'usuario_clinica.nombre as nombreDoctor','usuario_clinica.apellido as apellidoDoctor')
+        ->join('pedido','pedido.id','=','venta.pedido_id')
+        ->join('usuario_clinica','usuario_clinica.id','=','pedido.usuario_id')
+        ->join('clinica','clinica.id','=','usuario_clinica.clinica_id')
+        ->join('empleado','empleado.id','=','venta.empleado_id')
+        ->where('venta.id',$id)
+        ->get();
+
+
+
+          $pdf = PDF::loadView('venta.pdf',compact('venta'));
+          return $pdf->stream('venta'.$id.'.pdf');
+
+    }
 
 
     public function getData (Request $Request)
     {
-        $venta = venta::all();
+        $venta = venta::select('venta.id as id','venta.pedido_id as pedido_id','empleado.username','venta.created_at as created_at')
+        ->join('empleado','empleado.id','=','venta.empleado_id')
+        ->get();
         return Datatables::of($venta)
         ->addColumn('action', function ($venta) {
-            return '<a href="/venta/'.$venta->id.'/edit" class="btn btn-xs "><i title="Editar" class="glyphicon glyphicon-edit"></i>&nbsp;</a>
+            return '<a href="/venta/'.$venta->id.'/pdf" class="btn btn-xs " target="_blanck"><i title="Exportar PDF" class="fa fa-file-pdf-o" aria-hidden="true" ></i>&nbsp;</a>
             <a href="/venta/'.$venta->id.'/detalle"> <i class="fa fa-eye" title="Detalle"></i>&nbsp;</a>';
         })
         ->addColumn('seletion', "")
@@ -128,7 +154,11 @@ class ventaController extends Controller
     */
     public function show($id)
     {
-        $venta = venta::all();
+        $venta = venta::select('venta.id as id','venta.pedido_id as pedido_id','empleado.username','venta.created_at as created_at')
+        ->join('empleado','empleado.id','=','venta.empleado_id')
+        ->get();
+
+        // exit;
         return view('venta.listar');
     }
 

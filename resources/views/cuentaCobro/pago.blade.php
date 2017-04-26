@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('titulo') Vista de cuenta de cobro
+@section('titulo') Cuentas de cobro
 @endsection
 @section('contenedor')
 <div class="box">
@@ -9,12 +9,12 @@
         <div class="col-sm-12">
           <div class="box">
             <div class="box-header">
-              Cuenta de cobro
+              <h3><b>Reporte total</b></h3>
             </div>
             <div class="box-body">
               <div class="row">
 
-                <div class="col-md-4">
+                <div class="col-md-6">
                 <div class="form-group">
                     <label>Nombre de la clícina</label>
                     @foreach($usuarioClinica as $values)
@@ -23,7 +23,7 @@
                     @endforeach
                 </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-6">
                 <div class="form-group">
                     <label>Nombre Doctor</label>
                     @foreach($usuarioClinica as $values)
@@ -33,10 +33,10 @@
                 </div>
                 </div>
                 <div class="col-md-4">
-                  <div class="form-group">
+                  <!-- <div class="form-group">
                     <label>Fecha de solicitud</label>
                     <input class="form-control" required="" data-parsley-id="136" type="text" name="cedula" value="" readonly="">
-                  </div>
+                  </div> -->
                 </div>
               </div>
 

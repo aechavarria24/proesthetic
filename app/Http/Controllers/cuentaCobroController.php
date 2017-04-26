@@ -47,9 +47,30 @@ class cuentaCobroController extends Controller
     }
     public function pagarCuenta(Request $request)
     {
-
         $input=$request->all();
-        if (isset($input['s'])) {
+
+
+
+        if (isset($input['suma']) && isset($input['s'])) {
+
+            $input=$request->all();
+            $pago=cuentacobro::whereIn('id',$input['s'])->sum('valorTotal');
+
+
+
+            $usuarioClinica=  usuarioClinica::select('usuario_clinica.id','usuario_clinica.nombre as NombreDoctor','usuario_clinica.apellido as ApellidoDocto','clinica.nombre as usuarioClinica')
+            ->join('clinica','usuario_clinica.clinica_id','=','clinica.id')
+
+
+            ->get();
+
+            return view('cuentacobro.pago', compact('usuarioClinica','pago'));
+            # code...
+        }
+
+
+        elseif(isset($input['s']) && isset($input['pago'])) {
+            // dd($input);
             $input["estado"]=2;
             foreach ($input['s'] as $value) {
 
@@ -106,7 +127,8 @@ class cuentaCobroController extends Controller
         return Datatables::of($cuentascobro)
         ->addColumn('action', function ($cuentaCobro) {
             return '<a href="/cuentacobro/'.$cuentaCobro->id.'/adicionar" class="btn btn-xs "><i title="Agregar venta" class="fa fa-cart-plus" aria-hidden="true"></i>&nbsp;</a>
-            <a href="/cuentacobro/'.$cuentaCobro->id.'/detalle" class="btn btn-xs "><i title="Detalle" class="fa fa-eye" aria-hidden="true"></i>&nbsp;</a>';
+            <a href="/cuentacobro/'.$cuentaCobro->id.'/detalle" class="btn btn-xs "><i title="Detalle" class="fa fa-eye" aria-hidden="true"></i>&nbsp;</a>
+            ';
         })
         ->addColumn('seletion', "")
         ->editColumn('estado',function($cuentaCobro){
@@ -136,17 +158,7 @@ class cuentaCobroController extends Controller
     */
     public function create(Request $request)
     {
-        $input=$request->all();
 
-        $pago=cuentacobro::whereIn('id',$input['s'])->sum('valorTotal');
-
-        $usuarioClinica=  usuarioClinica::select('usuario_clinica.id','usuario_clinica.nombre as NombreDoctor','usuario_clinica.apellido as ApellidoDocto','clinica.nombre as usuarioClinica')
-        ->join('clinica','usuario_clinica.clinica_id','=','clinica.id')
-
-
-        ->get();
-
-        return view('cuentacobro.pago', compact('usuarioClinica','pago'));
 
     }
 
