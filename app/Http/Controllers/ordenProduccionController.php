@@ -15,6 +15,8 @@ use App\Model\servicioTipocontratoPedido;
 use App\Model\estado_venta;
 use App\Model\venta;
 use App\Model\insumo;
+use App\Model\insumoOrdenProduccion;
+
 use Notify;
 use Datatables;
 
@@ -123,7 +125,29 @@ class ordenProduccionController extends Controller{
     * @return \Illuminate\Http\Response
     */
     public function store(Request $request){
-        return redirect('produccion/show');
+        if (session("insumo") == null) {
+            Notify::warning('Por favor ingresar insumos, gracias');
+            return redirect('/pedido/show');
+        }
+        \DB::beginTransaction();
+        try {
+            $input = $request->all();
+            $orden_produccion = ordenProduccion::find($input["ordenProduccion"]);
+            $insumos = session("insumo");
+            foreach ($insumos as $key => $value) {
+                insumoOrdenProduccion::create(["insumo_id"=>$value["insumo"],
+                "cantidad"=>$value["cantidad"],"orden_produccion_id"=>$orden_produccion["id"]]);
+            }
+            \DB::commit();
+            Notify::success('Insumos asociados con éxito');
+            return redirect('/pedido/show');
+        } catch (\Exception $e) {
+            \DB::rollBack();
+            Notify::warning('Error en la transaction');
+            return redirect('/pedido/show');
+        }
+
+
     }
 
     /**
@@ -166,210 +190,270 @@ class ordenProduccionController extends Controller{
         ->where('orden_produccion.id',$id)
         ->get();
 
-        // // dd($pedido);
-        // // dd($pedido[0]["id"]);
+        $piezas = servicio::select("servicio.nombre", "servicio_tipocontrato.id")
+        ->join("servicio_tipocontrato", "servicio_tipocontrato.servicio_id", "=", "servicio.id")
+        ->join("servicio_tipocontrato_pedido",
+        "servicio_tipocontrato_pedido.servicio_tipocontrato_id", "=", "servicio_tipocontrato.id")
+        ->where("servicio_tipocontrato_pedido.pedido_id", "=", $pedido[0]["idt"])
+        ->get();
 
-        // exit;
+        $piezas_pedido = $this->consultar_piezas($pedido[0]["idt"]);
+        $servicios = $piezas_pedido["servicios"];
+        $medidas_pieza = $piezas_pedido["medidas"];
 
-        return view('ordenProduccion.ordenProduccionInsumo',compact('insumoProduccion','pedido'));
+        //dd($piezas);
+        // dd($pedido[0]["id"]);
+
+        //    exit;
+
+        return view('ordenProduccion.ordenProduccionInsumo',compact('insumoProduccion','pedido', 'piezas', 'servicios', 'medidas_pieza' ));
     }
 
     public function add_Insumo(Request $request){
-
         $input = $request->all();
-
-
+        $insumo = insumo::select("*")
+        ->where("id", "=", $input["insumo"])
+        ->get()->toArray();
 
         if(session("insumo") != null){
-
             $insumos = session("insumo");
-            array_push($insumos, ["insumo"=>$input["insumo"], "cantidad"=>$input["cantidad"]]);
-            session(["insumo"=>$insumos]);
-
-        }else{
-
-            session(["insumo"=>[[ "insumo"=>$input["insumo"], "cantidad"=>$input["cantidad"] ]]]);
-
-        }
-
-        return json_encode(session("insumo"));
-
-
+            array_push($insumos, ["insumo"=>$input["insumo"],
+            "cantidad"=>$input["cantidad"], "nombre"=>$insumo[0]["nombre"],
+            "unidad_medida"=>$insumo[0]["unidadMedida"],
+            "pieza"=>$input["pieza"]
+        ]);
+        session(["insumo"=>$insumos]);
+    }else{
+        session(["insumo"=>[
+            ["insumo"=>$input["insumo"],
+            "cantidad"=>$input["cantidad"], "nombre"=>$insumo[0]["nombre"],
+            "unidad_medida"=>$insumo[0]["unidadMedida"],
+            "pieza"=>$input["pieza"]
+        ]
+        ]]);
     }
+    return json_encode(session("insumo"));
+}
 
-    public function get_producto(){
-        return json_decode(session("insumo"));
-    }
+public function get_producto(){
+    return json_decode(session("insumo"));
+}
 
 
-    public function update(Request $request, $id){
+public function update(Request $request, $id){
 
-    }
+}
 
-    /**
-    * Remove the specified resource from storage.
-    *
-    * @param  int  $id
-    * @return \Illuminate\Http\Response
-    */
-    public function destroy($id){
-        //
-    }
+/**
+* Remove the specified resource from storage.
+*
+* @param  int  $id
+* @return \Illuminate\Http\Response
+*/
+public function destroy($id){
+    //
+}
 
-    public function eliminar_tabla_asociar(Request $request){
-        $request->session("insumo")->flush();
-    }
+public function eliminar_tabla_asociar(Request $request){
+    $request->session("insumo")->flush();
+}
 
-    public function retornar($id){
+public function retornar($id){
+    /*
+    SELECT pa.cedula, pa.nombre paciente, pe.id, uc.nombre doctor, uc.apellido apelldio_doctor
+    FROM paciente pa INNER JOIN pedido pe ON pa.id = pe.paciente_id
+    INNER JOIN usuario_clinica uc ON pe.usuario_id = uc.id AND pe.id = 4;*/
+    $pedido = pedido::select("paciente.cedula","paciente.nombre as paciente",
+    "pedido.id as nro_pedido","usuario_clinica.nombre as doctor",
+    "usuario_clinica.apellido as apellido_doctor")
+    ->where('pedido.id', '=', $id)
+    ->where("estado_pedido_id", "=", estado_pedido::select("id")
+    ->where("nombre", "=", "Enviado")->first()["id"]
+    )
+    ->join("paciente", "paciente.id", "=", "paciente_id")
+    ->join("usuario_clinica", "usuario_clinica.id", "=", "usuario_id")
+    ->first();
+
+    if ($pedido != null) {
         /*
-        SELECT pa.cedula, pa.nombre paciente, pe.id, uc.nombre doctor, uc.apellido apelldio_doctor
-        FROM paciente pa INNER JOIN pedido pe ON pa.id = pe.paciente_id
-        INNER JOIN usuario_clinica uc ON pe.usuario_id = uc.id AND pe.id = 4;*/
-        $pedido = pedido::select("paciente.cedula","paciente.nombre as paciente",
-        "pedido.id as nro_pedido","usuario_clinica.nombre as doctor",
-        "usuario_clinica.apellido as apellido_doctor")
-        ->where('pedido.id', '=', $id)
-        ->where("estado_pedido_id", "=", estado_pedido::select("id")
-        ->where("nombre", "=", "Enviado")->first()["id"]
-        )
-        ->join("paciente", "paciente.id", "=", "paciente_id")
-        ->join("usuario_clinica", "usuario_clinica.id", "=", "usuario_id")
-        ->first();
-
-        if ($pedido != null) {
-            /*
-            SELECT mp.*, se.nombre  FROM medida_pieza mp
-            INNER JOIN servicio_tipocontrato_pedido stp ON  stp.id = mp.servicio_tipocontrato_pedido_id
-            INNER JOIN servicio_tipocontrato st ON st.id = stp.servicio_tipocontrato_id
-            INNER JOIN servicio se ON se.id =  st.servicio_id
-            AND stp.pedido_id = 6;
-            */
-            $medidas_pieza = medidapieza::select("medida_pieza.*", "servicio.nombre as servicio")
-            ->join("servicio_tipocontrato_pedido", "servicio_tipocontrato_pedido.id", "=", "medida_pieza.servicio_tipocontrato_pedido_id")
-            ->join("servicio_tipocontrato", "servicio_tipocontrato.id", "=", "servicio_tipocontrato_pedido.servicio_tipocontrato_id")
-            ->join("servicio", "servicio.id", "=", "servicio_tipocontrato.servicio_id")
-            ->where("servicio_tipocontrato_pedido.pedido_id", "=", $pedido["nro_pedido"])
-            ->get();
-            /*
-            SELECT mp.*, se.nombre  FROM medida_pieza mp
-            INNER JOIN servicio_tipocontrato_pedido stp ON  stp.id = mp.servicio_tipocontrato_pedido_id
-            INNER JOIN servicio_tipocontrato st ON st.id = stp.servicio_tipocontrato_id
-            INNER JOIN servicio se ON se.id =  st.servicio_id
-            AND stp.pedido_id = 6 group by (nombre);
-            */
-            $servicios = medidapieza::select("servicio.nombre as servicio")
-            ->join("servicio_tipocontrato_pedido", "servicio_tipocontrato_pedido.id", "=", "medida_pieza.servicio_tipocontrato_pedido_id")
-            ->join("servicio_tipocontrato", "servicio_tipocontrato.id", "=", "servicio_tipocontrato_pedido.servicio_tipocontrato_id")
-            ->join("servicio", "servicio.id", "=", "servicio_tipocontrato.servicio_id")
-            ->where("servicio_tipocontrato_pedido.pedido_id", "=", $pedido["nro_pedido"])
-            ->groupBy("servicio.nombre")
-            ->get();
-            return view('ordenProduccion.retornar', compact('pedido','medidas_pieza', 'servicios'));
-        }else{
-            return redirect('/pedido/show');
-        }
-
+        SELECT mp.*, se.nombre  FROM medida_pieza mp
+        INNER JOIN servicio_tipocontrato_pedido stp ON  stp.id = mp.servicio_tipocontrato_pedido_id
+        INNER JOIN servicio_tipocontrato st ON st.id = stp.servicio_tipocontrato_id
+        INNER JOIN servicio se ON se.id =  st.servicio_id
+        AND stp.pedido_id = 6;
+        */
+        $medidas_pieza = medidapieza::select("medida_pieza.*", "servicio.nombre as servicio")
+        ->join("servicio_tipocontrato_pedido", "servicio_tipocontrato_pedido.id", "=", "medida_pieza.servicio_tipocontrato_pedido_id")
+        ->join("servicio_tipocontrato", "servicio_tipocontrato.id", "=", "servicio_tipocontrato_pedido.servicio_tipocontrato_id")
+        ->join("servicio", "servicio.id", "=", "servicio_tipocontrato.servicio_id")
+        ->where("servicio_tipocontrato_pedido.pedido_id", "=", $pedido["nro_pedido"])
+        ->get();
+        /*
+        SELECT mp.*, se.nombre  FROM medida_pieza mp
+        INNER JOIN servicio_tipocontrato_pedido stp ON  stp.id = mp.servicio_tipocontrato_pedido_id
+        INNER JOIN servicio_tipocontrato st ON st.id = stp.servicio_tipocontrato_id
+        INNER JOIN servicio se ON se.id =  st.servicio_id
+        AND stp.pedido_id = 6 group by (nombre);
+        */
+        $servicios = medidapieza::select("servicio.nombre as servicio")
+        ->join("servicio_tipocontrato_pedido", "servicio_tipocontrato_pedido.id", "=", "medida_pieza.servicio_tipocontrato_pedido_id")
+        ->join("servicio_tipocontrato", "servicio_tipocontrato.id", "=", "servicio_tipocontrato_pedido.servicio_tipocontrato_id")
+        ->join("servicio", "servicio.id", "=", "servicio_tipocontrato.servicio_id")
+        ->where("servicio_tipocontrato_pedido.pedido_id", "=", $pedido["nro_pedido"])
+        ->groupBy("servicio.nombre")
+        ->get();
+        return view('ordenProduccion.retornar', compact('pedido','medidas_pieza', 'servicios'));
+    }else{
+        return redirect('/pedido/show');
     }
 
-    public function cambiar_estado_retornar(Request $request){
-        $input = $request->all();
-        $var = 0;
-        $fecha_fin = (getdate()["year"]."-".getdate()["mon"]."-".getdate()["mday"]);
-        try {
+}
+
+public function cambiar_estado_retornar(Request $request){
+    $input = $request->all();
+    $var = 0;
+    $fecha_fin = (getdate()["year"]."-".getdate()["mon"]."-".getdate()["mday"]);
+    try {
+        \DB::beginTransaction();
+        $orden_produccion = ordenProduccion::select("*")->where("Pedido_id", "=", $input["nro_pedido"])
+        ->where("estado_orden_produccion_id", "=",
+        estado_orden_produccion::select("*")
+        ->where("nombre", "=", "Enviado")->first()["id"])->first();
+
+        $orden_produccion->update(["estado_orden_produccion_id" =>
+        estado_orden_produccion::select("*")
+        ->where("nombre", "=", "Terminado")
+        ->first()["id"],"fechaFin"=>$fecha_fin]);
+
+        $var = ordenProduccion::create(["pedido_id"=>
+        $orden_produccion["pedido_id"],"observacion"=>
+        $input["observacion"],"estado_orden_produccion_id"=>
+        estado_orden_produccion::select("*")->where("nombre", "=", "Pendiente")
+        ->first()["id"]]);
+
+        $pedido = pedido::find($orden_produccion["pedido_id"]);
+
+        $pedido->update(["estado_pedido_id"=>
+        estado_pedido::select("*")->where("nombre", "=", "Retornado")->first()["id"]]);
+        Notify::success("Pedido, ". $pedido["id"]." Retornado con éxito."."Notificación");
+        \DB::commit();
+    } catch (\Exception $e) {
+        \DB::rollBack();
+        Notify::Error("Ha ocurrido un error al retornar el pedido, Por favor vuelva a intentarlo "."Notificación");
+    }
+    return redirect('/pedido/show');;
+}
+
+public function cambiar_estado(Request $request){
+    $respuesta = 0;
+    $estados = estado_orden_produccion::all();
+    $input = $request->all();
+    $orden_produccion =ordenProduccion::find($input['orden_produccion']);
+    if($orden_produccion ==null){
+        $respuesta = '3';
+    }else {
+        if ($input['estado'] == estado_orden_produccion::select("*")->where("nombre", "=", "Enviado")->first()["id"]) {
             \DB::beginTransaction();
-            $orden_produccion = ordenProduccion::select("*")->where("Pedido_id", "=", $input["nro_pedido"])
-            ->where("estado_orden_produccion_id", "=",
-            estado_orden_produccion::select("*")
-            ->where("nombre", "=", "Enviado")->first()["id"])->first();
-
-            $orden_produccion->update(["estado_orden_produccion_id" =>
-            estado_orden_produccion::select("*")
-            ->where("nombre", "=", "Terminado")
-            ->first()["id"],"fechaFin"=>$fecha_fin]);
-
-            $var = ordenProduccion::create(["pedido_id"=>
-            $orden_produccion["pedido_id"],"observacion"=>
-            $input["observacion"],"estado_orden_produccion_id"=>
-            estado_orden_produccion::select("*")->where("nombre", "=", "Pendiente")
-            ->first()["id"]]);
-
-            $pedido = pedido::find($orden_produccion["pedido_id"]);
-
-            $pedido->update(["estado_pedido_id"=>
-            estado_pedido::select("*")->where("nombre", "=", "Retornado")->first()["id"]]);
-            Notify::success("Pedido, ". $pedido["id"]." Retornado con éxito."."Notificación");
-            \DB::commit();
-        } catch (\Exception $e) {
-            \DB::rollBack();
-            Notify::Error("Ha ocurrido un error al retornar el pedido, Por favor vuelva a intentarlo "."Notificación");
-        }
-        return redirect('/pedido/show');;
-    }
-
-    public function cambiar_estado(Request $request){
-        $respuesta = 0;
-        $estados = estado_orden_produccion::all();
-        $input = $request->all();
-        $orden_produccion =ordenProduccion::find($input['orden_produccion']);
-        if($orden_produccion ==null){
-            $respuesta = '3';
-        }else {
-            if ($input['estado'] == estado_orden_produccion::select("*")->where("nombre", "=", "Enviado")->first()["id"]) {
-                \DB::beginTransaction();
-                try {
-                    $pedido = pedido::select("*")->where("id", "=",
-                    $orden_produccion["pedido_id"])->first();
-                    $pedido->update(["estado_pedido_id"=>estado_pedido::select("id")
-                    ->where("nombre", "=", "Enviado")->first()["id"]]);
-                    $orden_produccion -> update(["estado_orden_produccion_id"
-                    =>$input['estado']]);
-                    \DB::commit();
-                    $respuesta = '1';
-                } catch (\Exception $e) {
-                    \DB::rollBack();
-                    $respuesta = '3';
-                }
-            }else if ($input['estado'] == estado_orden_produccion::select("*")->where("nombre", "=", "Procesando")->first()["id"]) {
-                \DB::beginTransaction();
-                try {
-                    $pedido = pedido::select("*")->where("id", "=",
-                    $orden_produccion["pedido_id"])->first();
-                    $pedido->update(["estado_pedido_id"=>estado_pedido::select("id")
-                    ->where("nombre", "=", "Procesando")->first()["id"]]);
-                    $orden_produccion -> update(["estado_orden_produccion_id"
-                    =>$input['estado']]);
-                    \DB::commit();
-                    $respuesta = '1';
-                } catch (\Exception $e) {
-                    \DB::rollBack();
-                    $respuesta = '3';
-                }
-            }else if ($input['estado'] == estado_orden_produccion::select("*")->where("nombre", "=", "Venta Generada")->first()["id"]) {
-                \DB::beginTransaction();
-                try {
-                    $fecha_fin = (getdate()["year"]."-".getdate()["mon"]."-".getdate()["mday"]);
-                    $pedido = pedido::select("*")->where("id", "=",
-                    $orden_produccion["pedido_id"])->first();
-                    $pedido->update(["estado_pedido_id"=>estado_pedido::select("id")
-                    ->where("nombre", "=", "Cumplido")->first()["id"]]);
-                    $orden_produccion -> update(["estado_orden_produccion_id"
-                    =>$input['estado'], "fechaFin"=>$fecha_fin]);
-                    venta::create(["pedido_id"=>$pedido["id"],
-                    "empleado_id"=>\Auth::user()->id,
-                    "estado_venta_id"=>estado_venta::select("*")
-                    ->where("nombre", "=", "Aprobada")->first()["id"]
-                ]);
+            try {
+                $pedido = pedido::select("*")->where("id", "=",
+                $orden_produccion["pedido_id"])->first();
+                $pedido->update(["estado_pedido_id"=>estado_pedido::select("id")
+                ->where("nombre", "=", "Enviado")->first()["id"]]);
+                $orden_produccion -> update(["estado_orden_produccion_id"
+                =>$input['estado']]);
                 \DB::commit();
-                $respuesta = 'venta';
+                $respuesta = '1';
             } catch (\Exception $e) {
                 \DB::rollBack();
                 $respuesta = '3';
             }
-        }// Fin if estado
-    } //Fin else $orden_produccion
+        }else if ($input['estado'] == estado_orden_produccion::select("*")->where("nombre", "=", "Procesando")->first()["id"]) {
+            \DB::beginTransaction();
+            try {
+                $pedido = pedido::select("*")->where("id", "=",
+                $orden_produccion["pedido_id"])->first();
+                $pedido->update(["estado_pedido_id"=>estado_pedido::select("id")
+                ->where("nombre", "=", "Procesando")->first()["id"]]);
+                $orden_produccion -> update(["estado_orden_produccion_id"
+                =>$input['estado']]);
+                \DB::commit();
+                $respuesta = '1';
+            } catch (\Exception $e) {
+                \DB::rollBack();
+                $respuesta = '3';
+            }
+        }else if ($input['estado'] == estado_orden_produccion::select("*")->where("nombre", "=", "Venta Generada")->first()["id"]) {
+            \DB::beginTransaction();
+            try {
+                $fecha_fin = (getdate()["year"]."-".getdate()["mon"]."-".getdate()["mday"]);
+                $pedido = pedido::select("*")->where("id", "=",
+                $orden_produccion["pedido_id"])->first();
+                $pedido->update(["estado_pedido_id"=>estado_pedido::select("id")
+                ->where("nombre", "=", "Cumplido")->first()["id"]]);
+                $orden_produccion -> update(["estado_orden_produccion_id"
+                =>$input['estado'], "fechaFin"=>$fecha_fin]);
+                venta::create(["pedido_id"=>$pedido["id"],
+                "empleado_id"=>\Auth::user()->id,
+                "estado_venta_id"=>estado_venta::select("*")
+                ->where("nombre", "=", "Aprobada")->first()["id"]
+            ]);
+            \DB::commit();
+            $respuesta = 'venta';
+        } catch (\Exception $e) {
+            \DB::rollBack();
+            $respuesta = '3';
+        }
+    }// Fin if estado
+} //Fin else $orden_produccion
 
 
-    return json_encode(['respuesta'=>$respuesta]);
+return json_encode(['respuesta'=>$respuesta]);
+
+}
+
+
+function eliminar_insumo(Request $request){
+    $input = $request->all();
+
+    $insumo = session("insumo");
+
+    foreach ($insumo as $key => $value) {
+        if ($value["insumo"] == $input["id"]) {
+            $insumo_eliminado = $insumo[$key];
+            unset($insumo[$key]);
+            session(["insumo"=>$insumo]);
+            break;
+        }
+    }
+
+    return response()->json(["session"=>session("insumo"),
+    "insumoEliminado"=>$insumo_eliminado]);
+}
+
+private function consultar_piezas($id_pedido){
+
+    $medidas_pieza = medidapieza::select("medida_pieza.*", "servicio.nombre as servicio")
+    ->join("servicio_tipocontrato_pedido", "servicio_tipocontrato_pedido.id", "=", "medida_pieza.servicio_tipocontrato_pedido_id")
+    ->join("servicio_tipocontrato", "servicio_tipocontrato.id", "=", "servicio_tipocontrato_pedido.servicio_tipocontrato_id")
+    ->join("servicio", "servicio.id", "=", "servicio_tipocontrato.servicio_id")
+    ->where("servicio_tipocontrato_pedido.pedido_id", "=", $id_pedido)
+    ->get();
+    /*
+    SELECT mp.*, se.nombre  FROM medida_pieza mp
+    INNER JOIN servicio_tipocontrato_pedido stp ON  stp.id = mp.servicio_tipocontrato_pedido_id
+    INNER JOIN servicio_tipocontrato st ON st.id = stp.servicio_tipocontrato_id
+    INNER JOIN servicio se ON se.id =  st.servicio_id
+    AND stp.pedido_id = 6 group by (nombre);
+    */
+    $servicios = medidapieza::select("servicio.nombre as servicio")
+    ->join("servicio_tipocontrato_pedido", "servicio_tipocontrato_pedido.id", "=", "medida_pieza.servicio_tipocontrato_pedido_id")
+    ->join("servicio_tipocontrato", "servicio_tipocontrato.id", "=", "servicio_tipocontrato_pedido.servicio_tipocontrato_id")
+    ->join("servicio", "servicio.id", "=", "servicio_tipocontrato.servicio_id")
+    ->where("servicio_tipocontrato_pedido.pedido_id", "=", $id_pedido)
+    ->groupBy("servicio.nombre")
+    ->get();
+
+    return $datos=["medidas"=>$medidas_pieza, "servicios"=>$servicios];
 
 }
 

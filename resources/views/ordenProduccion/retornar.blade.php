@@ -66,31 +66,33 @@ Retornar
                             <div class="box-header">
                                 Medidas de la pieza
                             </div>
+                            <div class="box-body">
 
-                            @foreach ($servicios  as $key => $servicio)
-                            <label for="table">Pieza: <?php echo $servicio["servicio"] ?></label>
-                            <table class="table" id = "table">
-                                <thead>
-                                    <tr>
-                                        <th>Cantidad</th>
-                                        <th>Dimesión</th>
-                                        <th>Unidad de medida</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                            @foreach ($medidas_pieza  as $key => $pieza)
-                            @if($servicio["servicio"] == $pieza["servicio"])
 
-                                    <tr>
-                                        <td><?php echo $pieza["cantidad"] ?></td>
-                                        <td><?php echo $pieza["dimension"] ?></td>
-                                        <td><?php echo $pieza["unidadMedidad"] ?></td>
-                                    </tr>
-                            @endif
-                            @endforeach
-                        </table>
-                        </tbody>
-                            @endforeach
+                                @foreach ($servicios  as $key => $servicio)
+                                <label for="table">Pieza: <?php echo $servicio["servicio"] ?></label>
+                                <table class="table" id = "table">
+                                    <thead>
+                                        <tr>
+                                            <th>Cantidad</th>
+                                            <th>Dimesión</th>
+                                            <th>Unidad de medida</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($medidas_pieza  as $key => $pieza)
+                                        @if($servicio["servicio"] == $pieza["servicio"])            
+                                        <tr>
+                                            <td><?php echo $pieza["cantidad"] ?></td>
+                                            <td><?php echo $pieza["dimension"] ?></td>
+                                            <td><?php echo $pieza["unidadMedidad"] ?></td>
+                                        </tr>
+                                        @endif
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                                @endforeach
+                            </div>
                         </div>
                     </div>
                 </div>
