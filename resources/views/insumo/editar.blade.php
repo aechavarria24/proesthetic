@@ -20,17 +20,16 @@
                     {{Form::text('unidadMedida', null,['class'=>'form-control'])}}
                 </div>
                 <div class="form-group">
+
                     <label label = "Proveedor">Proveedor</label>
                     <select  class="form-control c-select" required  name="proveedor[]"  multiple="multiple" id="proveedor">
-                        @foreach($proveedores as $values)
                         @foreach($proveedor as $value)
-                        @if ($values->id == $value ->id )
-                        <option value="{{$values->id}}" selected=""> {{$values->nombre}}</option>
-                        @break;
-                        @endif
+                        <option value="{{$value->id}}" selected=""> {{$value->nombre}}</option>
+                        @endforeach
+                        @foreach($proveedores as $values)
                         <option value="{{$values->id}}"> {{$values->nombre}}</option>
                         @endforeach
-                        @endforeach
+
                     </select>
                 </div>
 
