@@ -49,7 +49,11 @@ class pedidoController extends Controller
         ->where('pedido.id',$id)
         ->get();
 
-        return view('pedido.detalle',compact('pedido'));
+        $piezas_pedido = $this->consultar_piezas($pedido[0]["id"]);
+        $servicios = $piezas_pedido["servicios"];
+        $medidas_pieza = $piezas_pedido["medidas"];
+
+        return view('pedido.detalle',compact('pedido','servicios', 'medidas_pieza'));
     }
 
     public function aprobarPedido(Request $request){
@@ -390,5 +394,32 @@ class pedidoController extends Controller
 
                 public function eliminar_session(Request $request){
                     $request->session()->forget('pedido');
+                }
+
+                private function consultar_piezas($id_pedido){
+
+                    $medidas_pieza = medidapieza::select("medida_pieza.*", "servicio.nombre as servicio")
+                    ->join("servicio_tipocontrato_pedido", "servicio_tipocontrato_pedido.id", "=", "medida_pieza.servicio_tipocontrato_pedido_id")
+                    ->join("servicio_tipocontrato", "servicio_tipocontrato.id", "=", "servicio_tipocontrato_pedido.servicio_tipocontrato_id")
+                    ->join("servicio", "servicio.id", "=", "servicio_tipocontrato.servicio_id")
+                    ->where("servicio_tipocontrato_pedido.pedido_id", "=", $id_pedido)
+                    ->get();
+                    /*
+                    SELECT mp.*, se.nombre  FROM medida_pieza mp
+                    INNER JOIN servicio_tipocontrato_pedido stp ON  stp.id = mp.servicio_tipocontrato_pedido_id
+                    INNER JOIN servicio_tipocontrato st ON st.id = stp.servicio_tipocontrato_id
+                    INNER JOIN servicio se ON se.id =  st.servicio_id
+                    AND stp.pedido_id = 6 group by (nombre);
+                    */
+                    $servicios = medidapieza::select("servicio.nombre as servicio")
+                    ->join("servicio_tipocontrato_pedido", "servicio_tipocontrato_pedido.id", "=", "medida_pieza.servicio_tipocontrato_pedido_id")
+                    ->join("servicio_tipocontrato", "servicio_tipocontrato.id", "=", "servicio_tipocontrato_pedido.servicio_tipocontrato_id")
+                    ->join("servicio", "servicio.id", "=", "servicio_tipocontrato.servicio_id")
+                    ->where("servicio_tipocontrato_pedido.pedido_id", "=", $id_pedido)
+                    ->groupBy("servicio.nombre")
+                    ->get();
+
+                    return $datos=["medidas"=>$medidas_pieza, "servicios"=>$servicios];
+
                 }
             }
