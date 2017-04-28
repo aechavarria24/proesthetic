@@ -95,11 +95,18 @@ class insumoController extends Controller
     */
     public function edit($id)
     {
-        $proveedores = proveedor::all();
+        $proveedores = proveedor::select("proveedor_id")
+        ->join("insumo_proveedor", "proveedor.id", "=", "insumo_proveedor.proveedor_id")
+        ->where("insumo_proveedor.insumo_id", "=", $id)
+        ->distinct('insumo_proveedor.proveedor_id')
+        ->get();
+
+
         $insumos = insumo::find($id);
         $proveedor = proveedor::select("proveedor.*")
         ->join("insumo_proveedor", "proveedor.id", "=", "insumo_proveedor.proveedor_id")
-        ->where("insumo_id", $id)->get();
+        ->where("insumo_id", $id)
+        ->get();
 
         $p = [];
         foreach ($proveedor as $key => $value) {
@@ -126,9 +133,32 @@ class insumoController extends Controller
     {
         $input = $request->all();
         $insumos = insumo::find($id);
+        //que machetazo metio puyol
+        foreach ($input['proveedor'] as $value) {
+            $proveedor= insumoproveedor::select('*')
+            ->where('insumo_id',$id)
+            ->where('proveedor_id','<>',$value)
+            ->delete();
+
+            }
+
         if ($insumos==null) {
             Notify::warning('No se encontraron datos','Nota: ');
             return redirect('insumo/show');
+        }
+
+        foreach ($input['proveedor'] as $value) {
+            $proveedor= insumoproveedor::select('*')
+            ->where('insumo_id',$id)
+            ->where('proveedor_id',$value)
+            ->get();
+
+
+            if (count($proveedor)==0) {
+
+                $variable=insumoproveedor::create(["insumo_id"=>$id,"proveedor_id"=>$value]);
+            //insumoproveedor::create(['proveedor_id'=>$input['proveedor'],'insumo_id'=>$id['0']]);
+            }
         }
         $insumos->update($input);
         Notify::success("El Insumo \"". $input['nombre'] ."\", se modifico con éxito.","Modificacion exitosa");
