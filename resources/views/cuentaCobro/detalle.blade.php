@@ -20,7 +20,8 @@
         <div class="form-group">
 
           <label>Valor</label>
-          <input class="form-control" required="" data-parsley-id="136" type="text" name="id" readonly="" value="{{$valor->valorTotal}}">
+          <label for="" id="lblValorTotal">{{$valor->valorTotal}}</label>
+
         </div>
         <div class="box">
           <div class="box-header">
@@ -46,16 +47,16 @@
              $tabla="";
              $acumulador=1;
              foreach ($cuentaCobro as $value) {
-               $tabla.='<tr data-valor ="F-'.$acumulador.'" class = "desmarcado">';
+               $tabla.='<tr id ="F-'.$acumulador.'" class = "desmarcado">';
 
-               $tabla.='<td>'.$acumulador++.' </td>';
+               $tabla.='<td>'.$acumulador.' </td>';
                $tabla.='<td>'.$value['numventa'].' </td>';
                $tabla.='<td>'.$value['pedido_id'].' </td>';
                $tabla.='<td>'.$value['empleado_id'].' </td>';
                $tabla.='<td>'.$value['fechaCreacion'].' </td>';
-               $tabla.='<td>'.'<a><i class="fa fa-trash" onclick="eliminarVenta(this);" id='.$value['cobroVentaId'].' title="Eliminar" value='.$value['numventa'].'></i></a>';
-
+               $tabla.='<td>'.'<a><i class="fa fa-trash" onclick="eliminarVenta(this, '.$acumulador.');" id='.$value['cobroVentaId'].' title="Eliminar" value='.$value['numventa'].'></i></a>';
                $tabla.='</tr>';
+               $acumulador++;
              }
              echo $tabla;
              ?>
@@ -68,13 +69,6 @@
             </div>
           </div>
         </div>
-
-
-
-
-
-
-
         <div class=" p-a text-center">
           <a class="btn btn-info" href="/cuentacobro/show">Regresar</a>
           <a href="/cuentacobro/{{$valor->cuentaCobro}}/adicionar" class="btn btn-success " type="button">Agregar venta</a>
@@ -90,7 +84,7 @@
 @endsection
 @section('script')
 <script type="text/javascript">
-function eliminarVenta(e) {
+function eliminarVenta(e, contador) {
     var id = $(e).attr('id');
 
     $.ajax({
@@ -112,10 +106,9 @@ function eliminarVenta(e) {
             text: 'Venta eliminada con éxito',
             icon : false
         })
-        var tr = $(e).closest("tr");
-        location.reload();
 
-
+        $("#F-"+contador).remove();
+        $("#lblValorTotal").text(r.valor_total);
 
     }else if (r.respuesta == 0){
         new PNotify({

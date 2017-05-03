@@ -22,8 +22,7 @@ class insumoController extends Controller
         $insumos = insumo::all();
         return Datatables::of($insumos)
         ->addColumn('action', function ($insumo) {
-            return '<a href="/insumo/'.$insumo->id.'/edit" class=""><i class="glyphicon glyphicon-edit"></i>&nbsp;</a>
-            <a href="/insumo/'.$insumo->id.'/edit" class=""><i class="glyphicon glyphicon-trash"></i>&nbsp;</a>';
+            return '<a href="/insumo/'.$insumo->id.'/edit" class="" title="Editar" ><i class="glyphicon glyphicon-edit"></i>&nbsp;</a>';
         })
         ->addColumn('proveedor', function($insumo){
             $proveedor = proveedor::select("proveedor.*")

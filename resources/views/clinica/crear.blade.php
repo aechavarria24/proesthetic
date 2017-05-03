@@ -85,7 +85,8 @@ $("#frmclinica").validate({
     rules: {
         nombre :{
             required: true,
-            lettersAndNumbers: true,
+            validar_clinica: true,
+            personName : true,
             minlength: 3,
             maxlength: 40
         },

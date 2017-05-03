@@ -100,12 +100,10 @@ class cuentaCobroController extends Controller
             return json_encode(["respuesta"=>0]);
         }else {
             $cuentaCobroVenta->delete($input['id']);
-
             $consulta_Venta=venta::select('venta.id as venta','servicio_tipoContrato.valor')
             ->join( 'pedido','pedido.id','=','venta.pedido_id')
             ->join( 'servicio_tipocontrato_pedido','servicio_tipocontrato_pedido.pedido_id','=','pedido.id')
             ->join( 'servicio_tipocontrato','servicio_tipocontrato.id','=','servicio_tipocontrato_pedido.servicio_tipocontrato_id')
-
             ->where( 'venta.id','=',$cuentaCobroVenta['venta_id'])
             ->first();
 
@@ -116,7 +114,7 @@ class cuentaCobroController extends Controller
 
             $valorTotal=$cuentaCobro['valorTotal']-$resta;
             $cuentaCobro->update(['valorTotal'=>$valorTotal]);
-            return json_encode(["respuesta"=>1]);
+            return json_encode(["respuesta"=>1, "valor_total"=>$valorTotal]);
         }
 
     }

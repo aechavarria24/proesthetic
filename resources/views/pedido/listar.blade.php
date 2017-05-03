@@ -46,37 +46,75 @@ var table = $('#tblPedido').DataTable({
 });
 function cancelarPedido(e){
     var id = $(e).attr("id");
-    $.ajax({
-        url:'/pedido/cancelarPedido',
-        dataType:'json',
-        data: {'id':id,
-        '_token': $("#_token").val()
-    },
-    type:'post'
-}).done(function(r){
-    // $("#valor").val(r.valor);
-
-    if (r.respuesta == 1) {
-
-
-        new PNotify({
-            title: 'Notificación',
-            type : 'success',
-            text: 'Estado actualizado con éxito.',
-            icon : false
-        })
-
-        table.ajax.reload(null,false);
-
-    }else if (r.respuesta == 0){
+    new PNotify({
+        title: 'Notificación',
+        text: 'Detalle el motivo por el cual va a cancelar el pedido',
+        icon: 'fa fa-ban',
+        hide: false,
+        confirm: {
+            prompt: true,
+            prompt_multi_line: true,
+        },
+        buttons: {
+            closer: false,
+            sticker: false
+        },
+        history: {
+            history: false
+        }
+    }).get().on('pnotify.confirm', function(e, notice, val) {
+        if (val.length > 0) {
+            $.ajax({
+                url:'/pedido/cancelarPedido',
+                dataType:'json',
+                data: {'id':id,
+                descripcion : val,
+                '_token': $("#_token").val()
+            },
+            type:'post'
+        }).done(function(r){
+            if (r.respuesta == 1) {
+                new PNotify({
+                    title: 'Notificación',
+                    type : 'success',
+                    text: 'Estado actualizado con éxito.',
+                    icon : false
+                });
+                table.ajax.reload(null,false);
+            }else if (r.respuesta == 0){
+                new PNotify({
+                    title: 'Notificación',
+                    type : 'error',
+                    text: 'No se puede cancelar el pedido.',
+                    icon : false
+                });
+            }
+        });
+    }else{
         new PNotify({
             title: 'Notificación',
             type : 'error',
-            text: 'No se puede cancelar el pedido.',
+            text: 'Por favor agregue una descripción',
             icon : false
         })
+
     }
+}).on('pnotify.cancel', function(e, notice) {
+    notice.cancelRemove().update({
+        title: 'Notificación',
+        text: 'El pedido no se cancelará',
+        icon: false,
+        hide: true,
+        confirm: {
+            prompt: false
+        },
+        buttons: {
+            closer: true,
+            sticker: true
+        }
+    });
 });
+
 }
 function aprobarPedido(e){
     var id = $(e).attr("id");

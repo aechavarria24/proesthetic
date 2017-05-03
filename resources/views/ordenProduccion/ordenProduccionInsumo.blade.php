@@ -3,7 +3,7 @@
 Orden de producción
 @endsection @section('contenedor')
 
-<div class="Pading">
+<div class="padding">
     <form class="" action="/produccion/insumo/guardar" method="get" id="frmInsumoOrdenProduccion">
         <div class="box">
             <div class="box-header">
@@ -24,50 +24,55 @@ Orden de producción
                                 {{Form::text('ordenProduccion', $pedido[0]["idp"],['class'=>'form-control', 'readonly'])}}
                             </div>
                         </div>
-                        <div class="dropdown-divider"></div>
-                        <div class="" id ="div_agregar_insumo">
-                            <div class="col-sm-12">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label label = "Insumos">Insumos</label>
+                                <select class="form-control c-select" name="insumo_id" id="insumo_id">
+                                    <option value ="0">Seleccionar</option>
+                                    @foreach($insumoProduccion as $value)
+                                    <option id ="select_{{ $value->id }}"  value="{{ $value->id }}">{{ $value->nombre }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="col-sm-10">
                                 <div class="form-group">
-                                    <label label = "Insumos">Insumos</label>
-                                    <select class="form-control c-select" name="insumo_id" id="insumo_id">
-                                        <option value ="0">Seleccionar</option>
-                                        @foreach($insumoProduccion as $value)
-                                        <option id ="select_{{ $value->id }}"  value="{{ $value->id }}">{{ $value->nombre }}</option>
-                                        @endforeach
-                                    </select>
+                                    <label class="control-label" label="Cantidad">Cantidad</label>
+                                    <input class="form-control" data-parsley-id="136" type="text" name="cantidad" id ="cantidad" maxlength="3">
                                 </div>
                             </div>
-                            <div class="col-sm-12">
-                                <div class="col-sm-10">
-                                    <div class="form-group">
-                                        <label class="control-label" label="Cantidad">Cantidad</label>
-                                        <input class="form-control" data-parsley-id="136" type="text" name="cantidad" id ="cantidad" maxlength="3">
-                                    </div>
-                                </div>
-                                <div class="col-sm-2">
-                                    <div class="form-group">
-                                        <label class="" for="">___</label>
-                                        <button id=¨"btnagregar" type ="button" onclick="funciones.addInsumo()" class="btn btn-icon white">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                    </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label class="" for="">___</label>
+                                    <button id=¨"btnagregar" type ="button" onclick="funciones.addInsumo()" class="btn btn-icon white">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-12">
                             <div class=" p-a text-center">
-                                <input type="hidden" name="_token" value="{{csrf_token()}}">
+                                <input type="hidden" name="_token" value="{{csrf_token()}}" />
                                 <button type="submit" class="btn info">Asociar Insumos</button>
                             </div>
                         </div>
                     </div>
                     <div class="col-sm-5">
-                        <div class="box">
-                            <div class="box-header">
-                                Insumos asociados
-                            </div>
-                            <div class="box-body">
+                        <div class="b-b b-info nav-active-info">
+                            <ul class="nav nav-tabs">
+                                <li class="nav-item" style="width: 50%; text-align: center;">
+                                    <a class="nav-link active" href="#" data-toggle="tab" data-target="#tab4" aria-expanded="true">Insumos a asociar</a>
+                                </li>
+                                <li class="nav-item" style="width: 49%; text-align: center;">
+                                    <a class="nav-link" href="#" data-toggle="tab" data-target="#tab5" aria-expanded="false">Insumos asociados</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="tab-content p-a m-b-md">
+                            <div class="tab-pane animated fadeIn text-muted active" id="tab4" aria-expanded="true">
                                 <div class="col-sm-12">
+                                    Insumos a asociar
                                     <table class="table table-striped b-t">
                                         <thead>
                                             <tr>
@@ -77,7 +82,31 @@ Orden de producción
                                                 <th>Opción</th>
                                             </tr>
                                         </thead>
-                                        <tbody id ="tbl_asociar_insumo"></tbody>
+                                        <tbody id ="tbl_asociar_insumo">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="tab-pane animated fadeIn text-muted" id="tab5" aria-expanded="false">
+                                <div class="col-sm-12">
+                                    Insumos asociados
+                                    <table class="table" id = "table">
+                                        <thead>
+                                            <tr>
+                                                <th>Insumo</th>
+                                                <th>Cantidad</th>
+                                                <th>Unidad de medida</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($insumos_asociados  as $key => $insumo)
+                                            <tr>
+                                                <td><?php echo $insumo["nombre"] ?></td>
+                                                <td><?php echo $insumo["cantidad"] ?></td>
+                                                <td><?php echo $insumo["unidadMedida"] ?></td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
                                     </table>
                                 </div>
                             </div>

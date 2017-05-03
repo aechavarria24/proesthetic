@@ -75,11 +75,13 @@ class ordenProduccionController extends Controller{
                     }
                 }
 
-                $btn_insumo= '<a href="/produccion/asociar/insumo/'.$ordenProduccion->id.'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i>&nbsp;Insumo</a>';
+                $btn_insumo= '<a href="/produccion/asociar/insumo/'.$ordenProduccion->id.'" class="btn btn-xs" title = "Asociar insumo(s)"><i class="fa fa-industry"></i></a>';
 
                 $btn_cambiar_estado = '<div class="btn-group">
-                <button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Estados <span class="caret"></span>
+                <button type="button" class="btn btn-xs
+                dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false" title  ="Estado(s)">
+                <i class="fa fa-sort-amount-asc"></i> <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
                 '.$option_estado.'
@@ -183,7 +185,17 @@ class ordenProduccionController extends Controller{
 
     public function asociar_Insumo($id){
 
-        $insumoProduccion = insumo::all();
+        $insumos_asociados = insumo::select("*")
+        ->join("insumo_ordenProduccion", "insumo_ordenProduccion.insumo_id", "=", "insumo.id")
+        ->get();
+
+
+        $insumoProduccion = insumo::select('*')
+        ->whereNotIn('id', insumoOrdenProduccion::select("insumo_ordenProduccion.insumo_id")
+        ->where("insumo_ordenProduccion.orden_produccion_id", "=", $id)
+        ->get()
+        ->toArray())
+        ->get();
 
         $pedido = ordenProduccion::select('orden_produccion.id as idp','pedido.id as idt')
         ->join('pedido','pedido.id','=','orden_produccion.pedido_id')
@@ -201,12 +213,11 @@ class ordenProduccionController extends Controller{
         $servicios = $piezas_pedido["servicios"];
         $medidas_pieza = $piezas_pedido["medidas"];
 
-        //dd($piezas);
-        // dd($pedido[0]["id"]);
 
-        //    exit;
 
-        return view('ordenProduccion.ordenProduccionInsumo',compact('insumoProduccion','pedido', 'piezas', 'servicios', 'medidas_pieza' ));
+        return view('ordenProduccion.ordenProduccionInsumo',
+        compact('insumoProduccion','pedido', 'piezas', 'servicios', 'medidas_pieza',
+        "insumos_asociados"));
     }
 
     public function add_Insumo(Request $request){
@@ -392,13 +403,14 @@ public function cambiar_estado(Request $request){
                 ->where("nombre", "=", "Cumplido")->first()["id"]]);
                 $orden_produccion -> update(["estado_orden_produccion_id"
                 =>$input['estado'], "fechaFin"=>$fecha_fin]);
-                venta::create(["pedido_id"=>$pedido["id"],
+
+                $venta_generada = venta::create(["pedido_id"=>$pedido["id"],
                 "empleado_id"=>\Auth::user()->id,
                 "estado_venta_id"=>estado_venta::select("*")
                 ->where("nombre", "=", "Aprobada")->first()["id"]
             ]);
             \DB::commit();
-            $respuesta = 'venta';
+            $respuesta = ["venta"=>'venta', "venta_generada"=>$venta_generada];
         } catch (\Exception $e) {
             \DB::rollBack();
             $respuesta = '3';

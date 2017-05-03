@@ -122,13 +122,13 @@ $("#frmUsuario").validate({
     rules: {
         nombre :{
             required: true,
-            lettersonly : true,
+            personName : true,
             minlength: 3,
             maxlength: 40
         },
         apellido: {
             required: true,
-            lettersonly : true,
+            personName : true,
             minlength: 3,
             maxlength: 40
         },

@@ -26,6 +26,7 @@ Route::post('clinica/estado/editar', 'clinicaController@cambiar_estado');
 
 //--GET--//
 Route::get('clinica/get','clinicaController@getData');
+Route::get('clinica/validar','clinicaController@validar_clinica');
 
 Route::resource('clinica','clinicaController');
 //------------------------------------------------------------------------------------//
