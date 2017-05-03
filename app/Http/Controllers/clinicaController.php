@@ -19,8 +19,7 @@ class clinicaController extends Controller
     * @return \Illuminate\Http\Response
     */
 
-    public function getData(Request $Request)
-    {
+    public function getData(Request $Request){
         $clinica = clinica::all();
 
 
@@ -48,8 +47,7 @@ class clinicaController extends Controller
     }
 
 
-    public function index()
-    {
+    public function index(){
         //
         return view('clinica.index');
     }
@@ -59,8 +57,7 @@ class clinicaController extends Controller
     *
     * @return \Illuminate\Http\Response
     */
-    public function create()
-    {
+    public function create(){
         //
         $tipoContrato = contrato::all();
         return view('clinica.crear', compact('tipoContrato'));
@@ -72,8 +69,7 @@ class clinicaController extends Controller
     * @param  \Illuminate\Http\Request  $request
     * @return \Illuminate\Http\Response
     */
-    public function store(Request $request)
-    {
+    public function store(Request $request){
         //
 
         $input = $request->all();
@@ -89,8 +85,7 @@ class clinicaController extends Controller
     * @param  int  $id
     * @return \Illuminate\Http\Response
     */
-    public function show()
-    {
+    public function show(){
         return view('clinica.listar');
     }
 
@@ -100,8 +95,7 @@ class clinicaController extends Controller
     * @param  int  $id
     * @return \Illuminate\Http\Response
     */
-    public function edit($id)
-    {
+    public function edit($id){
         $tipoContrato= contrato::all();
         // $tipoContrato= contrato::select('tipo_contrato.*')
         // ->join('clinica','tipo_contrato.id','=','clinica.tipo_contrato_id')
@@ -138,8 +132,7 @@ class clinicaController extends Controller
     * @param  int  $id
     * @return \Illuminate\Http\Response
     */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id){
         $input = $request->all();
         $clinica = clinica::find($id);
         if ($clinica==null) {
@@ -157,8 +150,18 @@ class clinicaController extends Controller
     * @param  int  $id
     * @return \Illuminate\Http\Response
     */
-    public function destroy($id)
-    {
+    public function destroy($id){
         //
+    }
+
+    public function validar_clinica(Request $request){
+        $input = $request->all();
+        $respuesta = 0;
+        $clinica = clinica::select('*')->where("nombre", "=", $input["nombre"])->first();
+        if ($clinica != null) {
+            $respuesta = 1;
+        }
+
+        return response()->json(["respuesta"=>$respuesta]);
     }
 }

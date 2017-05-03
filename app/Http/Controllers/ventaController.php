@@ -129,7 +129,6 @@ class ventaController extends Controller
                 ->join( 'pedido','pedido.id','=','venta.pedido_id')
                 ->join( 'servicio_tipocontrato_pedido','servicio_tipocontrato_pedido.pedido_id','=','pedido.id')
                 ->join( 'servicio_tipocontrato','servicio_tipocontrato.id','=','servicio_tipocontrato_pedido.servicio_tipocontrato_id')
-
                 ->where( 'venta.id','=',$value)
                 ->first();
 

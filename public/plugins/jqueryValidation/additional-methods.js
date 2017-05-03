@@ -703,7 +703,7 @@ $.validator.addMethod( "address", function( value, element ) {
 
 
 $.validator.addMethod("SelectNotEquals", function(value, element, arg){
- return validar = (value == 0) ? false : true ;
+	return validar = (value == 0) ? false : true ;
 }, "Por favor, escoja una opcion");
 
 
@@ -771,6 +771,25 @@ $.validator.addMethod( "validarEmpleado", function( value, element ) {
 	});
 	return validar;
 }, "Ya existe" );
+
+$.validator.addMethod( "validar_clinica", function( value, element ) {
+	var validar = false;
+	$.ajax({
+		type : 'get',
+		datatype : 'json',
+		data : { nombre : $("#nombre").val()},
+		url : '/clinica/validar',
+		async : false
+	}).done(function(result){
+		if (result.respuesta == 1) {
+			validar = false;
+		}else if (result.respuesta == 0){
+			validar = true;
+		}
+	});
+	return	validar;
+}, "Ya existe" );
+
 
 $.validator.addMethod( "letterswithbasicpunc", function( value, element ) {
 	return this.optional( element ) || /^[a-z\-.,()'"\s]+$/i.test( value );

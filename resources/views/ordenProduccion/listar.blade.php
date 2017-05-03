@@ -100,7 +100,7 @@ function detalle(id){
                     data : {"orden_produccion" : orden_produccíon, "estado": estado, "_token":$("#_token").val()},
                     url : "/produccion/estado/editar"
                 }).done(function (result){
-                    console.log(result);
+                    console.log(result.respuesta.venta);
                     if (result.respuesta =='1') {
                         new PNotify({
                             title: 'Cambio de estado',
@@ -115,12 +115,12 @@ function detalle(id){
                             vuelva a intentarlo',
                             type: 'error'
                         });
-                    }else if(result.respuesta == 'venta'){
-                        acciones.mensaje_venta();
+                    }else if(result.respuesta.venta == 'venta'){
+                        acciones.mensaje_venta(result.respuesta.venta_generada.id);
                     }
                 });
             },
-            mensaje_venta : function() {
+            mensaje_venta : function(codigo_venta) {
                 var cur_value = 1,
                 progress;
 
@@ -159,10 +159,10 @@ function detalle(id){
                                     icon: "fa fa-refresh fa-spin"
                                 });
                             }
-                            if (cur_value == 90) {
-                                loader.update({
-                                    title: "Venta creada con éxito",
-                                    icon: "fa fa-spinner fa-spin"
+                            if (cur_value == 75) {
+                                new PNotify({
+                                    title: 'Venta creada con éxito',
+                                    text: ' Código de la venta: ' + codigo_venta,
                                 });
                             }
                             if (cur_value >= 100) {

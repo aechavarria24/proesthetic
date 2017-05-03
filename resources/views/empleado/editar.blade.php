@@ -56,29 +56,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-8 offset-sm-2">
-                    <div class="box">
-                        <div class="box-header">
-                            Seguridad
-                        </div>
-                        <div class="box-body">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label>Pregunta de seguridad</label>
-                                        {{Form::text('apellido', $pregunta->pregunta,['class'=>'form-control', 'disabled'=>'disabled'])}}
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label label = "Respuesta">Respuesta</label>
-                                        {{Form::input('password','respuesta',$empleado->respuesta,['class'=>'form-control', 'disabled'=>'disabled'])}}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="col-sm-12">
                     <div class=" p-a text-center">
                         <button type="submit" class="btn btn-warning">Modificar</button>
@@ -111,13 +88,13 @@ $("#frmEmpleado").validate({
     rules: {
         nombre :{
             required: true,
-            lettersAndNumbers : true,
+            personName : true,
             minlength: 3,
             maxlength: 40
         },
         apellido: {
             required: true,
-            lettersAndNumbers : true,
+            personName : true,
             minlength: 3,
             maxlength: 40
         },

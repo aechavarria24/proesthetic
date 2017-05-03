@@ -36,12 +36,11 @@ class empleadoController extends Controller
         ->addColumn('action', function ($empleado) {
             $btnEstado ="";
             if($empleado["estado"] == 1){
-                $btnEstado .= '<button  onclick="cambiar_estado('.$empleado["id"].', 0)" class="btn" title = "Inactivar" ><i class="glyphicon glyphicon-remove" ></i></button>';
+                $btnEstado .= '<button  onclick="cambiar_estado('.$empleado["id"].', 0)" class="btn btn-xs" title = "Inactivar" ><i class="fa fa-remove" ></i></button>';
             }else if ($empleado["estado"] == 0){
-                $btnEstado .= '<button onclick="cambiar_estado('.$empleado["id"].', 1)" class="btn" title = "Activar" ><i class="glyphicon glyphicon-ok" ></i></button>';
+                $btnEstado .= '<button onclick="cambiar_estado('.$empleado["id"].', 1)" class="btn btn-xs" title = "Activar" ><i class="fa fa-check" ></i></button>';
             }
-            return $btnEstado.='<a href="/empleado/'.$empleado["id"].'/edit" title = "Editar" class="btn btn-xsy"><i class="glyphicon glyphicon-edit"></i></a>
-            <a href="/empleado/'.$empleado["id"].'/edit" title = "Inhabilitar" class="btn btn-xs"><i class="glyphicon glyphicon-trash"></i></a>';
+            return $btnEstado.='<a href="/empleado/'.$empleado["id"].'/edit" title = "Editar" class="btn btn-xs"><i class="glyphicon glyphicon-edit"></i></a>';
         })->editColumn('estado',function($empleado){ return $empleado["estado"] == 1 ? "Activo":"Inactivo";})
         ->make(true);
     }
