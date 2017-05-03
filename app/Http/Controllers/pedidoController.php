@@ -41,7 +41,7 @@ class pedidoController extends Controller
 
 
     public function detalle($id) {
-        $pedido=pedido::select('pedido.id','clinica.nombre','paciente.nombre as pacienteNombre','paciente.cedula','estado_pedido.nombre as estadoPedido','fechaEntrega')
+        $pedido=pedido::select('pedido.observacion','pedido.id','clinica.nombre','paciente.nombre as pacienteNombre','paciente.cedula','estado_pedido.nombre as estadoPedido','fechaEntrega')
         ->join('usuario_clinica','usuario_clinica.id','=','pedido.usuario_id')
         ->join('clinica','clinica.id','=','usuario_clinica.clinica_id')
         ->join('paciente','paciente.id','=','pedido.paciente_id')
@@ -71,6 +71,7 @@ class pedidoController extends Controller
                 $orden_produccion=ordenProduccion::create(['usuario_id'=>$id_usuario,'pedido_id'=>$pedido["id"],'estado_orden_produccion_id'=>$estado_orden_produccion_id]);
                 Notify::success("Orden de producción","Orden"." ". $orden_produccion." "."creado con éxito");
                 $respuesta = 1;
+                $respuesta2=$orden_produccion['id'];
             }else{
                 $respuesta = 0;
             }
@@ -81,7 +82,8 @@ class pedidoController extends Controller
         }
 
 
-        return json_encode(["respuesta" => $respuesta]);
+        return json_encode(["respuesta" => $respuesta,"respuesta2"=>$respuesta2]);
+        return json_encode();
     }
 
     public function cancelarPedido(Request $Request){

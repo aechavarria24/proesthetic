@@ -62,8 +62,9 @@ class ventaController extends Controller
 
     public function getData (Request $Request)
     {
-        $venta = venta::select('venta.id as id','venta.pedido_id as pedido_id','empleado.username','venta.created_at as created_at')
+        $venta = venta::select('venta.id as id','estado_venta.nombre','venta.pedido_id as pedido_id','empleado.username','venta.created_at as created_at')
         ->join('empleado','empleado.id','=','venta.empleado_id')
+        ->join('estado_venta','estado_venta.id','=','venta.estado_venta_id')
         ->get();
         return Datatables::of($venta)
         ->addColumn('action', function ($venta) {
@@ -154,9 +155,11 @@ class ventaController extends Controller
     */
     public function show($id)
     {
-        $venta = venta::select('venta.id as id','venta.pedido_id as pedido_id','empleado.username','venta.created_at as created_at')
+        $venta = venta::select('estado_venta.nombre as nombre as estado_venta_id','venta.id as id','venta.pedido_id as pedido_id','empleado.username','venta.created_at as created_at')
         ->join('empleado','empleado.id','=','venta.empleado_id')
+        ->join('estado_venta','estado_venta.id','=','venta.estado_venta_id')
         ->get();
+    
 
         // exit;
         return view('venta.listar');

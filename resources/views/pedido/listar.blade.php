@@ -80,6 +80,7 @@ function cancelarPedido(e){
 }
 function aprobarPedido(e){
     var id = $(e).attr("id");
+
     $.ajax({
         url:'/pedido/aprobarPedido',
         dataType:'json',
@@ -91,11 +92,13 @@ function aprobarPedido(e){
 }).done(function(r){
     // $("#valor").val(r.valor);
 
+
     if (r.respuesta == 1) {
         new PNotify({
+
             title: 'Notificación',
             type : 'success',
-            text: 'pedido Aprobado con éxito',
+            text: 'pedido Aprobado con éxito, orden de producción: '+r.respuesta2+' '+'creada',
             icon : false
         })
         table.ajax.reload(null,false);

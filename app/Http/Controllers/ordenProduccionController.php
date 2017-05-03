@@ -127,7 +127,7 @@ class ordenProduccionController extends Controller{
     public function store(Request $request){
         if (session("insumo") == null) {
             Notify::warning('Por favor ingresar insumos, gracias');
-            return redirect('/pedido/show');
+            return redirect('/produccion/show');
         }
         \DB::beginTransaction();
         try {
@@ -140,11 +140,11 @@ class ordenProduccionController extends Controller{
             }
             \DB::commit();
             Notify::success('Insumos asociados con éxito');
-            return redirect('/pedido/show');
+            return redirect('/produccion/show');
         } catch (\Exception $e) {
             \DB::rollBack();
             Notify::warning('Error en la transaction');
-            return redirect('/pedido/show');
+            return redirect('/produccion/show');
         }
 
 
