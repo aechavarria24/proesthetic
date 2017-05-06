@@ -40,7 +40,7 @@ var table = $('#tblPedido').DataTable({
         {data: 'usuario_id', name: 'usuario_id'},
         {data: 'created_at', name: 'created_at'},
         {data: 'fechaEntrega', name: 'fechaEntrega'},
-        {data: 'estado_pedido_id', name: 'estado_pedido_id'},
+        {data: 'nombre', name: 'nombre'},
         {data: 'action', name: 'action', orderable: false,searchable: false}
     ]
 });
@@ -85,7 +85,7 @@ function cancelarPedido(e){
                 new PNotify({
                     title: 'Notificación',
                     type : 'error',
-                    text: 'No se puede cancelar el pedido.',
+                    text: 'El pedido se encuantra en un estado que no se puede cancelar.',
                     icon : false
                 });
             }

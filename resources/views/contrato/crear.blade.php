@@ -68,7 +68,7 @@ Contrato
                                     </div>
                                     <div class = "col-sm-1">
                                         <div class="form-group">
-                                            <label for="">__</label>
+                                            <label for="">______</label>
                                             <button class="btn btn-icon white" type = "button" onclick="agregar_servicio()">
                                                 <i class="fa fa-plus"></i>
                                             </button>
@@ -90,11 +90,7 @@ Contrato
                             </table>
                         </div>
                     </div>
-                    <div class="col-sm-12">
-                        <div class=" p-a text-center">
-                            <button type="submit" class="btn info">Registrar</button>
-                        </div>
-                    </div>
+
                 </form>
             </div>
         </div>

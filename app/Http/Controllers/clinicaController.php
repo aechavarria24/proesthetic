@@ -30,9 +30,9 @@ class clinicaController extends Controller
         ->addColumn('action', function ($clinica) {
             $btnEstado ="";
             if($clinica->estadoClinica == 1){
-                $btnEstado .= '<button  onclick="cambiar_estado('.$clinica->id.', 0)" title = "Inactivar" ><i class="glyphicon glyphicon-remove" ></i></button>';
+                $btnEstado .= '<a  onclick="cambiar_estado('.$clinica->id.', 0)" title = "Inactivar" ><i class="glyphicon glyphicon-remove"></i></a>&nbsp';
             }else if ($clinica->estadoClinica == 0){
-                $btnEstado .= '<button onclick="cambiar_estado('.$clinica->id.', 1)"  title = "Activar" ><i class="glyphicon glyphicon-ok" ></i></button>';
+                $btnEstado .= '<a onclick="cambiar_estado('.$clinica->id.', 1)"  title = "Activar" ><i class="glyphicon glyphicon-ok" ></i> </a>&nbsp';
             }
 
             return $btnEstado .= '<a href="/clinica/'.$clinica->id.'/edit" title = "Editar"><i class="glyphicon glyphicon-edit"></i></a>';
@@ -85,7 +85,8 @@ class clinicaController extends Controller
     * @param  int  $id
     * @return \Illuminate\Http\Response
     */
-    public function show(){
+    public function show($id){
+        $clinica=clinica::all();
         return view('clinica.listar');
     }
 

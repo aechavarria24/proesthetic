@@ -71,7 +71,8 @@ class ventaController extends Controller
             return '<a href="/venta/'.$venta->id.'/pdf" class="btn btn-xs " target="_blanck"><i title="Exportar PDF" class="fa fa-file-pdf-o" aria-hidden="true" ></i>&nbsp;</a>
             <a href="/venta/'.$venta->id.'/detalle"> <i class="fa fa-eye" title="Detalle"></i>&nbsp;</a>';
         })
-        ->addColumn('seletion', "")
+
+        ->addColumn('seletion','')
         ->make(true);
     }
 
@@ -158,7 +159,7 @@ class ventaController extends Controller
         ->join('empleado','empleado.id','=','venta.empleado_id')
         ->join('estado_venta','estado_venta.id','=','venta.estado_venta_id')
         ->get();
-    
+
 
         // exit;
         return view('venta.listar');

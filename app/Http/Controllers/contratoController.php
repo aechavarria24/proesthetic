@@ -20,12 +20,7 @@ class contratoController extends Controller{
     public function getData (Request $Request){
         $contrato = contrato::all();
         return Datatables::of($contrato)
-        ->addColumn('action', function ($contrato) {
-            return '<a href="/contrato/'.$contrato->id.'/edit" class="btn btn-xs
-            btn-primary"><i class="glyphicon glyphicon-edit"></i>&nbsp;Editar</a>
-            <a href="/contrato/'.$contrato->id.'/edit" class="btn btn-xs btn-danger">
-            <i class="glyphicon glyphicon-trash"></i>&nbsp;Inabilitar</a>';
-        })->make(true);
+    ->make(true);
     }
 
 

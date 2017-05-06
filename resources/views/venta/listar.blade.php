@@ -59,9 +59,13 @@ $('#tblVentas').DataTable({
     {data: 'action', name: 'action', orderable: false,searchable: false}
 ],
     "fnRowCallback": function(nRow, aData, iDisplayIndex) {
-        var opciones = $('td:eq(0)', nRow);
-        let html = '<input class="form-control" type="checkbox" disable="true" name="s[]" value="'+aData.id+'" />';
-         opciones.html(html);
+
+        if (aData.nombre != "Asociada") {
+            var opciones = $('td:eq(0)', nRow);
+            let html = '<input class="form-control" type="checkbox"  name="s[]" value="'+aData.id+'" />';
+            opciones.html(html);
+
+        }
 }});
 </script>
 @endsection
