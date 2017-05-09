@@ -105,7 +105,7 @@ $("#frmclinica").validate({
         telefono: {
             required: true,
             digits : true,
-            minlength: 8,
+            minlength: 7,
             maxlength: 40
         },
         diaCorte : {
