@@ -110,9 +110,6 @@
                                                 <div class="row">
                                                     <div class="offset-sm-3">
                                                         <div class="m-b-md">
-                                                            <label class="md-check">
-                                                                <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> <i class="primary"></i>  Recordarme
-                                                            </label>
                                                         </div>
                                                         <input type="hidden" name="lblTipo" value="empleado">
                                                         <button type="submit" class="btn btn-lg black p-x-lg">Entrar</button>

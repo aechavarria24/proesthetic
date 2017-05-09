@@ -22,8 +22,7 @@ class proveedorController extends Controller
     $proveedores = proveedor::all();
     return Datatables::of($proveedores)
     ->addColumn('action', function ($proveedor) {
-      return '<a href="/proveedor/'.$proveedor->id.'/edit" class=""><i class="glyphicon glyphicon-edit"></i>&nbsp;</a>
-      <a href="/proveedor/'.$proveedor->id.'/edit" class=""><i class="glyphicon glyphicon-ok" ></i>&nbsp;</a>';
+      return '<a href="/proveedor/'.$proveedor->id.'/edit" class=""><i class="glyphicon glyphicon-edit"></i>&nbsp;</a>';
     })
     ->make(true);
   }
@@ -127,7 +126,7 @@ public function generar_pdf(){
         $pdf->loadHTML($view);
         return $pdf->stream('invoice');
 
-  
+
 
 }
 

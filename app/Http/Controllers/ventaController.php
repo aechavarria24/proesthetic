@@ -62,15 +62,17 @@ class ventaController extends Controller
 
     public function getData (Request $Request)
     {
-        $venta = venta::select('venta.id as id','venta.pedido_id as pedido_id','empleado.username','venta.created_at as created_at')
+        $venta = venta::select('venta.id as id','estado_venta.nombre','venta.pedido_id as pedido_id','empleado.username','venta.created_at as created_at')
         ->join('empleado','empleado.id','=','venta.empleado_id')
+        ->join('estado_venta','estado_venta.id','=','venta.estado_venta_id')
         ->get();
         return Datatables::of($venta)
         ->addColumn('action', function ($venta) {
             return '<a href="/venta/'.$venta->id.'/pdf" class="btn btn-xs " target="_blanck"><i title="Exportar PDF" class="fa fa-file-pdf-o" aria-hidden="true" ></i>&nbsp;</a>
             <a href="/venta/'.$venta->id.'/detalle"> <i class="fa fa-eye" title="Detalle"></i>&nbsp;</a>';
         })
-        ->addColumn('seletion', "")
+
+        ->addColumn('seletion','')
         ->make(true);
     }
 
@@ -153,9 +155,11 @@ class ventaController extends Controller
     */
     public function show($id)
     {
-        $venta = venta::select('venta.id as id','venta.pedido_id as pedido_id','empleado.username','venta.created_at as created_at')
+        $venta = venta::select('estado_venta.nombre as nombre as estado_venta_id','venta.id as id','venta.pedido_id as pedido_id','empleado.username','venta.created_at as created_at')
         ->join('empleado','empleado.id','=','venta.empleado_id')
+        ->join('estado_venta','estado_venta.id','=','venta.estado_venta_id')
         ->get();
+
 
         // exit;
         return view('venta.listar');

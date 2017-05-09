@@ -35,6 +35,10 @@
                     <label>Estado Pedido</label>
                     <input class="form-control" required="" data-parsley-id="136" type="text" name="pedidoid" readonly="" value="{{$valor->estadoPedido}}">
                 </div>
+                <div class="form-group">
+                    <label>Observación</label>
+                    <input class="form-control" required="" data-parsley-id="136" type="text" name="observacion" readonly="" value="{{$valor->observacion}}">
+                </div>
                 <div class=" p-a text-center">
                     <a class="btn btn-info" href="/pedido/show">Regresar</a>
                 </div>

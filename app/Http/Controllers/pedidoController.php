@@ -41,7 +41,7 @@ class pedidoController extends Controller
 
 
     public function detalle($id) {
-        $pedido=pedido::select('pedido.id','clinica.nombre','paciente.nombre as pacienteNombre','paciente.cedula','estado_pedido.nombre as estadoPedido','fechaEntrega')
+        $pedido=pedido::select('pedido.observacion','pedido.id','clinica.nombre','paciente.nombre as pacienteNombre','paciente.cedula','estado_pedido.nombre as estadoPedido','fechaEntrega')
         ->join('usuario_clinica','usuario_clinica.id','=','pedido.usuario_id')
         ->join('clinica','clinica.id','=','usuario_clinica.clinica_id')
         ->join('paciente','paciente.id','=','pedido.paciente_id')
@@ -60,6 +60,7 @@ class pedidoController extends Controller
         $input=$request->all();
         /* Se debe tomar el id de la session de usuario*/
         $respuesta = 0;
+        $respuesta2=0;
         try {
             \DB::beginTransaction();
             $id_usuario= \Auth::user()->id;
@@ -71,7 +72,9 @@ class pedidoController extends Controller
                 $orden_produccion=ordenProduccion::create(['usuario_id'=>$id_usuario,'pedido_id'=>$pedido["id"],'estado_orden_produccion_id'=>$estado_orden_produccion_id]);
                 Notify::success("Orden de producción","Orden"." ". $orden_produccion." "."creado con éxito");
                 $respuesta = 1;
+                $respuesta2=$orden_produccion['id'];
             }else{
+                // dd($respuesta);
                 $respuesta = 0;
             }
             \DB::commit();
@@ -81,7 +84,9 @@ class pedidoController extends Controller
         }
 
 
-        return json_encode(["respuesta" => $respuesta]);
+
+        return json_encode(["respuesta" => $respuesta,"respuesta2"=>$respuesta2]);
+
     }
 
     public function cancelarPedido(Request $Request){
@@ -102,11 +107,15 @@ class pedidoController extends Controller
 public function getData (Request $Request)
 {
     // return "llego al data";
-    $pedido = pedido::all();
+    $pedido = pedido::select('clinica.nombre as usuario_id','pedido.id as id','pedido.created_at as created_at',
+    'pedido.fechaEntrega as fechaEntrega','estado_pedido.nombre')
+    ->join('estado_pedido','estado_pedido.id','=','pedido.estado_pedido_id')
+    ->join('clinica','clinica.id','=','pedido.usuario_id')
+    ->get();
     return Datatables::of($pedido)
     ->addColumn('action', function ($pedido) {
         return '<a><i onclick="aprobarPedido(this);" id="'.$pedido->id.'" class="fa fa-handshake-o" aria-hidden="true" title="Aprobar y procesar"></i>&nbsp;</a>
-        <a><i class="glyphicon glyphicon-trash"  onclick="cancelarPedido(this);" id="'.$pedido->id.'" title="Eliminar"></i>&nbsp;</a>
+        <a><i class="glyphicon glyphicon-trash"  onclick="cancelarPedido(this);" id="'.$pedido->id.'" title="Cancelar"></i>&nbsp;</a>
         <a href="/pedido/'.$pedido->id.'/edit" ><i class="glyphicon glyphicon-edit" title="Editar"></i>&nbsp;</a>
         <a href="/pedido/'.$pedido->id.'/detallePedido" ><i class="fa fa-eye" title="Detalle"></i>&nbsp;</a>'
         . $retornar =  $pedido->estado_pedido_id == 6  ? '<a href="/pedido/'.$pedido->id.'/retornar" title = "Retornar"><i class="fa fa-undo"></i></a>': "";
@@ -268,7 +277,11 @@ public function store(Request $request)
         */
         public function show($id)  {
 
-            $pedido = pedido::all();
+            $pedido = pedido::select('clinica.nombre as usuario_id','pedido.id as id','pedido.created_at as created_at',
+            'pedido.fechaEntrega as fechaEntrega','estado_pedido.nombre')
+            ->join('estado_pedido','estado_pedido.id','=','pedido.estado_pedido_id')
+            ->join('clinica','clinica.id','=','pedido.usuario_id')
+            ->get();
             return view('pedido.listar');
         }
 

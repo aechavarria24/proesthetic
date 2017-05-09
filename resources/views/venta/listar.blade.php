@@ -21,6 +21,7 @@ Venta
               <th  style="width:20%">Número Pedido</th>
               <th  style="width:20%">Usuario creación</th>
               <th  style="width:20%">Fecha creación</th>
+              <th  style="width:20%">Estado</th>
               <th  style="width:20%">Opciones</th>
             </tr>
           </thead>
@@ -54,12 +55,17 @@ $('#tblVentas').DataTable({
     {data: 'pedido_id', name: 'pedido_id'},
     {data: 'username', name: 'username'},
     {data: 'created_at', name: 'created_at'},
+    {data: 'nombre', name: 'nombre'},
     {data: 'action', name: 'action', orderable: false,searchable: false}
-  ],"fnRowCallback": function(nRow, aData, iDisplayIndex) {
-       var opciones = $('td:eq(0)', nRow);
-       let html = '<input class="form-control" type="checkbox" name="s[]" value="'+aData.id+'" />';
-       opciones.html(html);
-    }
-});
+],
+    "fnRowCallback": function(nRow, aData, iDisplayIndex) {
+
+        if (aData.nombre != "Asociada") {
+            var opciones = $('td:eq(0)', nRow);
+            let html = '<input class="form-control" type="checkbox"  name="s[]" value="'+aData.id+'" />';
+            opciones.html(html);
+
+        }
+}});
 </script>
 @endsection

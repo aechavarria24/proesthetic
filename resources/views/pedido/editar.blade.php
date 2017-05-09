@@ -101,7 +101,8 @@
 
                     <div class="col-sm-12">
                         <div class=" p-a text-center">
-                            <button type="submit"  class="btn info">Actualizar</button>
+                            <button type="submit"  class="btn success">Actualizar</button>
+                            <a type="button" class="btn info" name="button" href="/pedido/show">Regresar</a>
                         </div>
                     </div>
                     {!! Form::close() !!}
