@@ -12,9 +12,12 @@ clinica
         <table class="table table-striped b-t b-b" id="tblclinica">
             <thead>
                 <tr>
-                    <th  style="width:1%">Usuario</th>
+
                     <th  style="width:1%">Nombre</th>
-                    <th  style="width:1%">apellido</th>
+                    <th  style="width:1%">Nit</th>
+                    <th  style="width:1%">Teléfono</th>
+                    <th  style="width:1%">Dirección</th>
+                    <th  style="width:1%">Día corte</th>
                     <th  style="width:1%">Estado</th>
                     <th  style="width:1%">Acción</th>
                 </tr>
@@ -36,9 +39,12 @@ var tabla = $('#tblclinica').DataTable({
     },
     ajax: '/clinica/get',
     columns: [
-        {data: 'username', name: 'username'},
+
         {data: 'nombre', name: 'nombre'},
-        {data: 'apellido', name: 'apellido'},
+        {data: 'NIT', name: 'NIT'},
+        {data: 'telefono', name: 'telefono'},
+        {data: 'direccion', name: 'direccion'},
+        {data: 'diaCorte', name: 'diaCorte'},
         {data: 'estadoClinica', name: 'estadoClinica'},
         {data: 'action', name: 'action', orderable: false,searchable: false}
     ]
