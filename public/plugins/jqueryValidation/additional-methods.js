@@ -732,7 +732,7 @@ $.validator.addMethod( "validarServicio", function( value, element ) {
 
 	});
 	return validar;
-}, "Insumo ya existe" );
+}, "Ya existe" );
 
 $.validator.addMethod( "validarUsuario", function( value, element ) {
 	var validar = false;

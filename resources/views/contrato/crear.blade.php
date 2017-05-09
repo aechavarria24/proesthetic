@@ -63,12 +63,12 @@ Contrato
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label label="Valor">Valor</label>
-                                            <input class="form-control"  id="txtValor" placeholder="valor" type="number" min ="1" title = "Centimetros, Milimetros, Radianes">
+                                            <input class="form-control" name="valor" id="txtValor" placeholder="valor" type="number" min ="1" title = "Centimetros, Milimetros, Radianes">
                                         </div>
                                     </div>
                                     <div class = "col-sm-1">
                                         <div class="form-group">
-                                            <label for="">______</label>
+                                            <label for="">__</label>
                                             <button class="btn btn-icon white" type = "button" onclick="agregar_servicio()">
                                                 <i class="fa fa-plus"></i>
                                             </button>
@@ -90,7 +90,11 @@ Contrato
                             </table>
                         </div>
                     </div>
-
+                    <div class="col-sm-12">
+                        <div class=" p-a text-center">
+                            <button type="submit" class="btn info">Registrar</button>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>
@@ -208,6 +212,11 @@ $("#frmcrearcontrato").validate({
             minlength: 7,
             maxlength: 13,
             number: true
+        },
+        valor: {
+            required: true,
+            minlength: 1,
+            maxlength: 1
         },
         containerMedidaPieza: {
             required: true,

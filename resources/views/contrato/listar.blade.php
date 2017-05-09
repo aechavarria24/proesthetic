@@ -13,7 +13,7 @@ Contrato
         <tr>
           <th  style="width:20%">Nombre</th>
           <th  style="width:25%">Descripción</th>
-
+          <th  style="width:25%">Opciones</th>
         </tr>
       </thead>
       <tbody>
@@ -35,7 +35,7 @@ $('#tblContrato').DataTable({
   columns: [
     {data: 'nombre', name: 'nombre'},
     {data: 'descripcion', name: 'descripcion'},
-    
+    {data: 'action', name: 'action', orderable: false,searchable: false}
   ]
 });
 </script>
