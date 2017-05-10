@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.App')
 @section('titulo') Detalle cuenta cobro
 @endsection
 @section('contenedor')

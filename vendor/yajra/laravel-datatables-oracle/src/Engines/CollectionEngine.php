@@ -144,14 +144,49 @@ class CollectionEngine extends BaseEngine
      */
     public function filtering()
     {
+        $keyword = $this->request->keyword();
+
+        if ($this->isSmartSearch()) {
+            $this->smartGlobalSearch($keyword);
+
+            return;
+        }
+
+        $this->globalSearch($keyword);
+    }
+
+    /**
+     * Perform multi-term search by splitting keyword into
+     * individual words and searches for each of them.
+     *
+     * @param string $keyword
+     */
+    private function smartGlobalSearch($keyword)
+    {
+        $keywords = array_filter(explode(' ', $keyword));
+
+        foreach ($keywords as $keyword) {
+            $this->globalSearch($keyword);
+        }
+    }
+
+    /**
+     * Perform global search for the given keyword.
+     *
+     * @param string $keyword
+     */
+    private function globalSearch($keyword)
+    {
+        if ($this->isCaseInsensitive()) {
+            $keyword = Str::lower($keyword);
+        }
+
         $columns          = $this->request->columns();
         $this->collection = $this->collection->filter(
-            function ($row) use ($columns) {
+            function ($row) use ($columns, $keyword) {
                 $data                  = $this->serialize($row);
                 $this->isFilterApplied = true;
-                $found                 = [];
 
-                $keyword = $this->request->keyword();
                 foreach ($this->request->searchableColumnIndex() as $index) {
                     $column = $this->getColumnName($index);
                     if (! $value = Arr::get($data, $column)) {
@@ -159,13 +194,15 @@ class CollectionEngine extends BaseEngine
                     }
 
                     if ($this->isCaseInsensitive()) {
-                        $found[] = Str::contains(Str::lower($value), Str::lower($keyword));
-                    } else {
-                        $found[] = Str::contains($value, $keyword);
+                        $value = Str::lower($value);
+                    }
+
+                    if (Str::contains($value, $keyword)) {
+                        return true;
                     }
                 }
 
-                return in_array(true, $found);
+                return false;
             }
         );
     }
@@ -181,7 +218,7 @@ class CollectionEngine extends BaseEngine
         for ($i = 0, $c = count($columns); $i < $c; $i++) {
             if ($this->request->isColumnSearchable($i)) {
                 $this->isFilterApplied = true;
-                $regex = $this->request->isRegex($i);
+                $regex                 = $this->request->isRegex($i);
 
                 $column  = $this->getColumnName($i);
                 $keyword = $this->request->columnKeyword($i);

@@ -1,7 +1,7 @@
-@extends('layouts.app')
+@extends('layouts.App')
 
 
 @section('contenedor')
-    
-    
-@endsection 
+
+
+@endsection

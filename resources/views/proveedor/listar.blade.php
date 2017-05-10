@@ -1,11 +1,11 @@
-@extends('layouts.app')
+@extends('layouts.App')
 @section('titulo')
 Proveedor
 @endsection
 @section('contenedor')
 <div class="box">
   <div class="box-header">
-    <h2>Lista de porveedores</h2>    
+    <h2>Lista de porveedores</h2>
   </div>
   <div class="box-body">
     <table class="table table-striped b-t b-b" id="tblProveedor">

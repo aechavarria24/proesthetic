@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.App')
 @section('titulo') Editar servicio
 @endsection
 @section('contenedor')

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.App')
 @section('titulo') Detalle orden de producción
 @endsection
 @section('contenedor')

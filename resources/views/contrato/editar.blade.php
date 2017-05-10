@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.App')
 @section('titulo') Editar contrato
 @endsection
 @section('contenedor')
@@ -9,7 +9,7 @@
   <div class="box-body">
     <div class="row">
       <div class="col-sm-4 offset-sm-4">
-        
+
 
         <div class="form-group">
           <label>Nombre</label>

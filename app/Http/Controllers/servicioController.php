@@ -26,7 +26,7 @@ class servicioController extends Controller
     }
     public function index()
     {
-        return view("servicio.index");
+        return view("servicio.crear");
     }
 
     /**

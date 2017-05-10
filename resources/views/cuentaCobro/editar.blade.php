@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.App')
 @section('titulo')
 Cuenta de cobro: <b>{{$cuentaCobro->id}}</b>
 @endsection
