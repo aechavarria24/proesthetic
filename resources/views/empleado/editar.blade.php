@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.App')
 @section('titulo') Editar empleado
 @endsection
 @section('contenedor')

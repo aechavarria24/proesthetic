@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.App')
 @section('titulo')
 Insumo Orden De Produccion
 @endsection

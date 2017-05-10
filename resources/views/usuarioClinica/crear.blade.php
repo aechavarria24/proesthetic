@@ -1,4 +1,4 @@
-@extends('layouts.app') @section('titulo') Usuario @endsection @section('contenedor')
+@extends('layouts.App') @section('titulo') Usuario @endsection @section('contenedor')
 <form data-ui-jp="parsley" novalidate="" method="post" action="/usuario" id = "frmUsuario">
     {{csrf_field()}}
     <div class="padding">

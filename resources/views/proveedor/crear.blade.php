@@ -1,5 +1,5 @@
 
-@extends('layouts.app') @section('titulo') Proveedor @endsection @section('contenedor')
+@extends('layouts.App') @section('titulo') Proveedor @endsection @section('contenedor')
 <div class="box">
     <div class="box-header">
         <h2>Registrar</h2>

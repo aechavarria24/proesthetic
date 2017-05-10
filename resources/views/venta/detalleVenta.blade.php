@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.App')
 @section('titulo') Detalle de venta
 @endsection
 @section('contenedor')

@@ -126,10 +126,42 @@ class QueryBuilderEngine extends BaseEngine
      */
     public function filtering()
     {
+        $keyword = $this->request->keyword();
+
+        if ($this->isSmartSearch()) {
+            $this->smartGlobalSearch($keyword);
+
+            return;
+        }
+
+        $this->globalSearch($keyword);
+    }
+
+    /**
+     * Perform multi-term search by splitting keyword into
+     * individual words and searches for each of them.
+     *
+     * @param string $keyword
+     */
+    private function smartGlobalSearch($keyword)
+    {
+        $keywords = array_filter(explode(' ', $keyword));
+
+        foreach ($keywords as $keyword) {
+            $this->globalSearch($keyword);
+        }
+    }
+
+    /**
+     * Perform global search for the given keyword.
+     *
+     * @param string $keyword
+     */
+    private function globalSearch($keyword)
+    {
         $this->query->where(
-            function ($query) {
-                $globalKeyword = $this->request->keyword();
-                $queryBuilder  = $this->getQueryBuilder($query);
+            function ($query) use ($keyword) {
+                $queryBuilder = $this->getQueryBuilder($query);
 
                 foreach ($this->request->searchableColumnIndex() as $index) {
                     $columnName = $this->getColumnName($index);
@@ -148,7 +180,7 @@ class QueryBuilderEngine extends BaseEngine
 
                         if ($columnDef['method'] instanceof Closure) {
                             $whereQuery = $queryBuilder->newQuery();
-                            call_user_func_array($columnDef['method'], [$whereQuery, $globalKeyword]);
+                            call_user_func_array($columnDef['method'], [$whereQuery, $keyword]);
                             $queryBuilder->addNestedWhereQuery($whereQuery, 'or');
                         } else {
                             $this->compileColumnQuery(
@@ -156,7 +188,7 @@ class QueryBuilderEngine extends BaseEngine
                                 Helper::getOrMethod($columnDef['method']),
                                 $columnDef['parameters'],
                                 $columnName,
-                                $globalKeyword
+                                $keyword
                             );
                         }
                     } else {
@@ -170,13 +202,13 @@ class QueryBuilderEngine extends BaseEngine
                                     $queryBuilder,
                                     $relation,
                                     $relationColumn,
-                                    $globalKeyword
+                                    $keyword
                                 );
                             } else {
-                                $this->compileQuerySearch($queryBuilder, $columnName, $globalKeyword);
+                                $this->compileQuerySearch($queryBuilder, $columnName, $keyword);
                             }
                         } else {
-                            $this->compileQuerySearch($queryBuilder, $columnName, $globalKeyword);
+                            $this->compileQuerySearch($queryBuilder, $columnName, $keyword);
                         }
                     }
 
@@ -326,10 +358,10 @@ class QueryBuilderEngine extends BaseEngine
          */
         foreach ($relationChunk as $relation => $chunk) {
             // Prepare variables
-            $builder      = $chunk['builder'];
-            $query        = $chunk['query'];
-            $bindings     = $builder->getBindings();
-            $builder      = "({$builder->toSql()}) >= 1";
+            $builder  = $chunk['builder'];
+            $query    = $chunk['query'];
+            $bindings = $builder->getBindings();
+            $builder  = "({$builder->toSql()}) >= 1";
 
             // Check if it last relation we will use orWhereRaw
             if ($lastRelation == $relation) {
@@ -518,16 +550,16 @@ class QueryBuilderEngine extends BaseEngine
             $model = $lastQuery->getRelation($eachRelation);
             switch (true) {
                 case $model instanceof BelongsToMany:
-                    $pivot = $model->getTable();
+                    $pivot   = $model->getTable();
                     $pivotPK = $model->getExistenceCompareKey();
                     $pivotFK = $model->getQualifiedParentKeyName();
                     $this->performJoin($pivot, $pivotPK, $pivotFK);
 
                     $related = $model->getRelated();
-                    $table = $related->getTable();
+                    $table   = $related->getTable();
                     $tablePK = $related->getForeignKey();
                     $foreign = $pivot . '.' . $tablePK;
-                    $other = $related->getQualifiedKeyName();
+                    $other   = $related->getQualifiedKeyName();
 
                     $lastQuery->addSelect($table . '.' . $eachRelation);
                     $this->performJoin($table, $foreign, $other);
@@ -535,25 +567,25 @@ class QueryBuilderEngine extends BaseEngine
                     break;
 
                 case $model instanceof HasOneOrMany:
-                    $table = $model->getRelated()->getTable();
+                    $table   = $model->getRelated()->getTable();
                     $foreign = $model->getQualifiedForeignKeyName();
-                    $other = $model->getQualifiedParentKeyName();
+                    $other   = $model->getQualifiedParentKeyName();
                     break;
 
                 case $model instanceof BelongsTo:
-                    $table = $model->getRelated()->getTable();
+                    $table   = $model->getRelated()->getTable();
                     $foreign = $model->getQualifiedForeignKey();
-                    $other = $model->getQualifiedOwnerKeyName();
+                    $other   = $model->getQualifiedOwnerKeyName();
                     break;
 
                 default:
                     $table = $model->getRelated()->getTable();
                     if ($model instanceof HasOneOrMany) {
                         $foreign = $model->getForeignKey();
-                        $other = $model->getQualifiedParentKeyName();
+                        $other   = $model->getQualifiedParentKeyName();
                     } else {
                         $foreign = $model->getQualifiedForeignKey();
-                        $other = $model->getQualifiedOtherKeyName();
+                        $other   = $model->getQualifiedOtherKeyName();
                     }
             }
             $this->performJoin($table, $foreign, $other);
@@ -662,7 +694,7 @@ class QueryBuilderEngine extends BaseEngine
                         // This code is check morph many or not.
                         // If one of nested relation is MorphToMany
                         // we will call joinEagerLoadedColumn.
-                        $lastQuery = $this->query;
+                        $lastQuery     = $this->query;
                         $isMorphToMany = false;
                         foreach (explode('.', $relation) as $eachRelation) {
                             $relationship = $lastQuery->getRelation($eachRelation);

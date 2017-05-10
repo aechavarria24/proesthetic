@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.App')
 @section('titulo') Pedido
 @endsection @section('contenedor')
 <div class="padding">

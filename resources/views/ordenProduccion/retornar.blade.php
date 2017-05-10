@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.App')
 @section('titulo')
 Retornar
 @endsection
@@ -81,7 +81,7 @@ Retornar
                                     </thead>
                                     <tbody>
                                         @foreach ($medidas_pieza  as $key => $pieza)
-                                        @if($servicio["servicio"] == $pieza["servicio"])            
+                                        @if($servicio["servicio"] == $pieza["servicio"])
                                         <tr>
                                             <td><?php echo $pieza["cantidad"] ?></td>
                                             <td><?php echo $pieza["dimension"] ?></td>
