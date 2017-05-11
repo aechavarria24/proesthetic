@@ -44,9 +44,10 @@ class ordenProduccionController extends Controller{
     }
 
     public function getData(Request $Request){
-        $ordenProduccion = ordenProduccion::select("orden_produccion.*", "estado_orden_produccion.nombre as estado")
+        $ordenProduccion = ordenProduccion::select("orden_produccion.*", "estado_orden_produccion.nombre as estado",'estado_orden_produccion_id')
         ->join("estado_orden_produccion", "orden_produccion.estado_orden_produccion_id", "=", "estado_orden_produccion.id")
         ->get();
+
         return Datatables::of($ordenProduccion)
         ->addColumn('action', function ($ordenProduccion) {
 
@@ -64,13 +65,15 @@ class ordenProduccionController extends Controller{
             ->get();
 
 
+
             if (count($estado_id) == 0) {
 
                 $option_estado = "";
+
                 $estados = $this->detalle($ordenProduccion->id);
 
                 if ($ordenProduccion->estado != "Enviado"){
-                    foreach ($estados["data"] as $value) {
+                        foreach ($estados["data"] as $value) {
                         $option_estado .= '<li><button class="btn btn-link" onclick = "cambiar_estado('.$ordenProduccion->id.','.$value["id"].')">'.$value["nombre"].'</button></li>';
                     }
                 }
@@ -186,13 +189,13 @@ class ordenProduccionController extends Controller{
     public function asociar_Insumo($id){
 
         $insumos_asociados = insumo::select("*")
-        ->join("insumo_ordenProduccion", "insumo_ordenProduccion.insumo_id", "=", "insumo.id")
+        ->join("insumo_ordenproduccion", "insumo_ordenproduccion.insumo_id", "=", "insumo.id")
         ->get();
 
 
         $insumoProduccion = insumo::select('*')
-        ->whereNotIn('id', insumoOrdenProduccion::select("insumo_ordenProduccion.insumo_id")
-        ->where("insumo_ordenProduccion.orden_produccion_id", "=", $id)
+        ->whereNotIn('id', insumoOrdenProduccion::select("insumo_ordenproduccion.insumo_id")
+        ->where("insumo_ordenproduccion.orden_produccion_id", "=", $id)
         ->get()
         ->toArray())
         ->get();
@@ -350,7 +353,8 @@ public function cambiar_estado_retornar(Request $request){
         \DB::commit();
     } catch (\Exception $e) {
         \DB::rollBack();
-        Notify::Error("Ha ocurrido un error al retornar el pedido, Por favor vuelva a intentarlo "."Notificación");
+        Notify::Error("Ha ocurrido un error al retornar el pedido, Por favor vuelva a intentarlo ".$e."Notificación");
+
     }
     return redirect('/pedido/show');;
 }
@@ -407,12 +411,13 @@ public function cambiar_estado(Request $request){
                 $venta_generada = venta::create(["pedido_id"=>$pedido["id"],
                 "empleado_id"=>\Auth::user()->id,
                 "estado_venta_id"=>estado_venta::select("*")
-                ->where("nombre", "=", "Aprobada")->first()["id"]
+                ->where("nombre", "=", "Pendiente")->first()["id"]
             ]);
             \DB::commit();
             $respuesta = ["venta"=>'venta', "venta_generada"=>$venta_generada];
         } catch (\Exception $e) {
             \DB::rollBack();
+          
             $respuesta = '3';
         }
     }// Fin if estado

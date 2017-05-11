@@ -51,15 +51,13 @@ $("#frmServicio").validate({
     rules: {
         nombre :{
             required: true,
-            lettersAndNumbers : true,
             validarServicio : true,
             minlength: 3,
             maxlength: 40
         },
         descripcion :{
             required: true,
-            lettersAndNumbers : true,
-            minlength: 3,
+          minlength: 3,
             maxlength: 40
         }
     }

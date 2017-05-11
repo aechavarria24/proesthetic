@@ -90,11 +90,6 @@ Contrato
                             </table>
                         </div>
                     </div>
-                    <div class="col-sm-12">
-                        <div class=" p-a text-center">
-                            <button type="submit" class="btn info">Registrar</button>
-                        </div>
-                    </div>
                 </form>
             </div>
         </div>
@@ -214,7 +209,7 @@ $("#frmcrearcontrato").validate({
             number: true
         },
         valor: {
-            required: true,
+            required: false,
             minlength: 1,
             maxlength: 1
         },

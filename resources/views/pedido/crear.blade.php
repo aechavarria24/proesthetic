@@ -55,8 +55,11 @@ Pedido
                                     <div class="form-group">
                                         <div class="form-group">
                                             <label>Cínica</label>
+                                            @foreach($usuarioClinica as $values)
                                             <input class="form-control" required="" data-parsley-id="136" type="text" name="nombre"   disabled="false" value="{{$values->usuarioClinica}}">
+                                            @endforeach
                                             <input class="form-control" type="hidden" name="empleado_id"  value="">
+
                                         </div>
                                     </div>
                                     <div class="form-group">

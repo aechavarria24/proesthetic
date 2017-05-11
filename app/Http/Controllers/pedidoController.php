@@ -61,10 +61,11 @@ class pedidoController extends Controller
         /* Se debe tomar el id de la session de usuario*/
         $respuesta = 0;
         $respuesta2=0;
+        $respuesta3=0;
         try {
             \DB::beginTransaction();
             $id_usuario= \Auth::user()->id;
-            $estado_orden_produccion_id = 3;
+            $estado_orden_produccion_id = 1;
             $pedido=pedido::find($input["id"]);
             if ($pedido != null && $pedido["estado_pedido_id"] == 1) {
                 $input["estado_pedido_id"] = 2;
@@ -81,11 +82,12 @@ class pedidoController extends Controller
         } catch (\Exception $e) {
             \DB::rollBack();
             $respuesta = 2;
+            $respuesta3 = $e;
         }
 
 
 
-        return json_encode(["respuesta" => $respuesta,"respuesta2"=>$respuesta2]);
+        return json_encode(["respuesta" => $respuesta,"respuesta2"=>$respuesta2,"respuesta3"=>$respuesta3]);
 
     }
 
@@ -107,11 +109,14 @@ class pedidoController extends Controller
 public function getData (Request $Request)
 {
     // return "llego al data";
+    $retornar=0;
     $pedido = pedido::select('clinica.nombre as usuario_id','pedido.id as id','pedido.created_at as created_at',
-    'pedido.fechaEntrega as fechaEntrega','estado_pedido.nombre')
+    'pedido.fechaEntrega as fechaEntrega','estado_pedido.nombre','pedido.estado_pedido_id')
     ->join('estado_pedido','estado_pedido.id','=','pedido.estado_pedido_id')
-    ->join('clinica','clinica.id','=','pedido.usuario_id')
+    ->join('usuario_clinica','usuario_clinica.id','=','pedido.usuario_id')
+    ->join('clinica','clinica.id','=','usuario_clinica.clinica_id')
     ->get();
+
     return Datatables::of($pedido)
     ->addColumn('action', function ($pedido) {
         return '<a><i onclick="aprobarPedido(this);" id="'.$pedido->id.'" class="fa fa-handshake-o" aria-hidden="true" title="Aprobar y procesar"></i>&nbsp;</a>
@@ -119,6 +124,7 @@ public function getData (Request $Request)
         <a href="/pedido/'.$pedido->id.'/edit" ><i class="glyphicon glyphicon-edit" title="Editar"></i>&nbsp;</a>
         <a href="/pedido/'.$pedido->id.'/detallePedido" ><i class="fa fa-eye" title="Detalle"></i>&nbsp;</a>'
         . $retornar =  $pedido->estado_pedido_id == 6  ? '<a href="/pedido/'.$pedido->id.'/retornar" title = "Retornar"><i class="fa fa-undo"></i></a>': "";
+
     })->editColumn('estado_pedido_id', function($pedido){
 
         switch ($pedido->estado_pedido_id) {
@@ -174,16 +180,18 @@ public function create()
     ->join('clinica','usuario_clinica.clinica_id','=','clinica.id')
     ->where('usuario_clinica.id', '=', \Auth::user()->id)
     ->get();
+
     // var_dump($usuarioClinica);
     // exit;
 
     //
     // SELECT * FROM servicio_tipocontrato as A
     //     INNER join servicio as b on a.servicio_id=b.id
-    $servicio = serviciotipoContrato::select('servicio_tipoContrato.id as id', 'servicio.nombre')
-    ->join('servicio','servicio_tipoContrato.servicio_id','=','servicio.id')
+    $servicio = serviciotipoContrato::select('servicio_tipocontrato.id as id', 'servicio.nombre')
+    ->join('servicio','servicio_tipocontrato.servicio_id','=','servicio.id')
     // ->join('servicio','servicio_tipoContrato.tipoContrato_id','=','servicio_tipoContrato.tipoContrato_id')
     ->get();
+
 
     // var_dump ($servicio);
     // exit;
@@ -305,7 +313,7 @@ public function store(Request $request)
                     ->get();
                     // dd($paciente);
 
-                    $medida_Pieza = pedido::select('servicio.nombre as servicio','medida_pieza.id as id_pieza','medida_Pieza.cantidad as cantidad','medida_Pieza.dimension as dimension','medida_Pieza.unidadMedidad as unidadMedidad')
+                    $medida_pieza = pedido::select('servicio.nombre as servicio','medida_pieza.id as id_pieza','medida_pieza.cantidad as cantidad','medida_pieza.dimension as dimension','medida_pieza.unidadMedidad as unidadMedidad')
                     ->join('servicio_tipocontrato_pedido','servicio_tipocontrato_pedido.pedido_id','=','pedido.id')
                     ->join('medida_pieza','medida_pieza.servicio_tipocontrato_pedido_id','=',
                     'servicio_tipocontrato_pedido.id')
@@ -315,10 +323,10 @@ public function store(Request $request)
                     ->get();
 
                     $servicio = serviciotipoContrato::select('*')
-                    ->join('servicio','servicio_tipoContrato.servicio_id','=','servicio.id')
+                    ->join('servicio','servicio_tipocontrato.servicio_id','=','servicio.id')
                     // ->join('servicio','servicio_tipoContrato.tipoContrato_id','=','servicio_tipoContrato.tipoContrato_id')
                     -> get();
-                    return view('pedido.editar',compact('pedido','servicio','paciente','medida_Pieza','$tabla'));
+                    return view('pedido.editar',compact('pedido','servicio','paciente','medida_pieza','$tabla'));
                 }else {
                     Notify::warning('El pedido se encuentra en un estado que no se puede editar','Alerta');
                     return view('pedido.listar');

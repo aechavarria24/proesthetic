@@ -56,7 +56,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($medida_Pieza as $valor)
+                                        @foreach($medida_pieza as $valor)
                                         <tr>
                                             <td>
                                                 <input readonly="true" class="form-control" value="{{$valor->servicio}}">

@@ -10,6 +10,7 @@ use App\Model\servicioTipoContrato;
 use App\Model\servicioTipocontratoPedido;
 use App\Model\cuentaCobro;
 use App\Model\cuentaCobroVenta;
+use App\Model\estado_venta;
 use Notify;
 use Datatables;
 use PDF;
@@ -111,7 +112,7 @@ class ventaController extends Controller
             $suma=0;
             foreach ($input['s'] as  $value) {
 
-                $consulta_Venta=venta::select('venta.id as venta','servicio_tipoContrato.valor')
+                $consulta_Venta=venta::select('venta.id as venta','servicio_tipocontrato.valor')
                 ->join( 'pedido','pedido.id','=','venta.pedido_id')
                 ->join( 'servicio_tipocontrato_pedido','servicio_tipocontrato_pedido.pedido_id','=','pedido.id')
                 ->join( 'servicio_tipocontrato','servicio_tipocontrato.id','=','servicio_tipocontrato_pedido.servicio_tipocontrato_id')
@@ -127,15 +128,19 @@ class ventaController extends Controller
 
             foreach ($input['s'] as  $value) {
 
-                $consulta_Venta=venta::select('venta.id as venta','servicio_tipoContrato.valor')
+                $consulta_Venta=venta::select('venta.*')
                 ->join( 'pedido','pedido.id','=','venta.pedido_id')
                 ->join( 'servicio_tipocontrato_pedido','servicio_tipocontrato_pedido.pedido_id','=','pedido.id')
                 ->join( 'servicio_tipocontrato','servicio_tipocontrato.id','=','servicio_tipocontrato_pedido.servicio_tipocontrato_id')
                 ->where( 'venta.id','=',$value)
                 ->first();
 
-                $insert_cuentaCobro_venta=cuentaCobroVenta::create(['cuentaCobro_id'=>$insert_cuentaCobro['id'],'venta_id'=>$consulta_Venta['venta']]);
+
+
+                $consulta_Venta->update(["estado_venta_id" => estado_venta::select("*")->where("nombre","=", "Asociada")->first()["id"]]);
+                $insert_cuentaCobro_venta=cuentaCobroVenta::create(['cuentaCobro_id'=>$insert_cuentaCobro['id'],'venta_id'=>$consulta_Venta['id']]);
             }
+
             Notify::success('Cuenta de cobro'.' '.$insert_cuentaCobro['id'].' '.'creada con exito','Noticia');
 
             return redirect('venta/show');

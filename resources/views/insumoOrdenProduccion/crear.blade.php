@@ -1,6 +1,6 @@
 @extends('layouts.App')
 @section('titulo')
-Asosciar insumo
+Asociar insumo
 @endsection
 
 @section('contenedor')

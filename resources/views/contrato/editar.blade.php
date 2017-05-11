@@ -9,11 +9,13 @@
   <div class="box-body">
     <div class="row">
       <div class="col-sm-4 offset-sm-4">
-
+          {{Form::model($contrato, ['route' => ['contrato.update',$contrato->id],'method' => 'put', 'id'=>'frmContrato'])}}
+            {{csrf_field()}}
 
         <div class="form-group">
           <label>Nombre</label>
-          {{Form::text('nombre', null,['class'=>'form-control'])}}
+          {{Form::text('nombre', null,['maxlength'=>'50','class'=>'form-control', 'id'=>'nombre'])}}
+
         </div>
         <div class="form-group">
           <label>Descripción</label>
@@ -24,7 +26,7 @@
         <div class=" p-a text-center">
           <button type="submit" class="btn btn-warning">Modificar</button>
         </div>
-        {!! Form::close() !!}
+        </form>
       </div>
     </div>
   </div>

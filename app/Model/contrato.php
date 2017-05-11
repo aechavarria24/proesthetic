@@ -8,6 +8,6 @@ class contrato extends Model
 {
     public $table = "tipo_contrato";
 
-    protected $fillable = ['nombre', 'descripcion', 'servicio_id','valor'];
+    protected $fillable = ['nombre', 'descripcion'];
 
 }

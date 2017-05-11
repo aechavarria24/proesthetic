@@ -23,10 +23,10 @@ class cuentaCobroController extends Controller
     * @return \Illuminate\Http\Response
     */
     public function generar_Pdf($id){
-        $cuentaCobro = venta::select('cuentaCobro_venta.id as cobroVentaId','cuenta_cobro.id as cuentaCobro','venta.id as numventa','venta.pedido_id as pedido_id',
+        $cuentaCobro = venta::select('cuentacobro_venta.id as cobroVentaId','cuenta_cobro.id as cuentaCobro','venta.id as numventa','venta.pedido_id as pedido_id',
         'venta.empleado_id as empleado_id','venta.created_at as fechaCreacion','cuenta_cobro.valorTotal as valorTotal')
-        ->join('cuentaCobro_venta','cuentaCobro_venta.venta_id','=','venta.id')
-        ->join('cuenta_cobro','cuenta_cobro.id','=','cuentaCobro_venta.cuentaCobro_id')
+        ->join('cuentacobro_venta','cuentacobro_venta.venta_id','=','venta.id')
+        ->join('cuenta_cobro','cuenta_cobro.id','=','cuentacobro_venta.cuentaCobro_id')
         ->where('cuenta_cobro.id',$id)
         ->get();
 
@@ -36,10 +36,10 @@ class cuentaCobroController extends Controller
     }
 
     public function detalle($id) {
-        $cuentaCobro = venta::select('cuentaCobro_venta.id as cobroVentaId','cuenta_cobro.id as cuentaCobro','venta.id as numventa','venta.pedido_id as pedido_id',
+        $cuentaCobro = venta::select('cuentacobro_venta.id as cobroVentaId','cuenta_cobro.id as cuentaCobro','venta.id as numventa','venta.pedido_id as pedido_id',
         'empleado.username as empleado_id','venta.created_at as fechaCreacion','cuenta_cobro.valorTotal as valorTotal')
-        ->join('cuentaCobro_venta','cuentaCobro_venta.venta_id','=','venta.id')
-        ->join('cuenta_cobro','cuenta_cobro.id','=','cuentaCobro_venta.cuentaCobro_id')
+        ->join('cuentacobro_venta','cuentacobro_venta.venta_id','=','venta.id')
+        ->join('cuenta_cobro','cuenta_cobro.id','=','cuentacobro_venta.cuentaCobro_id')
         ->join('empleado','empleado_id','=','venta.empleado_id')
         ->where('cuenta_cobro.id',$id)
         ->get();
@@ -147,7 +147,7 @@ class cuentaCobroController extends Controller
 
     public function index()
     {
-        return redirect('cuentacobro/show');
+        return redirect('/cuentacobro/show');
     }
 
     /**
@@ -217,12 +217,12 @@ class cuentaCobroController extends Controller
     * @param  int  $id
     * @return \Illuminate\Http\Response
     */
-    public function show($id)
+    public function show()
     {
         //
         $cuentacobros = cuentaCobro::all();
 
-        return view('cuentacobro.listar');
+        return view('cuentaCobro.listar');
 
     }
 

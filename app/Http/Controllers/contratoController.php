@@ -21,10 +21,8 @@ class contratoController extends Controller{
         $contrato = contrato::all();
         return Datatables::of($contrato)
         ->addColumn('action', function ($contrato) {
-            return '<a href="/contrato/'.$contrato->id.'/edit" class="btn btn-xs
-            btn-primary"><i class="glyphicon glyphicon-edit"></i>&nbsp;Editar</a>
-            <a href="/contrato/'.$contrato->id.'/edit" class="btn btn-xs btn-danger">
-            <i class="glyphicon glyphicon-trash"></i>&nbsp;Inabilitar</a>';
+            return '<a href="/contrato/'.$contrato->id.'/edit" ><i class="glyphicon glyphicon-edit"></i>&nbsp;Editar</a>';
+
         })->make(true);
     }
 
@@ -59,11 +57,13 @@ class contratoController extends Controller{
         $id_contrato = contrato::create($input);
         if ($id_contrato != null ) {
             try {
+                    foreach ($servicio as $key => $value) {
 
-                foreach ($servicio as $key => $value) {
                     servicioTipoContrato::create(["servicio_id"=>$value["servicio"],
                     "tipoContrato_id"=>$id_contrato["id"], "valor"=>$value["valor"]]);
+
                 }
+
 
                 Notify::success("El contrato \"". $input['nombre'] ."\", se
                 registro con éxito.","Registro exitoso");
@@ -72,7 +72,8 @@ class contratoController extends Controller{
             } catch (\Exception $e) {
                 \DB::rollBack();
                 Notify::error("El contrato \"". $input['nombre'] ."\", no se pudo
-                registrar con éxito, debido a una excepción","Error");
+                registrar con éxito, debido a una excepción",$e);
+
             }
         }else{
             Notify::error("El contrato \"". $input['nombre'] ."\", no se pudo
@@ -101,6 +102,7 @@ class contratoController extends Controller{
     public function edit($id)
     {
         $contrato = contrato::find($id);
+        
     if (false/**$contrato==null*/) {
         Notify::warning('No se encontraron datos','Espera...');
         return redirect('/edit/show');
