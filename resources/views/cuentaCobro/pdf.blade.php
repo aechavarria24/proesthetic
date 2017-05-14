@@ -2,7 +2,8 @@
 <html>
     <head>
         <?php
-        $fecha='<b><h3>'.(getDate()['year'].'-'.getDate()['month'].'-'.getDate()['wday'].' Hora:'.getDate()['hours'].'-'.getDate()['minutes']).'<h3></b>';
+
+        $fecha='<b><h3>'.(getDate()['year'].'-'.getDate()['month'].'-'.getDate()['mday'].' Hora:'.getDate()['hours'].'-'.getDate()['minutes']).'<h3></b>';
         echo $fecha;
          ?>
 
@@ -22,7 +23,7 @@
     <div class="box-header">
         @foreach($cuentaCobro as $valor)
         @endforeach
-
+        <h1>Cliente: <b>{{$valor->clinica}}</b></h1>
         <h2>Cuenta de cobro: {{$valor->cuentaCobro}}</h2>
 
     </div>
@@ -49,6 +50,7 @@
                                             <th  style="width:20%">Número Venta</th>
                                             <th  style="width:20%">Número Pedido</th>
                                             <th  style="width:20%">Usuario creación</th>
+                                            <th  style="width:20%">Día corte</th>
                                             <th  style="width:20%">Fecha creación</th>
 
                                         </tr>
@@ -62,6 +64,7 @@
                                             <td>{{$value->numventa}} </td>
                                             <td>{{$value->pedido_id}} </td>
                                             <td>{{$value->empleado_id}} </td>
+                                            <td>{{$value->diaCorte}} </td>
                                             <td>{{$value->fechaCreacion}} </td>
                                             </tr>
 

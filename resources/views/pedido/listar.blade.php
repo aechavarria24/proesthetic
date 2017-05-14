@@ -151,7 +151,7 @@ function aprobarPedido(e){
         new PNotify({
             title: 'Ooops',
             type : 'error',
-            text: 'Ha ocurrido una excepción, por favor reintente: '+r.respuesta3.errorInfo+'',
+            text: 'Ha ocurrido una excepción, por favor reintente: '+r.respuesta3+'',
             icon : false
         })
     }

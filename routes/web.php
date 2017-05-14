@@ -228,7 +228,7 @@ Route::get('cuentacobro/get', 'cuentaCobroController@getData');
 Route::get('cuentacobro/{id}/pdf', 'cuentaCobroController@generar_Pdf');
 Route::post('/cuentaCobro/eliminarVenta', 'cuentaCobroController@eliminarVenta');
 Route::get('cuentacobro/{id}/detalle', 'cuentaCobroController@detalle');
-Route::get('/cuentacobro/{id}/adicionar', 'cuentaCobroController@adicionar');
+Route::get('/cuentaCobro/{id}/adicionar', 'cuentaCobroController@adicionar');
 Route::post('/agregar_venta', 'cuentaCobroController@agregar_venta');
 
 

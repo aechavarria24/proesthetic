@@ -48,7 +48,7 @@
           <strong><h3>Total a pagar : $<?=$pago ?></h3></strong>
         </div>
         <div class=" p-a text-center">
-          <a href="/cuentacobro" class="btn btn-primary">Confirmar pago</a>
+          <a href="/cuentacobro/show" class="btn btn-primary">Regresar</a>
         </div>
 
 

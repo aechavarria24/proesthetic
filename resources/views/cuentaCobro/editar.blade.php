@@ -60,11 +60,14 @@ $('#tblVentas').DataTable({
     {data: 'empleado_id', name: 'empleado_id'},
     {data: 'created_at', name: 'created_at'},
 
-  ],"fnRowCallback": function(nRow, aData, iDisplayIndex) {
-       var opciones = $('td:eq(0)', nRow);
-       let html = '<input class="form-control" type="checkbox" name="s[]" value="'+aData.id+'" />';
-       opciones.html(html);
-    }
-});
+  ],  "fnRowCallback": function(nRow, aData, iDisplayIndex) {
+
+        if (aData.nombre != "Asociada") {
+            var opciones = $('td:eq(0)', nRow);
+            let html = '<input class="form-control" type="checkbox"  name="s[]" value="'+aData.id+'" />';
+            opciones.html(html);
+
+        }
+}});
 </script>
 @endsection
