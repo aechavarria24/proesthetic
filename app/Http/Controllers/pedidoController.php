@@ -65,7 +65,7 @@ class pedidoController extends Controller
         try {
             \DB::beginTransaction();
             $id_usuario= \Auth::user()->id;
-            $estado_orden_produccion_id = 1;
+            $estado_orden_produccion_id = 3;
             $pedido=pedido::find($input["id"]);
             if ($pedido != null && $pedido["estado_pedido_id"] == 1) {
                 $input["estado_pedido_id"] = 2;
@@ -82,7 +82,7 @@ class pedidoController extends Controller
         } catch (\Exception $e) {
             \DB::rollBack();
             $respuesta = 2;
-            $respuesta3 = $e;
+            $respuesta3 ="No tiene permisos para realizar la operación, contacte al administrador del sistema e informe el código de error";
         }
 
 

@@ -13,6 +13,7 @@ use App\Model\cuentaCobroVenta;
 use Notify;
 use Datatables;
 use PDF;
+use Empleado;
 
 
 class cuentaCobroController extends Controller
@@ -24,9 +25,14 @@ class cuentaCobroController extends Controller
     */
     public function generar_Pdf($id){
         $cuentaCobro = venta::select('cuentacobro_venta.id as cobroVentaId','cuenta_cobro.id as cuentaCobro','venta.id as numventa','venta.pedido_id as pedido_id',
-        'venta.empleado_id as empleado_id','venta.created_at as fechaCreacion','cuenta_cobro.valorTotal as valorTotal')
+        'empleado.username as empleado_id','venta.created_at as fechaCreacion',
+        'cuenta_cobro.valorTotal as valorTotal','clinica.nombre as clinica','clinica.diaCorte')
         ->join('cuentacobro_venta','cuentacobro_venta.venta_id','=','venta.id')
         ->join('cuenta_cobro','cuenta_cobro.id','=','cuentacobro_venta.cuentaCobro_id')
+        ->join('empleado','empleado.id','=','venta.empleado_id')
+        ->join('pedido','pedido.id','=','venta.pedido_id')
+        ->join('usuario_clinica','usuario_clinica.id','=','pedido.usuario_id')
+        ->join('clinica','clinica.id','=','usuario_clinica.clinica_id')
         ->where('cuenta_cobro.id',$id)
         ->get();
 
@@ -65,7 +71,7 @@ class cuentaCobroController extends Controller
 
             ->get();
 
-            return view('cuentacobro.pago', compact('usuarioClinica','pago'));
+            return view('cuentaCobro.pago', compact('usuarioClinica','pago'));
             # code...
         }
 
@@ -83,11 +89,11 @@ class cuentaCobroController extends Controller
 
 
             Notify::success('Cuentas de cobro pagadas con exito','Noticia');
-            return redirect('/cuentacobro/show');
+            return redirect('/cuentaCobro/show');
 
         }
         Notify::error('Por favor seleccione una cuenta de cobro','Error');
-        return redirect('/cuentacobro/show');
+        return redirect('/cuentaCobro/show');
 
     }
 
@@ -125,7 +131,7 @@ class cuentaCobroController extends Controller
         $cuentascobro = cuentaCobro::all();
         return Datatables::of($cuentascobro)
         ->addColumn('action', function ($cuentaCobro) {
-            return '<a href="/cuentacobro/'.$cuentaCobro->id.'/adicionar" class="btn btn-xs "><i title="Agregar venta" class="fa fa-cart-plus" aria-hidden="true"></i>&nbsp;</a>
+            return '<a href="/cuentaCobro/'.$cuentaCobro->id.'/adicionar" class="btn btn-xs "><i title="Agregar venta" class="fa fa-cart-plus" aria-hidden="true"></i>&nbsp;</a>
             <a href="/cuentacobro/'.$cuentaCobro->id.'/detalle" class="btn btn-xs "><i title="Detalle" class="fa fa-eye" aria-hidden="true"></i>&nbsp;</a>
             ';
         })
@@ -147,7 +153,7 @@ class cuentaCobroController extends Controller
 
     public function index()
     {
-        return redirect('/cuentacobro/show');
+        return redirect('/cuentaCobro/show');
     }
 
     /**
@@ -280,7 +286,7 @@ class cuentaCobroController extends Controller
 
 
             Notify::success('Venta agregada con exito','Noticia');
-            return redirect('cuentacobro/show');
+            return redirect('cuentaCobro/show');
         }
 
         Notify::error('No se encontraron datos','Alerta');
@@ -300,11 +306,11 @@ class cuentaCobroController extends Controller
         $cuentaCobro = cuentaCobro::find($id);
         if ($cuentaCobro == null) {
             Notify::warning('No se encontraron datos','Nota: ');
-            return redirect('cuentacobro/show');
+            return redirect('cuentacCbro/show');
         }
         $cuentaCobro->update($input);
         Notify::success("La cuenta de cobro  se modifico con éxito.","Modificacion exitosa");
-        return redirect('cuentacobro/show');
+        return redirect('cuentaCobro/show');
     }
     /**
     * Remove the specified resource from storage.

@@ -132,7 +132,7 @@ class ordenProduccionController extends Controller{
     public function store(Request $request){
         if (session("insumo") == null) {
             Notify::warning('Por favor ingresar insumos, gracias');
-            return redirect('/pedido/show');
+            return redirect('/produccion/show');
         }
         \DB::beginTransaction();
         try {
@@ -145,11 +145,11 @@ class ordenProduccionController extends Controller{
             }
             \DB::commit();
             Notify::success('Insumos asociados con éxito');
-            return redirect('/pedido/show');
+            return redirect('/produccion/show');
         } catch (\Exception $e) {
             \DB::rollBack();
             Notify::warning('Error en la transaction');
-            return redirect('/pedido/show');
+            return redirect('/produccion/show');
         }
 
 
@@ -349,7 +349,7 @@ public function cambiar_estado_retornar(Request $request){
 
         $pedido->update(["estado_pedido_id"=>
         estado_pedido::select("*")->where("nombre", "=", "Retornado")->first()["id"]]);
-        Notify::success("Pedido, ". $pedido["id"]." Retornado con éxito."."Notificación");
+        Notify::success("Pedido, ". $pedido["id"]." Retornado con éxito."."Orden de producción "."". $orden_produccion["id"]." Retornado con éxito."."Notificación");
         \DB::commit();
     } catch (\Exception $e) {
         \DB::rollBack();
@@ -417,7 +417,7 @@ public function cambiar_estado(Request $request){
             $respuesta = ["venta"=>'venta', "venta_generada"=>$venta_generada];
         } catch (\Exception $e) {
             \DB::rollBack();
-          
+
             $respuesta = '3';
         }
     }// Fin if estado
