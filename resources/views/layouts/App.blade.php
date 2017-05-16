@@ -89,74 +89,18 @@
                             <!-- / Panel -->
                             @endif
                             @endforeach
-                            {{--
                                 @else
                                 <script type="text/javascript">
                                 setTimeout(function(){
                                     document.getElementById('logout-form').submit();
                                 },100)
                                 </script>
-                                --}}
                                 @endif
                                 <!-- / Panel -->
                             </ul>
                         </li>
                     </ul>
                 </nav>
-            </div>
-            <div data-flex-no-shrink>
-                <div class="nav-fold dropup">
-                    <a data-toggle="dropdown">
-                        <div class="pull-left">
-                            <div class="inline"><span class="avatar w-40 grey">JR</span></div>
-                            <img src="/images/a0.jpg" alt="..." class="w-40 img-circle hide">
-                        </div>
-                        <div class="clear hidden-folded p-x">
-                            <span class="block _500 text-muted">Jean Reyes</span>
-                            <div class="progress-xxs m-y-sm lt progress">
-                                <div class="progress-bar info" style="width: 15%;">
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </a>
-
-                <div class="dropdown-menu w dropdown-menu-scale ">
-                    <a class="dropdown-item" href="/profile.html">
-                        <span>Profile</span>
-                    </a>
-                    <a class="dropdown-item" href="/setting.html">
-                        <span>Settings</span>
-                    </a>
-                    <a class="dropdown-item" href="/app.inbox.html">
-                        <span>Inbox</span>
-                    </a>
-                    <a class="dropdown-item" href="/app.message.html">
-                        <span>Message</span>
-
-                    </a>
-                    <div class="dropdown-menu w dropdown-menu-scale ">
-                        <a class="dropdown-item" href="/profile.html">
-                            <span>Profile</span>
-                        </a>
-                        <a class="dropdown-item" href="/setting.html">
-                            <span>Settings</span>
-                        </a>
-                        <a class="dropdown-item" href="/app.inbox.html">
-                            <span>Inbox</span>
-                        </a>
-                        <a class="dropdown-item" href="/app.message.html">
-                            <span>Message</span>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a  class="dropdown-item" href="{{route('logout')}}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-                        class="">Cerrar Sesión</a>
-                        <form id="logout-form" action="{{route('logout')}}" method="post" style="display:none;">
-                            {{csrf_field()}}
-                        </form>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -239,7 +183,7 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link clear" data-toggle="dropdown">
                                 <span class="avatar w-32">
-                                    <img src="/images/a3.jpg" class="w-full rounded" alt="...">
+                                    <img src="/images/logo.png" class="w-full rounded" alt="..." title="Opciones">
                                 </span>
                             </a>
                             <div class="dropdown-menu w dropdown-menu-scale pull-right">

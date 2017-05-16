@@ -269,7 +269,7 @@ public function destroy($id){
 }
 
 public function eliminar_tabla_asociar(Request $request){
-    $request->session("insumo")->flush();
+        $request->session()->forget("insumo");
 }
 
 public function retornar($id){
