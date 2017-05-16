@@ -12,6 +12,7 @@ use App\Model\clinica;
 use App\Model\servicioTipoContrato;
 use App\Model\medidapieza;
 use App\Model\ordenProduccion;
+use App\Model\rol;
 use App\Model\servicioTipocontratoPedido;
 use Notify;
 use Datatables;
@@ -110,21 +111,54 @@ public function getData (Request $Request)
 {
     // return "llego al data";
     $retornar=0;
-    $pedido = pedido::select('clinica.nombre as usuario_id','pedido.id as id','pedido.created_at as created_at',
-    'pedido.fechaEntrega as fechaEntrega','estado_pedido.nombre','pedido.estado_pedido_id')
-    ->join('estado_pedido','estado_pedido.id','=','pedido.estado_pedido_id')
-    ->join('usuario_clinica','usuario_clinica.id','=','pedido.usuario_id')
-    ->join('clinica','clinica.id','=','usuario_clinica.clinica_id')
-    ->get();
+
+    /**
+     * Validar el rol de usuario para mostrar los pedido, ya sean solo de
+     * un doctor ó todos para el Administrador.
+     * @var [rol_id ]
+     */
+    if (\Auth::user()->rol_id == rol::select("*")
+    ->where("nombre", "=", "Administrador")->first()["id"]) {
+        $pedido = pedido::select('clinica.nombre as usuario_id','pedido.id as id','pedido.created_at as created_at',
+        'pedido.fechaEntrega as fechaEntrega','estado_pedido.nombre','pedido.estado_pedido_id')
+        ->join('estado_pedido','estado_pedido.id','=','pedido.estado_pedido_id')
+        ->join('usuario_clinica','usuario_clinica.id','=','pedido.usuario_id')
+        ->join('clinica','clinica.id','=','usuario_clinica.clinica_id')
+        ->get();
+    } else if(\Auth::user()->rol_id == rol::select("*")
+    ->where("nombre", "=", "Doctor")->first()["id"]){
+        $pedido = pedido::select('clinica.nombre as usuario_id','pedido.id as id','pedido.created_at as created_at',
+        'pedido.fechaEntrega as fechaEntrega','estado_pedido.nombre','pedido.estado_pedido_id')
+        ->join('estado_pedido','estado_pedido.id','=','pedido.estado_pedido_id')
+        ->join('usuario_clinica','usuario_clinica.id','=','pedido.usuario_id')
+        ->join('clinica','clinica.id','=','usuario_clinica.clinica_id')
+        ->where("usuario_id", "=", \Auth::user()->id)
+        ->get();
+    }
 
     return Datatables::of($pedido)
     ->addColumn('action', function ($pedido) {
-        return '<a><i onclick="aprobarPedido(this);" id="'.$pedido->id.'" class="fa fa-handshake-o" aria-hidden="true" title="Aprobar y procesar"></i>&nbsp;</a>
-        <a><i class="glyphicon glyphicon-trash"  onclick="cancelarPedido(this);" id="'.$pedido->id.'" title="Cancelar"></i>&nbsp;</a>
-        <a href="/pedido/'.$pedido->id.'/edit" ><i class="glyphicon glyphicon-edit" title="Editar"></i>&nbsp;</a>
-        <a href="/pedido/'.$pedido->id.'/detallePedido" ><i class="fa fa-eye" title="Detalle"></i>&nbsp;</a>'
-        . $retornar =  $pedido->estado_pedido_id == 6  ? '<a href="/pedido/'.$pedido->id.'/retornar" title = "Retornar"><i class="fa fa-undo"></i></a>': "";
 
+        $btnAprobarProcesar = '<a><i onclick="aprobarPedido(this);" id="'.$pedido->id.'" class="fa fa-handshake-o" aria-hidden="true" title="Aprobar y procesar"></i>&nbsp;</a>';
+        $btnCancelar = '<a><i class="glyphicon glyphicon-trash"  onclick="cancelarPedido(this);" id="'.$pedido->id.'" title="Cancelar"></i>&nbsp;</a>';
+        $btnEditar = '<a href="/pedido/'.$pedido->id.'/edit" ><i class="glyphicon glyphicon-edit" title="Editar"></i>&nbsp;</a>';
+        $btnDetallePedido = '<a href="/pedido/'.$pedido->id.'/detallePedido" ><i class="fa fa-eye" title="Detalle"></i>&nbsp;</a>';
+        $btnRetornar =  $pedido->estado_pedido_id == 6  ? '<a href="/pedido/'.$pedido->id.'/retornar" title = "Retornar"><i class="fa fa-undo"></i></a>': "";
+
+        /**
+         * Retornar los botones según el rol del usuario (Doctor ó Administrador).
+         * @var [rol_id]
+         */
+        if (\Auth::user()->rol_id == rol::select("*")
+        ->where("nombre", "=", "Doctor")->first()["id"]) {
+            return $btnCancelar.$btnEditar.$btnDetallePedido.$btnRetornar;
+        } else if (\Auth::user()->rol_id == rol::select("*")
+        ->where("nombre", "=", "Administrador")->first()["id"]){
+            return $btnAprobarProcesar.$btnCancelar.$btnEditar.$btnDetallePedido;
+        }
+
+
+        return $btnAprobarProcesar.$btnCancelar.$btnEditar.$btnDetallePedido.$btnRetornar;
     })->editColumn('estado_pedido_id', function($pedido){
 
         switch ($pedido->estado_pedido_id) {
@@ -244,7 +278,7 @@ public function store(Request $request)
             $paciente1=paciente::create(['cedula'=>$input["cedula"],'nombre'=>$input["nombre"]]);
             $auxiliar_paciente=$paciente1->id;
         }else {
-            $valida_paciente->update('nombre'->$input["nombre"]);            
+            $valida_paciente->update('nombre'->$input["nombre"]);
             $auxiliar_paciente=$valida_paciente->id;
         }
 

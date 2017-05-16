@@ -21,7 +21,7 @@ class contratoController extends Controller{
         $contrato = contrato::all();
         return Datatables::of($contrato)
         ->addColumn('action', function ($contrato) {
-            return '<a href="/contrato/'.$contrato->id.'/edit" ><i class="glyphicon glyphicon-edit"></i>&nbsp;Editar</a>';
+            return '<a href="/contrato/'.$contrato->id.'/edit" title="Editar" ><i class="glyphicon glyphicon-edit"></i></a>';
 
         })->make(true);
     }
@@ -102,7 +102,7 @@ class contratoController extends Controller{
     public function edit($id)
     {
         $contrato = contrato::find($id);
-        
+
     if (false/**$contrato==null*/) {
         Notify::warning('No se encontraron datos','Espera...');
         return redirect('/edit/show');
@@ -159,8 +159,7 @@ public function agregar_servicio(Request $request){
 }
 
 function eliminar_tabla_servicio(Request $request){
-    $input = $request->all();
-    $request->session("contrato")->flush();
+        $request->session()->forget("contrato");
 }
 
 

@@ -11,10 +11,6 @@
                 <div class="row">
                     <div class="col-sm-4 offset-sm-2">
                         <div class="form-group">
-                            <label label="cedula">Cedula</label>
-                            <input class="form-control" required="" data-parsley-id="136" type="text" name="cedula">
-                        </div>
-                        <div class="form-group">
                             <label label="Nombre">Nombre</label>
                             <input class="form-control" required="" data-parsley-id="136" type="text" name="nombre">
                         </div>
@@ -34,6 +30,12 @@
                                 @endforeach
 
                             </select>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class=" p-a text-center">
+                                <!-- <input type="hidden" value = "{{csrf_token()}}" name ="_token" id ="_token" > -->
+                                <button type="submit" class="btn info">Registrar</button>
+                            </div>
                         </div>
 
                     </div>
@@ -66,12 +68,6 @@
                         <div class="form-group">
                             <label label="Respuesta">Respuesta</label>
                             <input class="form-control" required="" data-parsley-id="138" type="password" name="respuesta">
-                        </div>
-                    </div>
-                    <div class="col-sm-12">
-                        <div class=" p-a text-center">
-                            <!-- <input type="hidden" value = "{{csrf_token()}}" name ="_token" id ="_token" > -->
-                            <button type="submit" class="btn info">Registrar</button>
                         </div>
                     </div>
                 </div>

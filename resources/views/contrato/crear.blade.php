@@ -63,7 +63,7 @@ Contrato
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <label label="Valor">Valor</label>
-                                            <input class="form-control" name="valor" id="txtValor" placeholder="valor" type="number" min ="1" title = "Centimetros, Milimetros, Radianes">
+                                            <input class="form-control" name="valor" id="txtValor" placeholder="valor" type="number" min ="1">
                                         </div>
                                     </div>
                                     <div class = "col-sm-1">
@@ -202,16 +202,10 @@ $("#frmcrearcontrato").validate({
             minlength: 3,
             maxlength: 45
         },
-        cedula: {
-            required: true,
-            minlength: 7,
-            maxlength: 13,
-            number: true
-        },
         valor: {
             required: false,
             minlength: 1,
-            maxlength: 1
+            maxlength: 7
         },
         containerMedidaPieza: {
             required: true,
