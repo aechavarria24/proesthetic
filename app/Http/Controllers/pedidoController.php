@@ -239,12 +239,12 @@ public function store(Request $request)
         $valida_paciente = paciente::select('id')
         ->where('cedula','=',$input['cedula'])
         ->first();
-        //dd($valida_paciente[0]);
         //$auxiliar_paciente=0;
         if ($valida_paciente == false) {
             $paciente1=paciente::create(['cedula'=>$input["cedula"],'nombre'=>$input["nombre"]]);
             $auxiliar_paciente=$paciente1->id;
         }else {
+            $valida_paciente->update('nombre'->$input["nombre"]);            
             $auxiliar_paciente=$valida_paciente->id;
         }
 
