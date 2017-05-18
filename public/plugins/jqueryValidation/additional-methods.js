@@ -734,6 +734,26 @@ $.validator.addMethod( "validarServicio", function( value, element ) {
 	return validar;
 }, "Ya existe" );
 
+
+$.validator.addMethod( "validarEmailDoctor", function( value, element ) {
+	var validar = false;
+	$.ajax({
+		type : 'POST',
+		datatype : 'json',
+		data : {"_token" : $("#_token").val() , email : $("#email").val() },
+		url : '/usuario/validarEmail',
+		async : false
+	}).done(function(result){
+		if (result.respuesta == 1) {
+			validar = false;
+		}else{
+			validar = true;
+		}
+
+	});
+	return validar;
+}, "Ya existe" );
+
 $.validator.addMethod( "validarUsuario", function( value, element ) {
 	var validar = false;
 	$.ajax({
@@ -760,6 +780,25 @@ $.validator.addMethod( "validarEmpleado", function( value, element ) {
 		datatype : 'json',
 		data : { usuario : $("#username").val(), _token : $("#txToken").val() },
 		url : '/empleado/validar_empleado',
+		async : false
+	}).done(function(result){
+		if (result.respuesta == 1) {
+			validar = false;
+		}else{
+			validar = true;
+		}
+
+	});
+	return validar;
+}, "Ya existe" );
+
+$.validator.addMethod( "validarEmailEmpleado", function( value, element ) {
+	var validar = false;
+	$.ajax({
+		type : 'post',
+		datatype : 'json',
+		data : { email : $("#email").val(), _token : $("#txToken").val() },
+		url : '/empleado/validar_email',
 		async : false
 	}).done(function(result){
 		if (result.respuesta == 1) {

@@ -20,8 +20,14 @@ trait ResetsPasswords
      * @param  string|null  $token
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function showResetForm(Request $request, $token = null)
+    public function showResetForm(Request $request, $token = null, $tabla)
     {
+        if ($tabla == "doctor") {
+          session(['tabla_usuario'=>'usuario_clinica']);
+      }else if ($tabla == "empleado") {
+          session(['tabla_usuario'=>'empleado']);
+        }
+
         return view('auth.passwords.reset')->with(
             ['token' => $token, 'email' => $request->email]
         );
@@ -116,7 +122,7 @@ trait ResetsPasswords
      */
     protected function sendResetResponse($response)
     {
-        return redirect($this->redirectPath())
+        return redirect($this->redirectPath("/login"))
                             ->with('status', trans($response));
     }
 

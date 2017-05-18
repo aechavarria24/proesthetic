@@ -119,7 +119,7 @@
                                             <div class="row">
                                                 <div class="offset-sm-6">
                                                     <div class="m-y">
-                                                        <a href="/forgot-password.html" class="_600">¿Olvidaste tu contraseña?</a>
+                                                        <a href="{{ route('password.request') }}" class="_600">¿Olvidaste tu contraseña?</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -154,7 +154,7 @@
                                             <div class="row">
                                                 <div class="offset-sm-6">
                                                     <div class="m-y">
-                                                        <a href="/forgot-password.html" class="_600">¿Olvidaste tu contraseña?</a>
+                                                        <a href="{{ route('password.request') }}" class="_600">¿Olvidaste tu contraseña?</a>
                                                     </div>
                                                 </div>
                                             </div>
