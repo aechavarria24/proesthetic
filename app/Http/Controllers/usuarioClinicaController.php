@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Model\usuarioClinica;
 use App\Model\clinica;
-use App\Model\preguntaCliente;
 use App\Model\rol;
 use Datatables;
 use Notify;
@@ -71,8 +70,7 @@ class usuarioClinicaController extends Controller
         //
         $clinica = clinica::all();
         $roles = rol::all();
-        $preguntas = preguntaCliente::all();
-        return view('usuarioClinica.crear', compact('clinica', 'roles', 'preguntas'));
+        return view('usuarioClinica.crear', compact('clinica', 'roles'));
     }
 
     /**
@@ -87,19 +85,18 @@ class usuarioClinicaController extends Controller
         try {
             $clinica = clinica::all();
             $roles = rol::all();
-            $preguntas = preguntaCliente::all();
             $input = $request->all();
             $input['password'] = bcrypt($input['password']);
             usuarioClinica::create($input);
             Notify::success("Usuario ". $input['username'] .", se registro con éxito.","Registro exitoso");
-            return view('usuarioClinica.crear', compact('clinica', 'roles', 'preguntas'));
+            return view('usuarioClinica.crear', compact('clinica', 'roles'));
         } catch ( \Exception $e) {
 
             switch ($e) {
                 //Excepcion de campos repetidos en la base de datos
                 case '23000':
                 Notify::danger("El usuario que intenta registrar: ". $e->getCode() .", ya existe.","Ooops...");
-                return view('usuarioClinica.crear', compact('clinica', 'roles', 'preguntas'));
+                return view('usuarioClinica.crear', compact('clinica', 'roles'));
                 break;
 
                 default:
@@ -110,11 +107,10 @@ class usuarioClinicaController extends Controller
 
         $clinica = clinica::all();
         $roles = rol::all();
-        $preguntas = preguntaCliente::all();
         $input = $request->all();
         usuarioClinica::create($input);
         Notify::success("Usuario ". $input['username'] .", se registro con éxito.","Registro exitoso");
-        return view('usuarioClinica.crear', compact('clinica', 'roles', 'preguntas'));
+        return view('usuarioClinica.crear', compact('clinica', 'roles'));
 
     }
 
@@ -194,6 +190,21 @@ class usuarioClinicaController extends Controller
         $input = $request->all();
         $usuario_clinica = usuarioClinica::select("*")
         ->where("username", "=", $input["id"])
+        ->count();
+
+        if ($usuario_clinica == 0) {
+            return response()->json(['respuesta'=>$usuario_clinica]);
+        }else{
+            $usuario_clinica=1;
+            return response()->json(['respuesta'=>$usuario_clinica]);
+        }
+    }
+
+
+    public function validar_email(Request $request){
+        $input = $request->all();
+        $usuario_clinica = usuarioClinica::select("*")
+        ->where("email", "=", $input["email"])
         ->count();
 
         if ($usuario_clinica == 0) {

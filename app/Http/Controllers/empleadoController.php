@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Model\rol;
-use App\Model\preguntaEmpleado;
 use App\Model\empleado;
 use Notify;
 use Datatables;
@@ -51,8 +50,7 @@ class empleadoController extends Controller
     public function create()
     {
         $roles = Rol::all();
-        $preguntas = preguntaEmpleado::all();
-        return view('empleado.crear', compact('roles', 'preguntas'));
+        return view('empleado.crear', compact('roles'));
     }
 
     /**
@@ -65,12 +63,11 @@ class empleadoController extends Controller
     {
         //
         $roles = Rol::all();
-        $preguntas = preguntaEmpleado::all();
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         empleado::create($input);
         Notify::success("El empleado \"". $input['nombre'] ."\", se registro con éxito.","Registro exitoso");
-        return view('empleado.crear', compact('roles', 'preguntas'));
+        return view('empleado.crear', compact('roles'));
 
     }
 
@@ -96,22 +93,12 @@ class empleadoController extends Controller
     {
         //
         $empleado = empleado::find($id);
-
-        //$empleado = empleado::select("empleado.*", "rol.nombre AS rol")
-        //->join("rol", "rol.id", "=", "empleado.rol_id")
-        //->where("empleado.id", $id)
-        //->first();
-        $pregunta = preguntaEmpleado::select("pregunta_empleado.*")
-        ->join("empleado", "pregunta_empleado.id", "=", "empleado.pregunta_empleado_id")
-        ->where("empleado.id", $id)
-        ->first();
         if ($empleado == null) {
             Notify::success("No se encontro el empleado \"". $input['nombre'] ."\".","Ooops");
             redirect('empleado/show');
         } else {
             $roles = rol::pluck("nombre","id");
-            $preguntas = preguntaEmpleado::pluck("pregunta", "id");
-            return view("empleado.editar", compact("empleado", "roles", 'pregunta'));
+            return view("empleado.editar", compact("empleado", "roles"));
         }
 
 
@@ -176,5 +163,19 @@ class empleadoController extends Controller
         $empleado -> update(["estado"=>$input['estado']]);
         return json_encode(['respuesta'=>'1']);
 
+    }
+
+    public function validar_email(Request $request){
+        $input = $request->all();
+        $empleado = empleado::select("*")
+        ->where("email", "=", $input["email"])
+        ->count();
+
+        if ($empleado == 0) {
+            return response()->json(['respuesta'=>$empleado]);
+        }else{
+            $empleado=1;
+            return response()->json(['respuesta'=>$empleado]);
+        }
     }
 }

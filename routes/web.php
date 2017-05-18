@@ -41,6 +41,7 @@ Route::resource('clinica','clinicaController');
 //--POST--//
 Route::post('usuarioClinica/estado/editar', 'usuarioClinicaController@cambiar_estado');
 Route::post('usuario/validar', 'usuarioClinicaController@validar_usuario');
+Route::post('usuario/validarEmail', 'usuarioClinicaController@validar_email');
 
 //--GET--//
 Route::get('clinica/get','clinicaController@getData');
@@ -58,6 +59,7 @@ Route::resource('usuario','usuarioClinicaController');
 
 //--POST--//
 Route::post('empleado/validar_empleado', 'empleadoController@validar_empleado');
+Route::post('empleado/validar_email', 'empleadoController@validar_email');
 Route::post('empleado/estado/editar', 'empleadoController@cambiar_estado');
 
 //--GET--//

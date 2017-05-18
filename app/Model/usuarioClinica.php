@@ -9,7 +9,7 @@ class usuarioClinica extends Model
     public $table = "usuario_clinica";
 
     protected $fillable = [
-        'rol_id', 'username', 'nombre', 'apellido', 'password', 'pregunta_id', 'respuesta',
+        'rol_id', 'username', 'nombre', 'apellido', 'password', 'email',
         'clinica_id','estado'
     ];
 }
