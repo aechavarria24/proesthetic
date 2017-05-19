@@ -68,7 +68,10 @@ class usuarioClinicaController extends Controller
     public function create()
     {
         //
-        $clinica = clinica::all();
+        $clinica = clinica::select('*')
+        ->where('estadoClinica','=','1')
+        ->get();
+
         $roles = rol::all();
         return view('usuarioClinica.crear', compact('clinica', 'roles'));
     }
@@ -144,7 +147,7 @@ class usuarioClinicaController extends Controller
 
         if ($usuarioClinica==null) {
             Notify::warning('No se encontraron datos','Espera...');
-            return redirect('/usuarioClinica/show');
+            return redirect('/usuario/show');
         } else {
             return view('usuarioClinica.editar',compact('usuarioClinica'));
         }
@@ -160,16 +163,10 @@ class usuarioClinicaController extends Controller
     public function update(Request $request, $id){
         $input = $request->all();
         $usuarioClinica = usuarioClinica::find($id);
-
-        if ($input['password']!=$input['confirmarPassword']) {
-            Notify::warning('Contraseña y confirmar contraseña no coinciden','Alerta: ');
-            return redirect('usuario/'.$id.'/edit');
-        }elseif ($usuarioClinica==null) {
-            Notify::warning('No se encontraron datos','Nota: ');
-            return redirect('usuario/show');
+        if ($usuarioClinica==null) {
+          Notify::success('No se encontro el usuario','Noticia');
+          return redirect('usuario/show');
         }
-        $input['password'] = bcrypt($input['password']);
-        $input['confirmarPassword'] = bcrypt($input['password']);
         $usuarioClinica->update($input);
         Notify::success("El usuario \"". $input['nombre'] ."\", se modifico con éxito.","Modificacion exitosa");
         return redirect('usuario/show');

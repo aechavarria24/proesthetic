@@ -44,7 +44,7 @@ class ordenProduccionController extends Controller{
     }
 
     public function getData(Request $Request){
-        $ordenProduccion = ordenProduccion::select("orden_produccion.*", "estado_orden_produccion.nombre as estado",'estado_orden_produccion_id')
+        $ordenProduccion = ordenProduccion::select("observacion","orden_produccion.*", "estado_orden_produccion.nombre as estado",'estado_orden_produccion_id')
         ->join("estado_orden_produccion", "orden_produccion.estado_orden_produccion_id", "=", "estado_orden_produccion.id")
         ->get();
 

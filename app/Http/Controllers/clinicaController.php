@@ -159,7 +159,7 @@ class clinicaController extends Controller
     public function validar_clinica(Request $request){
         $input = $request->all();
         $respuesta = 0;
-        $clinica = clinica::select('*')->where("nombre", "=", $input["nombre"])->first();
+        $clinica = clinica::select('*')->where("NIT", "=", $input["NIT"])->first();
         if ($clinica != null) {
             $respuesta = 1;
         }

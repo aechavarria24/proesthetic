@@ -270,7 +270,7 @@ public function store(Request $request)
     if (!Session("pedido")==null) {
         $input = $request->all();
         $valida_paciente[0] = null;
-        $valida_paciente = paciente::select('id')
+        $valida_paciente = paciente::select('*')
         ->where('cedula','=',$input['cedula'])
         ->first();
         //$auxiliar_paciente=0;
@@ -278,7 +278,7 @@ public function store(Request $request)
             $paciente1=paciente::create(['cedula'=>$input["cedula"],'nombre'=>$input["nombre"]]);
             $auxiliar_paciente=$paciente1->id;
         }else {
-            $valida_paciente->update('nombre'->$input["nombre"]);
+            $valida_paciente->update(['nombre'=>$input["nombre"]]);
             $auxiliar_paciente=$valida_paciente->id;
         }
 

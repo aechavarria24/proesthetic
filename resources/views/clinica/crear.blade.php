@@ -85,13 +85,13 @@ $("#frmclinica").validate({
     rules: {
         nombre :{
             required: true,
-            validar_clinica: true,
             personName : true,
             minlength: 3,
             maxlength: 40
         },
         NIT :{
             required: true,
+            validar_clinica: true,
             digits : true,
             minlength: 10,
             maxlength: 10

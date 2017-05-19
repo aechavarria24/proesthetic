@@ -35,7 +35,7 @@ Cuenta cobro
         <div class=" p-a text-center">
 
             <button  class="btn primary" type="submit" name="pago" value="pago">Confirmar pago</button>
-            <button  class="btn primary" onclick="sumar();" type="submit" name="suma" value="suma">Suma total</button>
+            <!-- <button  class="btn primary" onclick="sumar();" type="submit" name="suma" value="suma">Suma total</button> -->
         </div>
 
 
@@ -65,10 +65,14 @@ $('#tblCuentaCobro').DataTable({
 
   ],
   "fnRowCallback": function(nRow, aData, iDisplayIndex) {
-       var opciones = $('td:eq(0)', nRow);
-       let html = '<input class="form-control" type="checkbox" name="s[]" value="'+aData.id+'" />';
-       opciones.html(html);
+       if (aData.estado != "Pagada") {
+           var opciones = $('td:eq(0)', nRow);
+           let html = '<input class="form-control" type="checkbox" name="s[]" value="'+aData.id+'" />';
+           opciones.html(html);
+
+       }
     }
+
 });
 </script>
 @endsection

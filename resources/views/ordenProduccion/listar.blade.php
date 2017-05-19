@@ -14,7 +14,8 @@ Orden de producción
                     <th  style="width:1%">Número de pedido</th>
                     <th  style="width:1%">Número orden</th>
                     <th  style="width:1%">Fecha creación</th>
-                    <th  style="width:1%">Fecha finalizacion</th>
+                    <th  style="width:1%">Fecha finalización</th>
+                    <th  style="width:1%">Observación</th>
                     <th  style="width:1%">Estado</th>
                     <th  style="width:1%">Opciones</th>
                 </tr>
@@ -86,6 +87,7 @@ function detalle(id){
             {data: 'id', name: ' id'},
             {data: 'created_at', name: 'created_at'},
             {data: 'fechaFin', name: 'fechaFin'},
+            {data: 'observacion', name: 'observacion'},
             {data: 'estado_orden_produccion', name: 'estado_orden_produccion'},
             {data: 'action', name: 'action', orderable: false,searchable: false}
         ]

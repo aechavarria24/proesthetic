@@ -51,24 +51,6 @@ var tabla = $('#tblclinica').DataTable({
 });
 
 
-var tabla = $('#tblclinica').DataTable({
-    processing: true,
-    serverSide: true,
-    "language": {
-        "url": "/plugins/dataTables/Spanish.json"
-    },
-    ajax: '/clinica/get',
-    columns: [
-        {data: 'NIT', name: 'NIT'},
-        {data: 'nombre', name: 'nombre'},
-        {data: 'telefono', name: 'telefono'},
-        {data: 'direccion', name: 'direccion'},
-        {data: 'estadoClinica', name: 'estadoClinica'},
-        {data: 'action', name: 'action', orderable: false,searchable: false}
-    ]
-});
-
-
 function cambiar_estado(id_clinica, estado){
     $.ajax({
 
@@ -87,7 +69,7 @@ function cambiar_estado(id_clinica, estado){
                 text: 'Actualización exitosa.',
                 icon : false
             })
-            table.ajax.reload(null,false);
+            tabla.ajax.reload(null,false);
         }
     });
 }

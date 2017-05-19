@@ -63,7 +63,7 @@
                                             </td>
                                             <td>
                                                 <input class="form-control" type="hidden"  id="{{$valor->id_pieza}}'" name="id_pieza[]"  type="number" value="{{$valor->id_pieza}}">
-                                                <input class="form-control" name="cantidad[]" id="txtCant-{{$valor->id_pieza}}" placeholder="Cantidad" type="number" value="{{$valor->cantidad}}">
+                                                <input class="form-control" name="cantidad[]" id="txtCant-{{$valor->id_pieza}}" placeholder="Cantidad" type="number" value="{{$valor->cantidad}}" required="">
                                             </td>
                                             <td>
                                                 <!-- <select class="form-control c-select" name="unidadMedida[]" id="{{$valor->id_pieza}}" type="hidden" value="{{$valor->id_pieza}}"> -->
@@ -147,8 +147,11 @@ $("#frmEditarPedido").validate({
         },
         cantidad: {
             required: true,
-            minlength: 10,
-            maxlength: 10
+            minlength: 1,
+            maxlength: 3,
+            message : {
+            ''
+            }
         },
         containerMedidaPieza: {
             required: true,

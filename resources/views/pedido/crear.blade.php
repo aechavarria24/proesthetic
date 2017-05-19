@@ -169,7 +169,7 @@ function AgregarServicio(e){
             +'<div class="row">'
             +'<div class="col-xs-3">'
             +'<input class="form-control" type="hidden"  id="servi-'+id_pieza+'" name="servicio_tipo_id" type="number" value="'+servicio_tipo_id+'">'
-            +'<input class="form-control" name="cantidad" id="txtCant-'+id_pieza+'" placeholder="Cantidad" maxlength="1"  type="number" min="0" max="100" value="">'
+            +'<input class="form-control" name="cantidad" id="txtCant-'+id_pieza+'" placeholder="Cantidad" maxlength="3"  type="text" maxlength=2 value="">'
             +	'</div>'
             +'<div class=" col-xs-4">'
             +'<select class="form-control c-select" name="unidadMedida" id="selectUnidadMedida-'+id_pieza+'" value="">'
@@ -251,7 +251,7 @@ function AgregarServicio(e){
         // alert(id);
         var idTabla=id.split('-');
         var cantidad=($("#txtCant-"+idTabla[0]).val());
-        if (cantidad.length==0||cantidad<=0) {
+        if (cantidad.length==0||cantidad<=0 || isNaN(cantidad)) {
 
             new PNotify({
                 title : 'Atención...',
