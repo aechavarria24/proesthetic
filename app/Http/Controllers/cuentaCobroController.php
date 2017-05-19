@@ -10,6 +10,7 @@ use App\Model\usuarioClinica;
 use App\Model\clinica;
 use App\Model\venta;
 use App\Model\cuentaCobroVenta;
+use App\Model\rol;
 use Notify;
 use Datatables;
 use PDF;
@@ -23,7 +24,7 @@ class cuentaCobroController extends Controller
     *
     * @return \Illuminate\Http\Response
     */
-    
+
     public function generar_Pdf($id){
         $cuentaCobro = venta::select('cuentacobro_venta.id as cobroVentaId','cuenta_cobro.id as cuentaCobro','venta.id as numventa','venta.pedido_id as pedido_id',
         'empleado.username as empleado_id','venta.created_at as fechaCreacion',
@@ -37,21 +38,27 @@ class cuentaCobroController extends Controller
         ->where('cuenta_cobro.id',$id)
         ->get();
 
-          $pdf = PDF::loadView('cuentaCobro.pdf',compact('cuentaCobro'));
-          return $pdf->stream('cuentaCobro'.$id.'.pdf');
+        $pdf = PDF::loadView('cuentaCobro.pdf',compact('cuentaCobro'));
+        return $pdf->stream('cuentaCobro'.$id.'.pdf');
 
     }
 
     public function detalle($id) {
+        $permiso = false;
         $cuentaCobro = venta::select('cuentacobro_venta.id as cobroVentaId','cuenta_cobro.id as cuentaCobro','venta.id as numventa','venta.pedido_id as pedido_id',
         'empleado.username as empleado_id','venta.created_at as fechaCreacion','cuenta_cobro.valorTotal as valorTotal')
         ->join('cuentacobro_venta','cuentacobro_venta.venta_id','=','venta.id')
         ->join('cuenta_cobro','cuenta_cobro.id','=','cuentacobro_venta.cuentaCobro_id')
-        ->join('empleado','empleado_id','=','venta.empleado_id')
-        ->where('cuenta_cobro.id',$id)
+        ->join('empleado','empleado.id','=','venta.empleado_id')
+        ->where('cuenta_cobro.id', "=", $id)
         ->get();
 
-        return view('cuentaCobro.detalle',compact('cuentaCobro'));
+        if (\Auth::user()->rol_id == rol::select("*")->where("nombre","=", "Administrador")->first()["id"]){
+            $permiso = true;
+        }
+
+
+        return view('cuentaCobro.detalle',compact('cuentaCobro', 'permiso'));
     }
     public function pagarCuenta(Request $request)
     {
@@ -128,25 +135,59 @@ class cuentaCobroController extends Controller
 
     public function getData (Request $Request)
     {
+        if (\Auth::user()->rol_id == rol::select("*")->where("nombre","=", "Doctor")->first()["id"]) {
+            $cuentascobro = cuentaCobro::select("cuenta_cobro.id as id",
+            "cuenta_cobro.created_at as created_at", "cuenta_cobro.valorTotal as valorTotal",
+            "cuenta_cobro.estado as estado")
+            ->join("cuentacobro_venta", "cuentacobro_venta.cuentaCobro_id", "=", "cuenta_cobro.id")
+            ->join("venta", "cuentacobro_venta.venta_id", "=", "venta.id")
+            ->join("pedido", "pedido.id", "=", "venta.pedido_id")
+            ->join("usuario_clinica", "usuario_clinica.id", "=", "pedido.usuario_id")
+            ->where("usuario_clinica.id", "=", \Auth::user()->id)
+            ->get();
 
-        $cuentascobro = cuentaCobro::all();
-        return Datatables::of($cuentascobro)
-        ->addColumn('action', function ($cuentaCobro) {
-            return '<a href="/cuentaCobro/'.$cuentaCobro->id.'/adicionar" class="btn btn-xs "><i title="Agregar venta" class="fa fa-cart-plus" aria-hidden="true"></i>&nbsp;</a>
-            <a href="/cuentacobro/'.$cuentaCobro->id.'/detalle" class="btn btn-xs "><i title="Detalle" class="fa fa-eye" aria-hidden="true"></i>&nbsp;</a>
-            ';
-        })
-        ->addColumn('seletion', "")
-        ->editColumn('estado',function($cuentaCobro){
-            if ($cuentaCobro->estado=='1') {
-                $estado='Pendiente';
-            }else {
-                $estado='Pagada';
-            }
-            return $estado;
-        })
+            return Datatables::of($cuentascobro)
+            ->addColumn('action', function ($cuentaCobro) {
+                return '<a href="/cuentacobro/'.$cuentaCobro->id.'/detalle" class="btn btn-xs "><i title="Detalle" class="fa fa-eye" aria-hidden="true"></i>&nbsp;</a>
+                ';
+            })
+            ->addColumn('seletion', "")
+            ->editColumn('estado',function($cuentaCobro){
+                if ($cuentaCobro->estado=='1') {
+                    $estado='Pendiente';
+                }else {
+                    $estado='Pagada';
+                }
+                return $estado;
+            })
 
-        ->make(true);
+            ->make(true);
+
+        }elseif (\Auth::user()->rol_id == rol::select("*")->where("nombre","=", "Administrador")->first()["id"]){
+            $cuentascobro = cuentaCobro::all();
+
+            return Datatables::of($cuentascobro)
+            ->addColumn('action', function ($cuentaCobro) {
+                return '<a href="/cuentaCobro/'.$cuentaCobro->id.'/adicionar" class="btn btn-xs "><i title="Agregar venta" class="fa fa-cart-plus" aria-hidden="true"></i>&nbsp;</a>
+                <a href="/cuentacobro/'.$cuentaCobro->id.'/detalle" class="btn btn-xs "><i title="Detalle" class="fa fa-eye" aria-hidden="true"></i>&nbsp;</a>
+                ';
+            })
+            ->addColumn('seletion', function(){
+                return "admin";
+            })
+            ->editColumn('estado',function($cuentaCobro){
+                if ($cuentaCobro->estado=='1') {
+                    $estado='Pendiente';
+                }else {
+                    $estado='Pagada';
+                }
+                return $estado;
+            })
+
+            ->make(true);
+        }
+
+
 
     }
 

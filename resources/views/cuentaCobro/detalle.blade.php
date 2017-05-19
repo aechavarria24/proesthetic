@@ -39,7 +39,10 @@
                       <th  style="width:20%">Número Pedido</th>
                       <th  style="width:20%">Usuario creación</th>
                       <th  style="width:20%">Fecha creación</th>
-                      <th  style="width:20%">Opciones</th>
+                      @if ($permiso)
+                          <th  style="width:20%">Opciones</th>
+
+                      @endif
                     </tr>
                   </thead>
                   <tbody>
@@ -54,7 +57,9 @@
                $tabla.='<td>'.$value['pedido_id'].' </td>';
                $tabla.='<td>'.$value['empleado_id'].' </td>';
                $tabla.='<td>'.$value['fechaCreacion'].' </td>';
-               $tabla.='<td>'.'<a><i class="fa fa-trash" onclick="eliminarVenta(this, '.$acumulador.');" id='.$value['cobroVentaId'].' title="Eliminar" value='.$value['numventa'].'></i></a>';
+               if ($permiso) {
+                   $tabla.='<td>'.'<a><i class="fa fa-trash" onclick="eliminarVenta(this, '.$acumulador.');" id='.$value['cobroVentaId'].' title="Eliminar" value='.$value['numventa'].'></i></a>';
+               }
                $tabla.='</tr>';
                $acumulador++;
              }
@@ -70,9 +75,12 @@
           </div>
         </div>
         <div class=" p-a text-center">
-          <a class="btn btn-info" href="/cuentacobro/show">Regresar</a>
-          <a href="/cuentaCobro/{{$valor->cuentaCobro}}/adicionar" class="btn btn-success " type="button">Agregar venta</a>
-          <a target="_blanck" href="/cuentacobro/{{$valor->cuentaCobro}}/pdf" class="btn btn-info " type="button">Exportar PDF</a>
+            @if ($permiso)
+                <a class="btn btn-info" href="/cuentacobro/show">Regresar</a>
+                <a href="/cuentaCobro/{{$valor->cuentaCobro}}/adicionar" class="btn btn-success " type="button">Agregar venta</a>
+                <a target="_blanck" href="/cuentacobro/{{$valor->cuentaCobro}}/pdf" class="btn btn-info " type="button">Exportar PDF</a>
+
+            @endif
         </div>
       </div>
     </div>
