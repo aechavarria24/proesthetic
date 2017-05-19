@@ -11,6 +11,7 @@ use App\Model\servicioTipocontratoPedido;
 use App\Model\cuentaCobro;
 use App\Model\cuentaCobroVenta;
 use App\Model\estado_venta;
+use App\Model\rol;
 use Notify;
 use Datatables;
 use PDF;
@@ -55,26 +56,48 @@ class ventaController extends Controller
 
 
 
-          $pdf = PDF::loadView('venta.pdf',compact('venta'));
-          return $pdf->stream('venta'.$id.'.pdf');
+        $pdf = PDF::loadView('venta.pdf',compact('venta'));
+        return $pdf->stream('venta'.$id.'.pdf');
 
     }
 
 
     public function getData (Request $Request)
     {
-        $venta = venta::select('venta.id as id','estado_venta.nombre','venta.pedido_id as pedido_id','empleado.username','venta.created_at as created_at')
-        ->join('empleado','empleado.id','=','venta.empleado_id')
-        ->join('estado_venta','estado_venta.id','=','venta.estado_venta_id')
-        ->get();
-        return Datatables::of($venta)
-        ->addColumn('action', function ($venta) {
-            return '<a href="/venta/'.$venta->id.'/pdf" class="btn btn-xs " target="_blanck"><i title="Exportar PDF" class="fa fa-file-pdf-o" aria-hidden="true" ></i>&nbsp;</a>
-            <a href="/venta/'.$venta->id.'/detalle"> <i class="fa fa-eye" title="Detalle"></i>&nbsp;</a>';
-        })
+        if (\Auth::user()->rol_id == rol::select("*")->where("nombre","=", "Doctor")->first()["id"]) {
+            $venta = venta::select('venta.id as id','estado_venta.nombre','venta.pedido_id as pedido_id','empleado.username','venta.created_at as created_at')
+            ->join('empleado','empleado.id','=','venta.empleado_id')
+            ->join('estado_venta','estado_venta.id','=','venta.estado_venta_id')
+            ->join('pedido', 'pedido.id', '=', 'venta.pedido_id')
+            ->join('usuario_clinica', 'usuario_clinica.id','=','pedido.usuario_id')
+            ->where("usuario_clinica.id", "=", \Auth::user()->id)
+            ->get();
+            return Datatables::of($venta)
+            ->addColumn('action', function ($venta) {
+                return '<a href="/venta/'.$venta->id.'/detalle"> <i class="fa fa-eye" title="Detalle"></i>&nbsp;</a>';
+            })
+            ->addColumn('seletion', function(){
+                return "";
+            })
+            ->make(true);
+        } else if (\Auth::user()->rol_id == rol::select("*")->where("nombre","=", "Administrador")->first()["id"]){
+            $venta = venta::select('venta.id as id','estado_venta.nombre','venta.pedido_id as pedido_id','empleado.username','venta.created_at as created_at')
+            ->join('empleado','empleado.id','=','venta.empleado_id')
+            ->join('estado_venta','estado_venta.id','=','venta.estado_venta_id')
+            ->get();
+            return Datatables::of($venta)
+            ->addColumn('action', function ($venta) {
+                return '<a href="/venta/'.$venta->id.'/pdf" class="btn btn-xs " target="_blanck"><i title="Exportar PDF" class="fa fa-file-pdf-o" aria-hidden="true" ></i>&nbsp;</a>
+                <a href="/venta/'.$venta->id.'/detalle"> <i class="fa fa-eye" title="Detalle"></i>&nbsp;</a>';
+            })
+            ->addColumn('seletion', function(){
+                return "admin";
+            })
+            ->make(true);
+        }
 
-        ->addColumn('seletion','')
-        ->make(true);
+
+
     }
 
 

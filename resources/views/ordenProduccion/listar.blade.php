@@ -1,78 +1,83 @@
 @extends('layouts.App')
-@section('titulo')
-Orden de producción
+@section('titulo') Orden de producción
 @endsection
 @section('contenedor')
-<div class="box">
-    <div class="box-header">
-        <h2>Lista de ordenes de producción</h2>
-    </div>
-    <div class="box-body">
-        <table class="table table-striped b-t b-b" id="tblordenProduccion">
-            <thead>
-                <tr>
-                    <th  style="width:1%">Número de pedido</th>
-                    <th  style="width:1%">Número orden</th>
-                    <th  style="width:1%">Fecha creación</th>
-                    <th  style="width:1%">Fecha finalización</th>
-                    <th  style="width:1%">Observación</th>
-                    <th  style="width:1%">Estado</th>
-                    <th  style="width:1%">Opciones</th>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
-    </div>
-</div>
-<input type="hidden" id="_token" name="_token" value="{{csrf_token()}}">
-<div class="modal fade" tabindex="-1" role="dialog" id="mdlEstado">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Modal title</h4>
-            </div>
-            <div class="modal-body">
-                <label for="">Su estado actual es: <span id="estadoActual"></span> </label>
-                <select class="form-control" ="" id="ddlEstados">
+    <div class="box">
+        <div class="box-header">
+            <h2>Lista de ordenes de producción</h2>
+        </div>
+        <div class="box-body">
 
-                </select>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Guardar</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+            <table class="table table-striped b-t b-b" id="tblordenProduccion">
+                <thead>
+                    <tr>
+                        <th  style="width:1%">Número de pedido</th>
+                        <th  style="width:1%">Número orden</th>
+                        <th  style="width:1%">Fecha creación</th>
+                        <th  style="width:1%">Fecha finalización</th>
+                        <th  style="width:1%">Estado</th>
+                        <th  style="width:1%">Opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <input type="hidden" id="_token" name="_token" value="{{csrf_token()}}">
+    </div>
 @endsection
-@section ('script')
-<script type="text/javascript">
 
-function detalle(id){
-    $.ajax({
-        'dataType':'json',
-        'type':'get',
-        'url':'/produccion/detalle/'+id
-    }).done(function (e){
-        if(e.data ==1){
+@section('script')
+    <script type="text/javascript">
+
+    var mensaje = true;
+
+    function ver_observacion(msg, id){
+
+        if (mensaje) {
             new PNotify ({
-                title: 'Espera',
-                text: 'No hay datos para mostrar',
-                type: 'error'
+                title: 'Nota:',
+                text: 'Recuerda que las observaciones debes cerrarlas tú ti mismo.'
             });
-
-        }else{
-            $("#estadoActual").text(e.estado);
-            $.each(e.data[0], function(i, e){
-                $("#ddlEstados").append("<option value='"+e.id+"'>"+e.nombre+"</option>");
-            })
-            $("#ddlEstados").removeAttr('hidden');
-            // $("#mdlEstado").modal();
+                mensaje = false;
         }
 
-    })};
+        console.log(id);
+        new PNotify({
+            title: "Número de orden: " + id,
+            text: msg,
+            addclass: "stack-bar-top",
+            cornerclass: "",
+            width: "90%",
+             hide: false
+        });
+
+    }
+
+
+    function detalle(id){
+        $.ajax({
+            'dataType':'json',
+            'type':'get',
+            'url':'/produccion/detalle/'+id
+        }).done(function (e){
+            if(e.data ==1){
+                new PNotify ({
+                    title: 'Espera',
+                    text: 'No hay datos para mostrar',
+                    type: 'error'
+                });
+            }else{
+                $("#estadoActual").text(e.estado);
+                $.each(e.data[0], function(i, e){
+                    $("#ddlEstados").append("<option value='"+e.id+"'>"+e.nombre+"</option>");
+                })
+                $("#ddlEstados").removeAttr('hidden');
+                // $("#mdlEstado").modal();
+            }
+
+        })
+    }
 
 
     var tabla = $('#tblordenProduccion').DataTable({
@@ -87,7 +92,6 @@ function detalle(id){
             {data: 'id', name: ' id'},
             {data: 'created_at', name: 'created_at'},
             {data: 'fechaFin', name: 'fechaFin'},
-            {data: 'observacion', name: 'observacion'},
             {data: 'estado_orden_produccion', name: 'estado_orden_produccion'},
             {data: 'action', name: 'action', orderable: false,searchable: false}
         ]
@@ -102,7 +106,6 @@ function detalle(id){
                     data : {"orden_produccion" : orden_produccíon, "estado": estado, "_token":$("#_token").val()},
                     url : "/produccion/estado/editar"
                 }).done(function (result){
-                    console.log(result.respuesta.venta);
                     if (result.respuesta =='1') {
                         new PNotify({
                             title: 'Cambio de estado',
@@ -113,8 +116,7 @@ function detalle(id){
                     }else if (result.respuesta == '3') {
                         new PNotify({
                             title: 'Cambio de estado',
-                            text: ' Ocurrio un error en el proceso, por favor \n\
-                            vuelva a intentarlo',
+                            text: ' Ocurrio un error en el proceso, por favor vuelva a intentarlo',
                             type: 'error'
                         });
                     }else if(result.respuesta.venta == 'venta'){
@@ -123,18 +125,12 @@ function detalle(id){
                 });
             },
             mensaje_venta : function(codigo_venta) {
-                var cur_value = 1,
-                progress;
+                var cur_value = 1, progress;
 
                 // Make a loader.
                 var loader = new PNotify({
                     title: "Buscando pedido",
-                    text: '<div class="progress progress-striped active" style="margin:0">\
-                    <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0">\
-                    <span class="sr-only">0%</span>\
-                    </div>\
-                    </div>',
-                    //icon: 'fa fa-moon-o fa-spin',
+                    text: '<div class="progress progress-striped active" style="margin:0"><div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0"><span class="sr-only">0%</span></div></div>',
                     icon: 'fa fa-cog fa-spin',
                     hide: false,
                     buttons: {
@@ -147,7 +143,7 @@ function detalle(id){
                     before_open: function(notice) {
                         progress = notice.get().find("div.progress-bar");
                         progress.width(cur_value + "%").attr("aria-valuenow", cur_value).find("span").html(cur_value + "%");
-                        // Pretend to do something.
+
                         var timer = setInterval(function() {
                             if (cur_value == 40) {
                                 loader.update({
@@ -164,7 +160,7 @@ function detalle(id){
                             if (cur_value == 75) {
                                 new PNotify({
                                     title: 'Venta creada con éxito',
-                                    text: ' Código de la venta: ' + codigo_venta,
+                                    text: ' Código de la venta: ' + codigo_venta
                                 });
                             }
                             if (cur_value >= 100) {
@@ -180,7 +176,6 @@ function detalle(id){
                 });
                 tabla.ajax.reload(false, null);
             }
-
         }
         if (estado === 5) {
             new PNotify({
@@ -219,5 +214,8 @@ function detalle(id){
             acciones.cambiar_estado();
         }
     }
+
+
+
     </script>
-    @endsection
+@endsection

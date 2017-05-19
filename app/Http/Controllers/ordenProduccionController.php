@@ -27,6 +27,15 @@ class ordenProduccionController extends Controller{
     * @return \Illuminate\Http\Response
     */
 
+    /**
+     * Consulta la orden de producción
+     * @param  [int] $id [valor por el cual se consultara la orden de producción]
+     * @return [json]     [retorna un json con clave data donde el valor es uno (1)
+     *                     si no se encuentra la orden de producción]
+     * @return [array]     [Retorna un array asosiativo en cosa de encontrar la orden de
+     *                      producción con el estado actual y los posibles
+     *                      estados que puede tener.]
+     */
     public function detalle($id){
         $ordenProduccion = ordenProduccion::find($id);
         $estado = estado_orden_produccion::find($ordenProduccion->estado_orden_produccion_id);
@@ -40,7 +49,6 @@ class ordenProduccionController extends Controller{
 
         return ["data"=>$estado_orden, "estado"=>$estado->nombre];
 
-
     }
 
     public function getData(Request $Request){
@@ -51,6 +59,10 @@ class ordenProduccionController extends Controller{
         return Datatables::of($ordenProduccion)
         ->addColumn('action', function ($ordenProduccion) {
 
+            /**
+             * Consulta el todas las ordenes de producción en estado "Venta Generada"
+             * @var [$estado_id]
+             */
             $estado_id = ordenProduccion::select("*")
             ->where("estado_orden_produccion_id", "=",
             estado_orden_produccion::select("*")->where("nombre", "=",
@@ -58,20 +70,42 @@ class ordenProduccionController extends Controller{
             ->where("pedido_id", "=", $ordenProduccion["pedido_id"])
             ->get();
 
+            /**
+             * Consulta el todas las ordenes de producción en estado "Terminado"
+             * @var [$estado_id]
+             */
             $estado_terminado = ordenProduccion::select("*")
             ->where("estado_orden_produccion_id", "=",
             estado_orden_produccion::select("*")->where("nombre", "=",
             "Terminado")->first()["id"])
             ->get();
 
+            if ($ordenProduccion->observacion != null) {
+                $btn_observacion = '<button class="btn btn-xs"  onclick = "ver_observacion(\''.$ordenProduccion->observacion.'\','.$ordenProduccion->id.')"><i class="fa fa-file-text-o" aria-hidden="true"></i></button>';
+            }else{
+                $btn_observacion = "";
+            }
 
 
+
+
+
+            /**
+             * Cuenta los estado_id de las ordenes de producción, si el contador
+             * es diferente de cero (0) no mostrara botones.
+             * @var string
+             */
             if (count($estado_id) == 0) {
 
                 $option_estado = "";
 
                 $estados = $this->detalle($ordenProduccion->id);
 
+                /**
+                 * Si la orden de producción es diferente del estado "Enviado",
+                 * creara los botones con los posibles estado que puede tener.
+                 *
+                 */
                 if ($ordenProduccion->estado != "Enviado"){
                         foreach ($estados["data"] as $value) {
                         $option_estado .= '<li><button class="btn btn-link" onclick = "cambiar_estado('.$ordenProduccion->id.','.$value["id"].')">'.$value["nombre"].'</button></li>';
@@ -91,13 +125,19 @@ class ordenProduccionController extends Controller{
                 </ul>
                 </div>';
 
+
+
+                /**
+                 * Si no hay estados posibles para la oreden de producción,
+                 * se retorna el boton ver observación.
+                 */
                 if ($option_estado != "") {
-                    return $btn_insumo . $btn_cambiar_estado;
+                    return $btn_insumo . $btn_cambiar_estado . $btn_observacion;
                 }else{
-                    return "No disponible";
+                    return $btn_observacion != "" ? $btn_observacion : "No disponible";
                 }
             } else {
-                return "No disponible";
+                return $btn_observacion != "" ? $btn_observacion : "No disponible";
             }
 
 
@@ -360,6 +400,7 @@ public function cambiar_estado_retornar(Request $request){
 }
 
 public function cambiar_estado(Request $request){
+
     $respuesta = 0;
     $estados = estado_orden_produccion::all();
     $input = $request->all();
@@ -398,6 +439,7 @@ public function cambiar_estado(Request $request){
                 $respuesta = '3';
             }
         }else if ($input['estado'] == estado_orden_produccion::select("*")->where("nombre", "=", "Venta Generada")->first()["id"]) {
+
             \DB::beginTransaction();
             try {
                 $fecha_fin = (getdate()["year"]."-".getdate()["mon"]."-".getdate()["mday"]);
@@ -417,7 +459,6 @@ public function cambiar_estado(Request $request){
             $respuesta = ["venta"=>'venta', "venta_generada"=>$venta_generada];
         } catch (\Exception $e) {
             \DB::rollBack();
-
             $respuesta = '3';
         }
     }// Fin if estado

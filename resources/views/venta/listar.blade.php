@@ -28,8 +28,8 @@ Venta
           <tbody>
           </tbody>
         </table>
-        <div class=" p-a text-center">
-          <button type="submit" class="btn btn-primary">Generar cuenta de cobro</button>
+        <div class="p-a text-center" id ="btnGenerar">
+
         </div>
 
       </div>
@@ -59,13 +59,26 @@ $('#tblVentas').DataTable({
     {data: 'action', name: 'action', orderable: false,searchable: false}
 ],
     "fnRowCallback": function(nRow, aData, iDisplayIndex) {
+        
+        if (aData.seletion == "admin") {
+            if (aData.nombre != "Asociada") {
+                var opciones = $('td:eq(0)', nRow);
+                let html = '<input class="form-control" type="checkbox"  name="s[]" value="'+aData.id+'" />';
+                opciones.html(html);
 
-        if (aData.nombre != "Asociada") {
+                $("#btnGenerar").html('<button type="submit" class="btn btn-primary">Generar cuenta de cobro</button>');
+
+            }else{
+                var opciones = $('td:eq(0)', nRow);
+                let html = '';
+                opciones.html(html);
+            }
+        }else{
             var opciones = $('td:eq(0)', nRow);
-            let html = '<input class="form-control" type="checkbox"  name="s[]" value="'+aData.id+'" />';
+            let html = '';
             opciones.html(html);
-
         }
+
 }});
 </script>
 @endsection
