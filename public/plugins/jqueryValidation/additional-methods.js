@@ -816,7 +816,7 @@ $.validator.addMethod( "validar_clinica", function( value, element ) {
 	$.ajax({
 		type : 'get',
 		datatype : 'json',
-		data : { nombre : $("#nombre").val()},
+		data : { NIT : $("#NIT").val()},
 		url : '/clinica/validar',
 		async : false
 	}).done(function(result){

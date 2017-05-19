@@ -23,6 +23,7 @@ class cuentaCobroController extends Controller
     *
     * @return \Illuminate\Http\Response
     */
+    
     public function generar_Pdf($id){
         $cuentaCobro = venta::select('cuentacobro_venta.id as cobroVentaId','cuenta_cobro.id as cuentaCobro','venta.id as numventa','venta.pedido_id as pedido_id',
         'empleado.username as empleado_id','venta.created_at as fechaCreacion',
@@ -89,7 +90,7 @@ class cuentaCobroController extends Controller
 
 
             Notify::success('Cuentas de cobro pagadas con exito','Noticia');
-            return redirect('/cuentaCobro/show');
+            return redirect('/cuentacobro/show');
 
         }
         Notify::error('Por favor seleccione una cuenta de cobro','Error');

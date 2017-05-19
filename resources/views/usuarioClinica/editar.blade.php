@@ -25,14 +25,7 @@
                         <label label = "Nombre">Nombre</label>
                         {{Form::text('nombre', $usuarioClinica->nombre,['class'=>'form-control','id'=>"nombre",'tabindex'=>"1"])}}
                     </div>
-                    <div class="form-group">
-                        <label label = "Contraseña">Contraseña</label>
-                        {{Form::input('password','password', null,['class'=>'form-control','id'=>"password",'required'=>"",'tabindex'=>"2"])}}
-                    </div>
-                    <div class="form-group">
-                        <label label = "Confirmar Contraseña">Confirmar contraseña</label>
-                        {{Form::input('password','confirmarPassword', null,['class'=>'form-control','id'=>"confirmarPassword",'required'=>"",'tabindex'=>"3"])}}
-                    </div>
+
                     <label>Clinica</label>
                     {{Form::text('nombre_clinica', $usuarioClinica->clinica_nombre,['class'=>'form-control','readonly'])}}
                 </div>
