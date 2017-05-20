@@ -102,9 +102,12 @@ function eliminarVenta(e, contador) {
         '_token': $("#_token").val()
 
     },
-    type:'post'
+    type: 'post'
+
 }).done(function(r){
     // $("#valor").val(r.valor);
+
+    console.log(r);
 
     if (r.respuesta == 1) {
 
@@ -122,9 +125,11 @@ function eliminarVenta(e, contador) {
         new PNotify({
             title: 'Notificación',
             type : 'error',
-            text: 'Pedido se encuantra en un estado que no se puede aprobar',
+            text: 'Venta no se puede eliminar',
             icon : false
         })
+    }else if(r.respuesta == "redireccion"){
+      window.location.href = "/cuentacobro/show";
     }
 });
 }
