@@ -15,6 +15,7 @@ use Notify;
 use Datatables;
 use PDF;
 use Empleado;
+use App\Model\estado_venta;
 
 
 class cuentaCobroController extends Controller
@@ -45,6 +46,7 @@ class cuentaCobroController extends Controller
 
     public function detalle($id) {
         $permiso = false;
+
         $cuentaCobro = venta::select('cuentacobro_venta.id as cobroVentaId','cuenta_cobro.id as cuentaCobro','venta.id as numventa','venta.pedido_id as pedido_id',
         'empleado.username as empleado_id','venta.created_at as fechaCreacion','cuenta_cobro.valorTotal as valorTotal')
         ->join('cuentacobro_venta','cuentacobro_venta.venta_id','=','venta.id')
@@ -53,12 +55,18 @@ class cuentaCobroController extends Controller
         ->where('cuenta_cobro.id', "=", $id)
         ->get();
 
-        if (\Auth::user()->rol_id == rol::select("*")->where("nombre","=", "Administrador")->first()["id"]){
+
+        if (count($cuentaCobro) == 0) {
+          Notify::success('Cuenta de cobro no existe','Error');
+          return redirect('/cuentacobro/show');
+        }else{
+
+          if (\Auth::user()->rol_id == rol::select("*")->where("nombre","=", "Administrador")->first()["id"]){
             $permiso = true;
+          }
+          return view('cuentaCobro.detalle',compact('cuentaCobro', 'permiso'));
         }
 
-
-        return view('cuentaCobro.detalle',compact('cuentaCobro', 'permiso'));
     }
     public function pagarCuenta(Request $request)
     {
@@ -108,13 +116,27 @@ class cuentaCobroController extends Controller
     public function eliminarVenta (Request $request)
     {
         $input = $request->all();
+        $redireccion = false;
 
-        $cuentaCobroVenta = cuentaCobroVenta::find($input['id']);
+
+        $cuentaCobroVenta = cuentaCobroVenta::select('*')
+        ->where("id", "=", $input['id'])
+        ->first();
+
         if ($cuentaCobroVenta== null) {
             return json_encode(["respuesta"=>0]);
         }else {
-            $cuentaCobroVenta->delete($input['id']);
-            $consulta_Venta=venta::select('venta.id as venta','servicio_tipoContrato.valor')
+
+            $cuentaCobro= cuentaCobro::find($cuentaCobroVenta['cuentaCobro_id']);
+
+
+
+        
+              $cuentaCobroVenta->delete($input['id']);
+
+
+
+            $consulta_Venta=venta::select('venta.id as venta','servicio_tipocontrato.valor')
             ->join( 'pedido','pedido.id','=','venta.pedido_id')
             ->join( 'servicio_tipocontrato_pedido','servicio_tipocontrato_pedido.pedido_id','=','pedido.id')
             ->join( 'servicio_tipocontrato','servicio_tipocontrato.id','=','servicio_tipocontrato_pedido.servicio_tipocontrato_id')
@@ -123,12 +145,25 @@ class cuentaCobroController extends Controller
 
             $resta=$consulta_Venta['valor'];
 
-            $cuentaCobro= cuentaCobro::find($cuentaCobroVenta['cuentaCobro_id']);
 
 
             $valorTotal=$cuentaCobro['valorTotal']-$resta;
-            $cuentaCobro->update(['valorTotal'=>$valorTotal]);
-            return json_encode(["respuesta"=>1, "valor_total"=>$valorTotal]);
+
+            if ($cuentaCobro==null) {
+              $cuentaCobro->update(['valorTotal'=>$valorTotal]);
+
+              return json_encode(["respuesta"=>1, "valor_total"=>$valorTotal]);
+            }
+
+
+            $venta = venta::find($cuentaCobroVenta["venta_id"]);
+            $venta->update(["estado_venta_id"=> estado_venta::select("*")
+            ->where("nombre", "=", "Pendiente")->first()["id"]]);
+            if ($redireccion) {
+              return json_encode(["respuesta"=>"redireccion"]);
+            }else{
+              return json_encode(["respuesta"=>1, "valor_total"=>$valorTotal]);
+            }
         }
 
     }
@@ -306,7 +341,7 @@ class cuentaCobroController extends Controller
 
             $suma=0;
             foreach ($input['s'] as $key => $value) {
-                $consulta_Venta=venta::select('venta.id as venta','servicio_tipoContrato.valor')
+                $consulta_Venta=venta::select('venta.*')
                 ->join( 'pedido','pedido.id','=','venta.pedido_id')
                 ->join( 'servicio_tipocontrato_pedido','servicio_tipocontrato_pedido.pedido_id','=','pedido.id')
                 ->join( 'servicio_tipocontrato','servicio_tipocontrato.id','=','servicio_tipocontrato_pedido.servicio_tipocontrato_id')
@@ -318,6 +353,8 @@ class cuentaCobroController extends Controller
 
 
                 $consultaVenta = cuentaCobroVenta::create(['cuentaCobro_id'=>$input['id'],'venta_id'=>$value]);
+                $consulta_Venta->update(["estado_venta_id" => estado_venta::select("*")
+                ->where("nombre","=", "Asociada")->first()["id"]]);
             }
             $consultacuenta= cuentaCobro::find($input['id']);
 
@@ -328,10 +365,11 @@ class cuentaCobroController extends Controller
 
 
             Notify::success('Venta agregada con exito','Noticia');
-            return redirect('cuentaCobro/show');
+            return redirect('cuentacobro/show');
         }
 
         Notify::error('No se encontraron datos','Alerta');
+        return redirect('cuentacobro/show');
 
 
     }

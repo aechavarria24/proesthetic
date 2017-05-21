@@ -67,7 +67,11 @@ $('#tblVentas').DataTable({
             let html = '<input class="form-control" type="checkbox"  name="s[]" value="'+aData.id+'" />';
             opciones.html(html);
 
-        }
+        } else{
+        var opciones = $('td:eq(0)', nRow);
+        let html = '';
+        opciones.html(html);
+      }
 }});
 </script>
 @endsection
